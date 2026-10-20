@@ -18,8 +18,8 @@ Day 1 从正式首页可用之日计，不从编写代码之日计。
 
 | 时间 | 工作 | 当前状态 |
 | --- | --- | --- |
-| Day 1 | 首页、robots、sitemap、404、About/Privacy/Terms | 本地实现与构建通过，准备预览部署 |
-| Day 1 | Cloudflare 资源、域名与 HTTPS、邮箱路由 | R2/D1 已创建；账户未找到域名 Zone |
+| Day 1 | 首页、robots、sitemap、404、About/Privacy/Terms | workers.dev 预览已部署并通过只读冒烟；正式域名未上线 |
+| Day 1 | Cloudflare 资源、域名与 HTTPS、邮箱路由 | R2/D1/Worker 已创建；Zone 已添加免费计划，等待注册商 NS 切换 |
 | Day 1 | GSC 域名资源、DNS 验证、sitemap、实际网址测试、请求索引 | 待生产上线和账户访问 |
 | Day 1–2 | GA4/Plausible 四事件、成功率与耗时指标 | 前端事件接口已写；D1 聚合出图指标已写；外部分析未启用 |
 | Day 3–5 | Face swap 工具、正文、FAQ、双向内链、sitemap | 未开始，不提前上线 |
@@ -44,18 +44,24 @@ Day 1 从正式首页可用之日计，不从编写代码之日计。
 - 10 项定向测试通过：图片签名、格式嗅探、输出域名限制、滚动窗口限流、并发重试只创建一次、安全拒绝不重试、清理顺序、持久聚合去重。D1 测试使用真实 SQLite + D1 形状适配，供应商/R2 使用 mock，不等于生产验证。
 - 无公开结果页；`/result/*` 404 且 noindex；API noindex/no-store。
 - 当前 Privacy/Terms 为与实现对齐的首版，运营联系邮箱和生产存储事实必须在上线前验证。不得将未验证的删除流程写成已验收。
-- 尚无正式 URL、部署 ID、生产冒烟、GSC 提交或模型出图证据；没有配置定时提醒。
+- 正式域名、GSC 提交和真实模型出图尚未完成；没有配置定时提醒。
+- 预览 URL：`https://pixform.liukai19911010.workers.dev`；Git `bf8d7b1`；Worker Version `2cdb3987-6bd9-482e-aa35-b2b950967b76`。
+- 预览首页、三个基础页、robots、sitemap 均 HTTP 200，HTML 有 H1；`/result/example` HTTP 404。预览所有路径返回 `X-Robots-Tag: noindex, nofollow`，仅正式 `pixform.ai` 主机放开索引。
+- D1 `0001_initial.sql`、`0002_daily_metrics.sql` 已远程应用成功；生成保持关闭。
 
 ## 本轮验证及外部依赖
 
 - `npm test`：10/10 通过。
 - `npm run typecheck`：通过。
-- `npm run cf:build`：通过；最终新增聚合指标版本正在复建。
+- `npm run cf:build`：最终新增聚合指标版本通过。
 - `wrangler deploy --dry-run`：通过，压缩包约 1.87 MiB。
 - npm 官方 registry 审计：修复 sharp 与上游 glob 漏洞后 0 个已知漏洞。
 - 本地 HTTP：首页及三个基础页 200、H1 在 HTML 中；sitemap 仅四条；风格 query canonical 指回首页；404/result/未来工具页为 404 + noindex；无配置生成 API 为 503。
 - 窄窗口视觉预览与风格按钮切换已检查；LCP/CLS/INP 尚未测量。
-- Cloudflare 已通过用户重新授权。当前账户无法找到 `pixform.ai` Zone，需用户添加/切换 DNS。
+- Cloudflare 已通过用户重新授权；已通过控制台添加 `pixform.ai` 到免费计划。Zone ID：`3245f19ae3f1b1f0fbfafc0863c31ccf`。
+- 分配的 nameserver：`kate.ns.cloudflare.com`、`patryk.ns.cloudflare.com`。待注册商替换原 `ns1.dyna-ns.net`、`ns2.dyna-ns.net`；未点击虚假的“我已更新名称服务器”。
+- 扫描导入三条旧 A 记录：`*`、根域、`www` → `185.53.179.149`；没有删除现有记录。后续绑定 Worker 正式域名时再处理根域与 www 的冲突。
+- 搜索爬虫保留允许；关闭 Cloudflare Bot Preference Sync，robots 由项目自身管理。
 - 用户指定 Gmail 已是 Cloudflare 已验证目的地址；没有因本项目再发送验证邮件。域名邮件规则尚未建立。
 - `.dev.vars` 已创建且 `git check-ignore` 通过；Token 留空供用户填写，签名 Secret 已在本地生成且未输出。
 - GA4/Plausible property 未配置；真实出图未执行，尚未产生模型调用费用。
