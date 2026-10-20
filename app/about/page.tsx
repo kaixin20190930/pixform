@@ -1,0 +1,5 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = { title: "About Pixform", description: "A simpler way to explore a new perspective on your photos.", alternates: { canonical: "/about" } };
+export default function About() {
+  return <main id="main" className="legal wrap"><div className="section-label">A FRESH PERSPECTIVE</div><h1>About Pixform</h1><p>Pixform is a small creative tool for exploring new versions of your own images. Start with a photograph and choose an artistic direction, from watercolor and pencil to anime and pixel art.</p><h2>Made for experimentation</h2><p>We want the distance between an idea and an image to feel smaller. The first release focuses on one task: transforming an existing image without an account, a complex editor or a separate results page.</p><h2>What to expect</h2><p>AI can surprise you, but it can also change details you wanted to keep. Pixform is for creative reinterpretation, not guaranteed likeness or precise restoration. Always review the result before sharing it.</p><h2>Contact</h2><p>Questions or feedback? Email <a href="mailto:hello@pixform.ai">hello@pixform.ai</a>.</p></main>;
+}

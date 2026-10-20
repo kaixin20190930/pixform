@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pixform",
+  "account_id": "23e53b75ddd6ee2d8b80031f6a1e45e0",
+  "main": "worker.ts",
+  "compatibility_date": "2026-10-20",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "pixform" }],
+  "vars": { "GENERATION_ENABLED": "false" },
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "pixform-private-media" }],
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "pixform",
+    "database_id": "190e9000-2348-46a2-b0b3-1a21ac838582",
+    "migrations_dir": "migrations"
+  }],
+  "triggers": { "crons": ["* * * * *"] },
+  "observability": { "enabled": false }
+}
