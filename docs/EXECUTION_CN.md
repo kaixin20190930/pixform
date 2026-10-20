@@ -1,3 +1,18 @@
+## 当前上线状态（2026-10-21 01:19 CST）
+
+- 正式站 https://pixform.ai 已上线，首页 HTTP 200；www 全路径 308 跳转根域。Worker 路由 `pixform.ai/*`、`www.pixform.ai/*` 已部署，现有代理 DNS 记录保留，未删除 DNS 数据。
+- Worker Version：`6a7847f6-af82-404a-b200-bcbc25dd8e4e`；GENERATION_ENABLED=true。三个平台 Secret 已配置。
+- 首页 canonical 为 https://pixform.ai，无 noindex；About/Privacy/Terms/robots/sitemap 均 200。robots 允许内容路径，阻止 API/result；结果页 404 + noindex；sitemap 目前仅四个已上线内容页。GSC 和分析平台仍未配置。
+- Cloudflare Email Routing 已启用且 ready；规则 `43c04a48617947cc943e4844c6c7b632`：hello@pixform.ai → liukai19911010@gmail.com，enabled=true。MX、SPF、DKIM 已建立；没有发送测试邮件，尚无实际投递验收。
+- 真实端到端验证：合成风景 PNG → 正式 /api/generate → Replicate SDXL → 私有 R2 → 预览/下载。任务 `1f688ed5-eb87-47cd-8f61-bc5227a285d5` succeeded，1 次模型尝试，7595 ms（单样本，不代表 SLA），输出 PNG 195493 bytes，下载与预览字节一致。
+- 发现并修复 workerd 不支持 redirect:error 的兼容问题：改为 manual，保留对非成功 HTTP 状态的拒绝，阻止自动跳转。创建失败只记录安全错误分类，不保存 Token 或上游响应正文。
+- 清理验收：只将上述测试任务提前设为过期，媒体和下载立即 404；每分钟 cron 删除 D1 记录；R2 输入/输出均返回 key does not exist。正常成功任务保留时间仍为完成后 3600000 ms。两条早期失败测试任务按原 TTL 自动清理。
+- 11 项测试通过（新增真实 workerd Request 兼容及 302 拒绝验证）；生产构建及类型检查通过。miniflare 固定为显式测试依赖。
+- 本地证据：.cache/pixform-live-home.png、.cache/live-test-input.png、.cache/live-output.png。含短期访问凭据的测试 JSON 仅在被 Git 忽略的 .cache 下。
+- 本轮有 2 次成功的真实模型任务：一次隔离诊断直连 Replicate、一次网站端到端验证；具体费用以 Replicate 账单为准。生成已开放。
+
+以下为前期执行记录；若状态冲突，以本节为准。
+
 # Pixform 第一阶段执行台账
 
 更新于 2026-10-21。最新用户方案原文见 `PHASE_ONE_SOURCE_CN.md`，替代先前首页和换脸页同步上线的安排。
@@ -59,11 +74,11 @@ Day 1 从正式首页可用之日计，不从编写代码之日计。
 - 本地 HTTP：首页及三个基础页 200、H1 在 HTML 中；sitemap 仅四条；风格 query canonical 指回首页；404/result/未来工具页为 404 + noindex；无配置生成 API 为 503。
 - 窄窗口视觉预览与风格按钮切换已检查；LCP/CLS/INP 尚未测量。
 - Cloudflare 已通过用户重新授权；已通过控制台添加 `pixform.ai` 到免费计划。Zone ID：`3245f19ae3f1b1f0fbfafc0863c31ccf`。
-- 分配的 nameserver：`kate.ns.cloudflare.com`、`patryk.ns.cloudflare.com`。待注册商替换原 `ns1.dyna-ns.net`、`ns2.dyna-ns.net`；未点击虚假的“我已更新名称服务器”。
+- 分配的 nameserver：`kate.ns.cloudflare.com`、`patryk.ns.cloudflare.com`。用户已确认注册商修改；2026-10-21 00:55 CST 已点击“我已更新名称服务器”并触发复检。Cloudflare 仍显示等待注册机构传播，Google DNS 查询仍返回旧 NS。
 - 扫描导入三条旧 A 记录：`*`、根域、`www` → `185.53.179.149`；没有删除现有记录。后续绑定 Worker 正式域名时再处理根域与 www 的冲突。
 - 搜索爬虫保留允许；关闭 Cloudflare Bot Preference Sync，robots 由项目自身管理。
 - 用户指定 Gmail 已是 Cloudflare 已验证目的地址；没有因本项目再发送验证邮件。域名邮件规则尚未建立。
-- `.dev.vars` 已创建且 `git check-ignore` 通过；Token 留空供用户填写，签名 Secret 已在本地生成且未输出。
+- `.dev.vars` 已创建且 `git check-ignore` 通过；用户已填写 Token，Replicate `/v1/account` 返回 200。REPLICATE_API_TOKEN、REPLICATE_SDXL_VERSION、JOB_SIGNING_SECRET 已通过标准输入安全写入 Worker，未输出密钥。
 - GA4/Plausible property 未配置；真实出图未执行，尚未产生模型调用费用。
 
 ## 对原方案的必要解释
@@ -82,3 +97,9 @@ Day 1 从正式首页可用之日计，不从编写代码之日计。
 - https://replicate.com/stability-ai/sdxl/api/schema
 - https://opennext.js.org/cloudflare/get-started
 - https://developers.cloudflare.com/api/resources/email_routing/subresources/addresses/methods/create/
+
+## 2026-10-21 名称服务器切换跟进
+
+- Cloudflare 复检已提交，域名尚未 active。启用 Email Routing 返回 `Active zone required`（2009），未建立转发规则。
+- 生成仍关闭；Token 认证成功不等于真实出图通过，尚未执行收费模型调用。
+- 待域名激活后继续 Worker 自定义域名绑定、邮箱转发、真实出图及清理验证和 GSC。

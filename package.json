@@ -26,6 +26,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "miniflare": "5.20261019.1-beta",
     "typescript": "^5.9.0",
     "wrangler": "^4.151.3"
   },

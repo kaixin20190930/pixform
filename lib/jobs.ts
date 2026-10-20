@@ -9,7 +9,7 @@ export function json(value: unknown, status = 200) { return Response.json(value,
 export async function provider(env: Env, path: string, init?: RequestInit): Promise<Prediction> {
   const res = await fetch(`https://api.replicate.com/v1/${path}`, {
     ...init, headers: { Authorization: `Bearer ${env.REPLICATE_API_TOKEN}`, "Content-Type": "application/json", ...init?.headers },
-    signal: AbortSignal.timeout(15000), cache: "no-store", redirect: "error",
+    signal: AbortSignal.timeout(15000), cache: "no-store", redirect: "manual",
   });
   if (!res.ok) throw new Error(`Provider HTTP ${res.status}`);
   return res.json();
@@ -59,7 +59,7 @@ export async function poll(env: Env, job: Job, origin: string) {
     const lock = await env.DB.prepare("UPDATE jobs SET status = 'saving' WHERE id = ? AND status IN ('starting','processing') RETURNING id").bind(job.id).first();
     if (!lock) return;
     try {
-      const output = await fetch(url, { signal: AbortSignal.timeout(20000), redirect: "error" });
+      const output = await fetch(url, { signal: AbortSignal.timeout(20000), redirect: "manual" });
       const contentType = output.headers.get("content-type")?.split(";")[0] || "";
       if (!output.ok || !["image/png", "image/jpeg", "image/webp"].includes(contentType)) throw new Error("Invalid result");
       const size = Number(output.headers.get("content-length") || 0);

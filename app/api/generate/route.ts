@@ -34,9 +34,11 @@ export async function POST(request: Request) {
     try {
       const prediction = await createPrediction(env, job, origin);
       await env.DB.prepare("UPDATE jobs SET prediction_id = ? WHERE id = ?").bind(prediction.id, id).run();
-    } catch {
+    } catch (error) {
       // Unknown POST outcomes must not be automatically repeated (could double-charge).
-      await finish(env, job, "failed", "Unable to confirm generation");
+      const reason = error instanceof Error && /^Provider HTTP \d{3}$/.test(error.message)
+        ? error.message : error instanceof Error ? error.name : "UnknownError";
+      await finish(env, job, "failed", `Unable to confirm generation (${reason})`);
       return json({ error: "We couldn't confirm that generation started. Please try again later." }, 502);
     }
     return json({ token: await sign(env.JOB_SIGNING_SECRET!, id, "job", job.expires_at), status: "starting" }, 202);

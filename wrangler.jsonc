@@ -1,13 +1,18 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "pixform",
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "pixform.ai/*", "zone_name": "pixform.ai" },
+    { "pattern": "www.pixform.ai/*", "zone_name": "pixform.ai" }
+  ],
   "account_id": "23e53b75ddd6ee2d8b80031f6a1e45e0",
   "main": "worker.ts",
   "compatibility_date": "2026-10-20",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "pixform" }],
-  "vars": { "GENERATION_ENABLED": "false" },
+  "vars": { "GENERATION_ENABLED": "true" },
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "pixform-private-media" }],
   "d1_databases": [{
     "binding": "DB",
