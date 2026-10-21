@@ -1,3 +1,11 @@
+## P0 / P1 内容优化已发布（2026-10-21）
+
+- Worker Version：`90e41fd8-ffe6-4784-acb0-054afd031cdb`。四张卡片改为正向能力描述；三项未来能力明确 Planned，通过预填 mailto 向 hello@pixform.ai 登记意向，需用户发送邮件，不声称已有自动订阅系统。照片换脸卡片提供回到工具的入口。
+- 首页与换脸页 Description 去除 in seconds；首页首屏同样改写。鉴于此前换脸实测 65 秒及冷启动波动，不替换成无法保证的 under a minute。
+- 新增 What makes a good face swap 四段实用指南；FAQ 6→8，增加合法使用和商业使用问题，JSON-LD 同源同步。HTML main 正文计数 1548 英文词（含工具、FAQ，排除脚本）。
+- 类型检查、生产构建、正式 HTML 检查通过；桌面卡片布局已查看，截图 `.cache/face-p01-cards.png`。仅内容和链接调整，无新增模型调用。本轮范围为 P0/P1，没有重复提交 GSC。
+- 法律/商业问答避免无条件许可结论；核对参考：https://www.copyright.gov/ai/ 、https://copyright.gov/what-is-copyright/ 、https://replicate.com/codeplugtech/face-swap 。模型当前许可与人物、原图权利需分别核对，不能由免费访问推导商业授权。
+
 ## Face Swap 已上线（2026-10-21）
 
 本节为最新状态，覆盖下方旧排期。用户本轮要求立即增加换脸功能，详细来源见 `FACE_SWAP_SOURCE_CN.md`。

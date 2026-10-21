@@ -1,5 +1,5 @@
 export const title = "Image to Image AI — Free Image to Image Generator";
-export const description = "Turn any photo into a new image with Pixform's free AI image to image generator. Upload, pick a style, download in seconds. No signup, no watermark.";
+export const description = "Turn any photo into a new image with Pixform's free AI image to image generator. Upload a photo, choose a style and download your result. No signup, no watermark.";
 export const styles = [
   { id: "watercolor", name: "Watercolor", mark: "◌", color: "#ead7cd", detail: "Soft washes. A lighter touch.", prompt: "delicate watercolor painting, translucent pigment washes, textured watercolor paper" },
   { id: "cyberpunk", name: "Cyberpunk", mark: "▧", color: "#d6d5f0", detail: "Neon light. After-dark energy.", prompt: "cinematic cyberpunk illustration, neon lighting, futuristic atmosphere" },

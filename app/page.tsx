@@ -28,7 +28,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
     <section className="hero wrap">
       <div className="eyebrow"><span /> YOUR PHOTO. A NEW POSSIBILITY.</div>
       <h1>Image to Image <em>AI</em></h1>
-      <p className="subtitle">Upload a photo, pick a style, get a new image in seconds.</p>
+      <p className="subtitle">Upload a photo, pick a style, discover a new look.</p>
       <Studio enabled={enabled} initialStyle={initialStyle} />
       <div className="hero-notes"><span>↗ No signup</span><span>◎ No added watermark</span><span>✧ Six creative styles</span></div>
     </section>
