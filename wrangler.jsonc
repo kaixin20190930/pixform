@@ -12,7 +12,7 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "pixform" }],
-  "vars": { "GENERATION_ENABLED": "true" },
+  "vars": { "GENERATION_ENABLED": "true", "REPLICATE_FACE_SWAP_VERSION": "278a81e7ebb22db98bcba54de985d22cc1abeead2754eb1f2af717247be69b34" },
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "pixform-private-media" }],
   "d1_databases": [{
     "binding": "DB",

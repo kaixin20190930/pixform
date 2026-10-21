@@ -15,6 +15,14 @@ export async function provider(env: Env, path: string, init?: RequestInit): Prom
   return res.json();
 }
 export async function createPrediction(env: Env, job: Job, origin: string) {
+  if (job.style === "face-swap") {
+    const input = await sign(env.JOB_SIGNING_SECRET!, job.id, "input", job.expires_at);
+    const face = await sign(env.JOB_SIGNING_SECRET!, job.id, "face", job.expires_at);
+    return provider(env, "predictions", { method: "POST", body: JSON.stringify({
+      version: env.REPLICATE_FACE_SWAP_VERSION,
+      input: { input_image: `${origin}/api/media/${input}`, swap_image: `${origin}/api/media/${face}` },
+    }) });
+  }
   const style = styles.find(s => s.id === job.style)!;
   const mediaToken = await sign(env.JOB_SIGNING_SECRET!, job.id, "input", job.expires_at);
   return provider(env, "predictions", { method: "POST", body: JSON.stringify({

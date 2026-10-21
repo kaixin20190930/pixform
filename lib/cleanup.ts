@@ -9,8 +9,8 @@ export async function sweep(env: Env) {
   }
   const expired = await env.DB.prepare("SELECT id FROM jobs WHERE expires_at <= ? LIMIT 100").bind(Date.now()).all<{ id: string }>();
   for (const { id } of expired.results) {
-    // Never remove the record until both objects are deleted, so cleanup can retry.
-    await env.MEDIA.delete([`input/${id}`, `output/${id}`]);
+    // Never remove the record until all uploaded and output objects are deleted, so cleanup can retry.
+    await env.MEDIA.delete([`input/${id}`, `face/${id}`, `output/${id}`]);
     await env.DB.prepare("DELETE FROM jobs WHERE id = ? AND expires_at <= ?").bind(id, Date.now()).run();
   }
   await env.DB.prepare("DELETE FROM usage WHERE created_at <= ?").bind(Date.now() - 3600000).run();

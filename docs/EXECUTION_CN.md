@@ -1,3 +1,19 @@
+## Face Swap 已上线（2026-10-21）
+
+本节为最新状态，覆盖下方旧排期。用户本轮要求立即增加换脸功能，详细来源见 `FACE_SWAP_SOURCE_CN.md`。
+
+- 正式入口：https://pixform.ai/face-swap；尾斜杠 308 到统一 canonical。首页相关工具卡片与导航已链接，子页链接回首页。
+- 模型：Replicate `codeplugtech/face-swap`，固定版本 `278a81e7ebb22db98bcba54de985d22cc1abeead2754eb1f2af717247be69b34`。input_image 保留场景，swap_image 提供替换人脸；密钥仅存在 Secret/忽略文件。
+- 双图上传、权限确认、异步状态、同页预览、下载与重新选择已实现。每张最大 10MB，JPG/PNG/WEBP；共享每 IP 每小时 10 次限额。GIF、视频和多脸选择明确未开放。
+- Worker Version：`efaab929-cdf1-406f-bd62-1bfafb188f7b`。12 项测试、类型检查、Cloudflare 生产构建通过。
+- 真实验收使用模型作者公开示例：直连 Replicate 58.18 秒；网站端到端任务 succeeded、单次模型尝试、65020ms（包含轮询），输出 JPEG 174870 bytes，预览/下载字节一致。仅为单样本，不代表 SLA 或成功率统计。
+- 新增 face 作用域签名 URL；结果/API 不索引。成功任务完成后 1 小时到期，未完成任务最长 2 小时。仅提前过期自己的测试任务：媒体 404，定时清理后 D1 无记录，R2 face key 不存在；单元测试覆盖 input/face/output 三对象删除。
+- SEO：精确 TDK、单一 H1、SSR 正文、6 FAQ、WebApplication/FAQPage/BreadcrumbList、OG、canonical 已检查；sitemap 已包含 5 个内容 URL。
+- GSC 域名资源已存在；2026-10-21 11:10 实际网址测试“网址可编入 Google 索引”，随后“已请求编入索引”。这不是已收录的证明。sitemap 已提交且成功，控制台暂显示上次抓取的 4 页，等待重新抓取新增页面。
+- Google Rich Results Test（11:15:29）检测到 2 项有效内容：路径、软件应用。软件应用仅提示缺少非严重 aggregateRating；无真实评分，不添加虚构评价。FAQ schema 已存在，但不承诺获得 FAQ 富媒体展示。
+- 桌面与 390px 移动布局已验收。Core Web Vitals、7/30/60/90 天索引曝光和排名目标需后续数据，尚不能验收。外部分析平台仍未配置。
+- 证据（本地忽略目录）：`.cache/face-live-page.png`、`.cache/face-gsc-submitted.png`、`.cache/face-live-output.jpg`。测试 JSON 包含短期访问凭据，不纳入 Git。
+
 ## 当前上线状态（2026-10-21 01:19 CST）
 
 - 正式站 https://pixform.ai 已上线，首页 HTTP 200；www 全路径 308 跳转根域。Worker 路由 `pixform.ai/*`、`www.pixform.ai/*` 已部署，现有代理 DNS 记录保留，未删除 DNS 数据。

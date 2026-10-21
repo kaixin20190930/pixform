@@ -49,6 +49,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       <div className="style-gallery">{styles.map(s => <Link key={s.id} href={`/?style=${s.id}#studio`} className="style-card"><div className={`swatch swatch-${s.id}`} style={{ backgroundColor: s.color }}><span aria-hidden>{s.mark}</span><small>STYLE {String(styles.indexOf(s) + 1).padStart(2, "0")}</small></div><h3>{s.name}<span aria-hidden>↗</span></h3><p>{s.detail}</p></Link>)}</div>
     </section>
     <section className="faq wrap"><div><div className="section-label">A FEW THINGS TO KNOW</div><h2>Questions?<br />Start here.</h2></div><div>{faqs.map(([q,a]) => <details key={q}><summary>{q}<span aria-hidden>+</span></summary><p>{a}</p></details>)}</div></section>
+    <section className="related-tools wrap"><div className="section-label">MORE AI IMAGE TOOLS</div><h2>A different way to transform.</h2><Link className="related-card" href="/face-swap"><h3>AI Face Swap <span aria-hidden>↗</span></h3><p>Upload a scene and a face. Create a new look with two photos.</p><p>Try now →</p></Link><p className="slot-hint">More tools coming soon.</p></section>
     <section className="closing wrap"><span aria-hidden>✧</span><div><h2>See your photo differently.</h2><p>Start with something familiar. Make something unexpected.</p></div><a href="#studio" className="dark-button">Try a new style ↗</a></section>
   </main>;
 }
