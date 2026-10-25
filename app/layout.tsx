@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </header>
     {children}
     <footer className="footer wrap"><div><Link className="brand footer-brand" href="/">Pixform.</Link><p>A fresh perspective on your photos.</p><small>© 2026 Pixform</small></div>
-      <nav aria-label="Footer"><Link href="/about">About</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link>{email && <a href={`mailto:${email}`}>Contact</a>}</nav>
+      <nav aria-label="Footer"><a href="https://rapcraft.ai">RapCraft</a><Link href="/about">About</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link>{email && <a href={`mailto:${email}`}>Contact</a>}</nav>
     </footer>
   </body></html>;
 }
