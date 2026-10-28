@@ -1,5 +1,5 @@
 export const faceTitle = "AI Face Swap — Free Online Face Swapper";
-export const faceDescription = "Swap faces in any photo with Pixform's free AI face swapper. Upload two photos and swap faces online. No signup, no watermark, works on any device.";
+export const faceDescription = "Swap faces in any photo with Pixform's AI face swapper. Get 10 free credits, upload two photos and download without an added watermark.";
 export const faceFaqs = [
   ["Is this AI face swap free to use?", "Yes. Free face swap is available without signup or a credit card, subject to capacity. You get up to 10 generation attempts per IP address per hour, shared with Image to Image AI. Pixform adds no watermark."],
   ["How long does a face swap take?", "Processing time varies with demand, image size and model startup. A cold start may take a few minutes. To do a face swap, upload the scene to keep, upload the face to use, confirm permission and select Swap Faces. The tool shows the real status and elapsed time."],

@@ -11,6 +11,8 @@ function fixture() {
   const db = new DatabaseSync(":memory:");
   db.exec(readFileSync(new URL("../migrations/0001_initial.sql", import.meta.url), "utf8"));
   db.exec(readFileSync(new URL("../migrations/0002_daily_metrics.sql", import.meta.url), "utf8"));
+  db.exec(readFileSync(new URL("../migrations/0003_auth_billing.sql", import.meta.url), "utf8"));
+  db.exec(readFileSync(new URL("../migrations/0004_billing_safety.sql", import.meta.url), "utf8"));
   const objects = new Map<string, unknown>();
   const env = {
     DB: { prepare(sql: string) {
@@ -34,10 +36,10 @@ test("rolling quota SQL admits ten attempts and rejects the eleventh", () => {
   const sql = source.match(/prepare\("(INSERT INTO usage[^"]+)"\)/)![1];
   const statement = db.prepare(sql);
   const now = Date.now();
-  for (let n = 0; n < 10; n++) assert.ok(statement.get(`id-${n}`, "ip-a", now, "ip-a", now - 3600000));
-  assert.equal(statement.get("eleven", "ip-a", now, "ip-a", now - 3600000), undefined);
-  assert.ok(statement.get("other", "ip-b", now, "ip-b", now - 3600000));
-  assert.ok(statement.get("expired", "ip-a", now + 3600001, "ip-a", now + 1));
+  for (let n = 0; n < 10; n++) assert.ok(statement.get(`id-${n}`, "ip-a", now, "ip-a", now - 3600000, 10));
+  assert.equal(statement.get("eleven", "ip-a", now, "ip-a", now - 3600000, 10), undefined);
+  assert.ok(statement.get("other", "ip-b", now, "ip-b", now - 3600000, 10));
+  assert.ok(statement.get("expired", "ip-a", now + 3600001, "ip-a", now + 1, 10));
   db.close();
 });
 test("concurrent polls retry a transient failure once, without double creation", async () => {

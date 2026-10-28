@@ -1,8 +1,9 @@
 import type { Env } from "./cloudflare";
 import { allowedOutput, retryableError, sign, verify } from "./security.ts";
 import { styles } from "./content.ts";
+import { settleCredits } from "./billing/credits.ts";
 
-export type Job = { id: string; prediction_id: string | null; status: string; style: string; attempts: number; created_at: number; expires_at: number; output_key: string | null; output_type: string | null; error: string | null };
+export type Job = { id: string; prediction_id: string | null; status: string; style: string; attempts: number; created_at: number; expires_at: number; output_key: string | null; output_type: string | null; error: string | null; user_id?: string | null; tool?: string | null; credits_reserved?: number };
 type Prediction = { id: string; status: string; output?: unknown; error?: unknown };
 const headers = { "Cache-Control": "private, no-store", "X-Robots-Tag": "noindex, nofollow" };
 export function json(value: unknown, status = 200) { return Response.json(value, { status, headers }); }
@@ -40,6 +41,7 @@ export async function finish(env: Env, job: Job, status: string, error: string |
   await env.DB.prepare("UPDATE jobs SET status = ?, error = ?, completed_at = ?, expires_at = ? WHERE id = ?")
     .bind(status, error, Date.now(), Date.now() + 3600000, job.id).run();
   job.status = status; job.error = error;
+  if (job.credits_reserved) await settleCredits(env, job.id, status === "succeeded");
 }
 export async function poll(env: Env, job: Job, origin: string) {
   if (!job.prediction_id || !["starting", "processing"].includes(job.status)) return;

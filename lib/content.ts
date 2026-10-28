@@ -1,5 +1,5 @@
 export const title = "Image to Image AI — Free Image to Image Generator";
-export const description = "Turn any photo into a new image with Pixform's free AI image to image generator. Upload a photo, choose a style and download your result. No signup, no watermark.";
+export const description = "Turn any photo into a new image with Pixform's AI image to image generator. Get 10 free credits, choose a style and download without an added watermark.";
 export const styles = [
   { id: "watercolor", name: "Watercolor", mark: "◌", color: "#ead7cd", detail: "Soft washes. A lighter touch.", prompt: "delicate watercolor painting, translucent pigment washes, textured watercolor paper" },
   { id: "cyberpunk", name: "Cyberpunk", mark: "▧", color: "#d6d5f0", detail: "Neon light. After-dark energy.", prompt: "cinematic cyberpunk illustration, neon lighting, futuristic atmosphere" },
@@ -10,7 +10,7 @@ export const styles = [
 ] as const;
 export const faqs = [
   ["What is image to image AI?", "Image to image AI creates a new image using an existing photo as its starting point. It can reinterpret the colors, textures and artistic style while keeping a connection to your original composition."],
-  ["Is this image to image generator free?", "Pixform is designed for free, limited use. The launch allowance is up to 10 generation attempts per IP address per hour, subject to availability. There is no paid subscription in this first release."],
+  ["Is this image to image generator free?", "Yes. Sign in with Google to receive 10 free credits once. Image to Image uses 1 credit per generation. You can add a subscription or one-time credit pack if you want to create more."],
   ["Do I need to sign up to use it?", "No account is required. Choose a photo from your device and select a style to get started when generation is available."],
   ["What image formats are supported?", "You can select JPG, PNG or WEBP images up to 10 MB. Use a clear image for the best starting point. Animated GIFs and videos are not supported by this tool."],
   ["Can I use the generated images commercially?", "Commercial use depends on the rights to your original image, the selected model’s license and the rights of anyone depicted. AI output is not guaranteed to be unique or free of third-party rights. Check these before publishing commercially."],

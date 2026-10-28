@@ -1,6 +1,8 @@
 # Pixform 收款与积分系统实施方案
 
-更新于 2026-10-24。本文基于当前 Cloudflare Workers + Next.js + D1 + R2 + Replicate 架构制定，作为支付功能的实施基线。用户提供的原始建议保存在对话附件中；本文修正其中会造成重复发放、积分透支和订阅状态错误的部分。
+更新于 2026-10-28。本文基于当前 Cloudflare Workers + Next.js + D1 + R2 + Replicate 架构制定，作为支付功能的实施基线。用户提供的原始建议保存在对话附件中；本文修正其中会造成重复发放、积分透支和订阅状态错误的部分。
+
+已确认的经营规则：Stripe 经营主体在美国；定价与结算币种为 USD；Checkout 启用 Stripe Tax 自动税费计算；年付在支付成功后一次发放 3,600 credits，在对应年度服务期结束时过期。Stripe Tax 负责结账时的税额计算与收取，具体注册、申报和汇缴仍以 Stripe 账户当前启用的税务产品和美国经营主体义务为准，Pixform 不在页面上笼统承诺“Stripe 已代办所有税务”。
 
 ## 一、上线目标与首版边界
 
@@ -19,6 +21,8 @@
 | Credits 700 | $25 | 700 | 一次性购买；不过期 |
 
 订阅 credits 优先消耗，永久 credits（Free 和积分包）随后消耗。这样即将到期的额度先用，同时不清掉用户购买的永久余额。取消订阅只关闭续费；当前周期权益持续到期末。付款失败进入 Stripe 的重试流程，不在第一次失败时立即降级或清空余额。
+
+退款采用清晰、可自动校验的首版规则：首次 Pro 购买或一次性积分包在付款后 7 天内、且该次购买发放的付费 credits 完全未使用时，可联系支持申请退款；已使用任何付费 credits、部分退款、订阅续费以及超过 7 天的购买原则上不退款。重复扣款、错误扣款、服务未交付及适用法律强制要求的情形例外。取消订阅只停止下一周期续费，不退还当前周期费用，权益保留至周期结束。退款完成后撤销对应未使用 credits；不得形成负余额。
 
 ## 二、必须修正原方案的地方
 
@@ -102,12 +106,13 @@ Stripe metadata 只做后台可读标签，不能作为发放数量的唯一真�
 - `bucket TEXT NOT NULL`：`subscription` 或 `permanent`
 - `source TEXT NOT NULL`：`signup`、`invoice`、`credit_pack`、`admin`、`refund_reversal`
 - `credits INTEGER NOT NULL`
-- `remaining INTEGER NOT NULL`
+- `reset_existing INTEGER NOT NULL DEFAULT 0`
 - `external_ref TEXT NOT NULL UNIQUE`
 - `expires_at INTEGER`
+- `revoked_at INTEGER`
 - `created_at INTEGER NOT NULL`
 
-它回答“这些积分从哪里来、什么时候过期、还剩多少”。Free 发放使用 `signup:<user_id>` 作为唯一 external_ref；订阅使用 invoice ID；积分包使用 PaymentIntent ID。
+它回答“这些积分从哪里来、什么时候过期、是否已被整体撤销”。每笔消耗不修改 grant；当前余额由 `billing_accounts` 提供，完整变化由不可变 `credit_ledger` 审计。Free 发放使用 `signup:<user_id>` 作为唯一 external_ref；订阅使用 invoice ID；积分包使用 PaymentIntent ID。
 
 ### `credit_reservations`
 
@@ -188,7 +193,7 @@ Stripe metadata 只做后台可读标签，不能作为发放数量的唯一真�
 - 开启失败付款邮件、Smart Retries，并设置订阅取消/欠款规则。
 - 开启 Radar 基础风控；Checkout 只允许需要的支付方式，首版可先只开放即时确认方式，降低异步履约复杂度。
 - 明确 Statement descriptor、客服邮箱、商户名称、品牌图标和退款说明。
-- 税务先决定使用 Stripe Tax 还是由商户自行处理；没有结论前不能宣称价格含税。
+- Checkout Session 设置 `automatic_tax.enabled=true`，使用 Stripe Tax 计算并收取适用税费；价格页显示“Taxes may be added at checkout”，不宣称展示价含税。
 - Checkout 开启“一个 Customer 一份有效订阅”的限制，已有订阅的用户转 Customer Portal。
 
 ## 七、Webhook 事件矩阵
@@ -202,7 +207,7 @@ Stripe metadata 只做后台可读标签，不能作为发放数量的唯一真�
 | `invoice.payment_failed` | 更新状态、展示付款问题；不立即清零或降级 |
 | `customer.subscription.updated` | 同步 status、period end、cancel_at_period_end；不直接发 credits |
 | `customer.subscription.deleted` | 清 subscription plan；到期后使 subscription bucket 失效，永久积分保留 |
-| `refund.created` / `charge.refunded` | 根据退款对应订单撤销尚未使用的 credits；已使用时进入人工处理，不制造负余额 |
+| `charge.refunded` | 根据退款对应订单撤销完全未使用的整笔 credits；已使用时冻结生成并进入人工处理，不制造负余额 |
 | `charge.dispute.created` | 冻结新生成、记录争议并人工处理；不自动删除账户或图片 |
 | `charge.dispute.closed` | 根据 won/lost 和人工决定解冻或冲正 |
 
@@ -241,7 +246,7 @@ Stripe 不保证所有事件按业务顺序到达。每个 handler 都要能在 
 - 增加监控：webhook 失败数、未处理事件、余额不一致、reserved 超时、每日发放/消耗、收入与 Replicate 成本估算、争议和退款。
 - 每日自动对账不是“盯日志”：定时比较余额缓存与 ledger 汇总，异常只报警，不自动改账。
 
-退款政策、公司/商户名称、经营主体所在地、税务处理必须在正式收款前确认。附件中的退款门槛可作为产品建议，但不能在不知道适用地区和 Stripe 商户信息时直接写进 Terms。
+经营主体地区、退款原则、税费工具和年付发放方式已经确认。正式收款前仍需从 Stripe Dashboard 核对公开商户名称、Statement descriptor、Stripe Tax registration/filing 状态，以及客服可及时响应。
 
 ## 十、测试与验收
 
@@ -292,10 +297,9 @@ Stripe Test Clock 用于验证月度续费、年付到期、失败重试和取�
 
 开发开始前需要准备但不要在聊天中粘贴 Secret：
 
-1. Stripe 账户的经营主体国家/地区、默认币种和公开商户名称。
-2. 退款政策最终选择，以及税费是含税、另计，还是启用 Stripe Tax。
-3. Google Cloud OAuth Client（正式回调域名为 pixform.ai）。
-4. Cloudflare Secret 中的 Stripe test key、test webhook secret、Google client secret、Better Auth secret。
-5. 确认 annual credits 采用本文推荐的“年度一次发 3,600，年度结束过期”。若改为每月发 300，需要额外的内部发放计划和月度幂等任务。
+1. Stripe Dashboard 的公开商户名称和 Statement descriptor（美国主体、USD、Stripe Tax 已确认）。
+2. Google Cloud OAuth Client（正式回调域名为 pixform.ai）。
+3. Cloudflare Secret 中的 Stripe test key、test webhook secret、Google client secret、Better Auth secret。
+4. Stripe Tax 当前 registration/filing 状态；代码会开启 automatic tax，但不会替代账户层面的税务注册和申报设置。
 
 完成以上输入后，开发从阶段 A 开始；正式 live key 直到 test mode 全链路通过后才配置。

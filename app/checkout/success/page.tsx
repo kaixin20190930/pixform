@@ -1,0 +1,4 @@
+"use client";
+import Link from "next/link";
+import { useEffect,useState } from "react";
+export default function Success(){const [state,setState]=useState("Confirming your payment…");useEffect(()=>{let tries=0;const id=new URLSearchParams(window.location.search).get("session_id");const check=async()=>{tries++;const r=await fetch(`/api/billing/order?session_id=${encodeURIComponent(id||"")}`,{cache:"no-store"});const v=await r.json();if(r.ok&&v.status==="paid"){setState("Payment confirmed. Your credits are ready.");return;}if(tries<15)setTimeout(check,2000);else setState("Your payment is still being confirmed. Check your account in a moment.");};check();},[]);return <main id="main" className="legal wrap"><div className="section-label">CHECKOUT COMPLETE</div><h1>{state}</h1><p>Credits are issued only after Pixform receives a verified payment event from Stripe.</p><Link className="dark-button" href="/account">View account ↗</Link></main>}

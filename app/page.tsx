@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Studio from "@/components/Studio";
 import { title, description, styles, faqs } from "@/lib/content";
-import { environment, ready } from "@/lib/cloudflare";
+import { billingReady, environment, ready } from "@/lib/cloudflare";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
 export default async function Home({ searchParams }: { searchParams: Promise<{ style?: string }> }) {
   const requestedStyle = (await searchParams).style;
   const initialStyle = styles.some(s => s.id === requestedStyle) ? requestedStyle! : "watercolor";
-  let enabled = false;
-  try { enabled = ready(await environment()); } catch { /* Local preview without Cloudflare bindings. */ }
+  let enabled = false,billing=false;
+  try { const env=await environment();enabled = ready(env);billing=billingReady(env); } catch { /* Local preview without Cloudflare bindings. */ }
   const schema = [
     { "@context": "https://schema.org", "@type": "WebApplication", name: "Pixform", url: "https://pixform.ai/", applicationCategory: "MultimediaApplication", operatingSystem: "Web", ...(enabled ? { offers: { "@type": "Offer", price: "0", priceCurrency: "USD" } } : {}) },
     { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) },
@@ -29,8 +29,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       <div className="eyebrow"><span /> YOUR PHOTO. A NEW POSSIBILITY.</div>
       <h1>Image to Image <em>AI</em></h1>
       <p className="subtitle">Upload a photo, pick a style, discover a new look.</p>
-      <Studio enabled={enabled} initialStyle={initialStyle} />
-      <div className="hero-notes"><span>↗ No signup</span><span>◎ No added watermark</span><span>✧ Six creative styles</span></div>
+      <Studio enabled={enabled} billingEnabled={billing} initialStyle={initialStyle} />
+      <div className="hero-notes"><span>↗ {billing?"10 credits with sign in":"No signup"}</span><span>◎ No added watermark</span><span>✧ Six creative styles</span></div>
     </section>
     <section className="steps wrap" aria-labelledby="how"><div className="section-label">A LITTLE INPUT. A NEW OUTLOOK.</div><h2 id="how">Three steps to something new.</h2>
       <div className="three-grid">{[

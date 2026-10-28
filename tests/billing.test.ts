@@ -1,0 +1,13 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { DatabaseSync } from "node:sqlite";
+
+function fixture(){const db=new DatabaseSync(":memory:");for(const file of ["0001_initial.sql","0002_daily_metrics.sql","0003_auth_billing.sql","0004_billing_safety.sql"])db.exec(readFileSync(new URL(`../migrations/${file}`,import.meta.url),"utf8"));db.prepare("INSERT INTO billing_accounts(user_id,updated_at) VALUES ('u1',1)").run();return db;}
+function grant(db:DatabaseSync,id:string,credits:number,bucket="permanent",reset=0){db.prepare("INSERT INTO credit_grants(id,user_id,bucket,source,credits,reset_existing,external_ref,created_at) VALUES (?, 'u1',?,'test',?,?,?,1)").run(id,bucket,credits,reset,`ref:${id}`);}
+
+test("credit grants are idempotent and ledger-backed",()=>{const db=fixture();grant(db,"g1",10);assert.equal(db.prepare("SELECT permanent_credits FROM billing_accounts WHERE user_id='u1'").get()?.permanent_credits,10);assert.throws(()=>grant(db,"g1",10));assert.equal(db.prepare("SELECT count(*) count FROM credit_ledger").get()?.count,1);db.close();});
+
+test("reservations cannot overspend and release exactly once",()=>{const db=fixture();grant(db,"g1",3);const reserve=db.prepare("INSERT INTO credit_reservations(job_id,user_id,tool,credits,subscription_used,permanent_used,state,created_at) VALUES (?,'u1','face-swap',2,0,2,'reserved',2)");reserve.run("j1");assert.throws(()=>reserve.run("j2"));assert.equal(db.prepare("SELECT permanent_credits FROM billing_accounts WHERE user_id='u1'").get()?.permanent_credits,1);db.prepare("UPDATE credit_reservations SET state='released',resolved_at=3 WHERE job_id='j1' AND state='reserved'").run();db.prepare("UPDATE credit_reservations SET state='released',resolved_at=4 WHERE job_id='j1' AND state='reserved'").run();assert.equal(db.prepare("SELECT permanent_credits FROM billing_accounts WHERE user_id='u1'").get()?.permanent_credits,3);assert.equal(db.prepare("SELECT count(*) count FROM credit_ledger WHERE reason='generation_release'").get()?.count,1);db.close();});
+
+test("subscription renewals reset only the subscription bucket",()=>{const db=fixture();grant(db,"pack",5);grant(db,"month1",300,"subscription",1);db.prepare("INSERT INTO credit_reservations(job_id,user_id,tool,credits,subscription_used,permanent_used,state,created_at) VALUES ('j1','u1','image-to-image',1,1,0,'reserved',2)").run();grant(db,"month2",300,"subscription",1);const b=db.prepare("SELECT subscription_credits,permanent_credits FROM billing_accounts WHERE user_id='u1'").get();assert.equal(b?.subscription_credits,300);assert.equal(b?.permanent_credits,5);db.close();});

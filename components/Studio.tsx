@@ -2,13 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { styles } from "@/lib/content";
+import { authClient } from "@/lib/auth-client";
 
 type Job = { token: string; status: string; output?: string; error?: string };
 function event(name: string, properties: Record<string, string | number> = {}) {
   // No filenames, image URLs, photo contents or IPs are sent in event properties.
   window.dispatchEvent(new CustomEvent("pixform:event", { detail: { name, properties } }));
 }
-export default function Studio({ enabled, initialStyle }: { enabled: boolean; initialStyle: string }) {
+export default function Studio({ enabled, billingEnabled, initialStyle }: { enabled: boolean; billingEnabled: boolean; initialStyle: string }) {
+  const { data: session } = authClient.useSession();
+  const [credits,setCredits]=useState<number|null>(null);
   const [style, setStyle] = useState(initialStyle);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
@@ -33,6 +36,7 @@ export default function Studio({ enabled, initialStyle }: { enabled: boolean; in
     return () => clearInterval(timer);
   }, [busy]);
   useEffect(() => () => { generation.current++; }, []);
+  useEffect(()=>{if(!billingEnabled||!session)return;const load=()=>fetch("/api/account/credits",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(v=>v&&setCredits(v.total));load();window.addEventListener("pixform:credits",load);return()=>window.removeEventListener("pixform:credits",load);},[billingEnabled,session]);
   function select(next?: File) {
     if (!next || busy) return;
     setError("");
@@ -45,6 +49,7 @@ export default function Studio({ enabled, initialStyle }: { enabled: boolean; in
   async function generate() {
     if (!file || busy) return;
     if (!enabled) { setError("Image generation is being prepared. Please check back soon."); return; }
+    if (billingEnabled && !session) { await authClient.signIn.social({provider:"google",callbackURL:window.location.href}); return; }
     const run = ++generation.current;
     setError(""); setResult(""); setSeconds(0); setStatus("uploading");
     event("generate", { style });
@@ -59,7 +64,7 @@ export default function Studio({ enabled, initialStyle }: { enabled: boolean; in
         if (run !== generation.current) return;
         setStatus(job.status);
         if (job.status === "succeeded" && job.output) {
-          setResult(job.output); setStatus("succeeded"); return;
+          setResult(job.output); setStatus("succeeded"); window.dispatchEvent(new Event("pixform:credits")); return;
         }
         if (["failed", "canceled"].includes(job.status)) throw new Error(job.error || "We couldn't create this image. Your original is still here; please try again.");
         await new Promise(r => setTimeout(r, 2000));
@@ -98,8 +103,8 @@ export default function Studio({ enabled, initialStyle }: { enabled: boolean; in
         <fieldset disabled={busy}><legend className="control-label"><span>02</span> Pick your perspective</legend><div className="style-options">
           {styles.map(s => <button type="button" key={s.id} aria-pressed={style === s.id} onClick={() => setStyle(s.id)} className={style === s.id ? "selected" : ""}><span aria-hidden style={{ background: s.color }}>{s.mark}</span>{s.name}</button>)}
         </div></fieldset>
-        <button className="generate" disabled={!file || busy} onClick={generate}>{busy ? "Creating your image…" : "Generate Image"}<span aria-hidden>{busy ? "◌" : "↗"}</span></button>
-        <p className="availability">{enabled ? "Free to try · No signup · 10 attempts / hour" : "Preview the studio · Generation opens soon"}</p>
+        <button className="generate" disabled={!file || busy} onClick={generate}>{busy ? "Creating your image…" : billingEnabled&&!session ? "Sign in to generate" : "Generate Image"}<span aria-hidden>{busy ? "◌" : "↗"}</span></button>
+        <p className="availability">{billingEnabled ? `1 credit per image${credits===null?"":` · ${credits} available`}` : enabled ? "Free to try · No signup · 10 attempts / hour" : "Preview the studio · Generation opens soon"}</p>
       </div>
       <div className="result-panel">
         <div className="result-heading"><span>Your next perspective</span><span className="live-label">{result ? "AFTER" : "PREVIEW"}</span></div>
