@@ -11,7 +11,7 @@ export const styles = [
 export const faqs = [
   ["What is image to image AI?", "Image to image AI creates a new image using an existing photo as its starting point. It can reinterpret the colors, textures and artistic style while keeping a connection to your original composition."],
   ["Is this image to image generator free?", "Yes. Sign in with Google to receive 10 free credits once. Image to Image uses 1 credit per generation. You can add a subscription or one-time credit pack if you want to create more."],
-  ["Do I need to sign up to use it?", "No account is required. Choose a photo from your device and select a style to get started when generation is available."],
+  ["Do I need to sign in to use it?", "Yes. Sign in with Google to receive your free credits and keep an accurate credit balance. A credit card is not required to claim the 10 free credits."],
   ["What image formats are supported?", "You can select JPG, PNG or WEBP images up to 10 MB. Use a clear image for the best starting point. Animated GIFs and videos are not supported by this tool."],
   ["Can I use the generated images commercially?", "Commercial use depends on the rights to your original image, the selected model’s license and the rights of anyone depicted. AI output is not guaranteed to be unique or free of third-party rights. Check these before publishing commercially."],
   ["Is there a watermark on the output?", "Pixform does not add a watermark. The model may still generate unwanted marks or text as part of an image; inspect your result before using it."],

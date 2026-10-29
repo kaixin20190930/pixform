@@ -9,6 +9,8 @@
     "start": "next start",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "typecheck": "tsc --noEmit",
+    "seo:source-audit": "node scripts/seo-source-audit.mjs",
+    "seo:production-smoke": "node scripts/seo-production-smoke.mjs",
     "cf:build": "opennextjs-cloudflare build",
     "preview": "opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare deploy",

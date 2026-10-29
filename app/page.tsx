@@ -30,7 +30,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       <h1>Image to Image <em>AI</em></h1>
       <p className="subtitle">Upload a photo, pick a style, discover a new look.</p>
       <Studio enabled={enabled} billingEnabled={billing} initialStyle={initialStyle} />
-      <div className="hero-notes"><span>{billing?"10 credits with sign in":"No signup"}</span><span>◎ No added watermark</span><span>✧ Six creative styles</span></div>
+      <div className="hero-notes"><span>{billing?"10 free credits with sign in":"Free preview"} · <Link href="/pricing">See pricing</Link></span><span>◎ No added watermark</span><span>✧ Six creative styles</span></div>
     </section>
     <section className="steps wrap" aria-labelledby="how"><div className="section-label">A LITTLE INPUT. A NEW OUTLOOK.</div><h2 id="how">Three steps to something new.</h2>
       <div className="three-grid">{[
