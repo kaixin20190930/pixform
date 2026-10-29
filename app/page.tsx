@@ -30,7 +30,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       <h1>Image to Image <em>AI</em></h1>
       <p className="subtitle">Upload a photo, pick a style, discover a new look.</p>
       <Studio enabled={enabled} billingEnabled={billing} initialStyle={initialStyle} />
-      <div className="hero-notes"><span>↗ {billing?"10 credits with sign in":"No signup"}</span><span>◎ No added watermark</span><span>✧ Six creative styles</span></div>
+      <div className="hero-notes"><span>{billing?"10 credits with sign in":"No signup"}</span><span>◎ No added watermark</span><span>✧ Six creative styles</span></div>
     </section>
     <section className="steps wrap" aria-labelledby="how"><div className="section-label">A LITTLE INPUT. A NEW OUTLOOK.</div><h2 id="how">Three steps to something new.</h2>
       <div className="three-grid">{[
@@ -46,10 +46,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       <p>The wider field includes style transfer, face swapping, image expansion and restoration. These are different tasks that need different models; this page focuses on artistic reinterpretation. It is not a precise retouching tool, and results can vary. Start with a clear photo you have permission to use, then check the generated details before sharing or downloading your favorite.</p>
     </div></section>
     <section className="styles-section wrap" id="styles"><div className="section-heading"><div><div className="section-label">FIND YOUR NEW FAVORITE</div><h2>One photo. Many personalities.</h2></div><p>Choose a direction.<br />Make it your own.</p></div>
-      <div className="style-gallery">{styles.map(s => <Link key={s.id} href={`/?style=${s.id}#studio`} className="style-card"><div className={`swatch swatch-${s.id}`} style={{ backgroundColor: s.color }}><span aria-hidden>{s.mark}</span><small>STYLE {String(styles.indexOf(s) + 1).padStart(2, "0")}</small></div><h3>{s.name}<span aria-hidden>↗</span></h3><p>{s.detail}</p></Link>)}</div>
+      <div className="style-gallery">{styles.map(s => <Link key={s.id} href={`/?style=${s.id}#studio`} className="style-card"><div className={`swatch swatch-${s.id}`} style={{ backgroundColor: s.color }}><span aria-hidden>{s.mark}</span><small>STYLE {String(styles.indexOf(s) + 1).padStart(2, "0")}</small></div><h3>{s.name}</h3><p>{s.detail}</p></Link>)}</div>
     </section>
     <section className="faq wrap"><div><div className="section-label">A FEW THINGS TO KNOW</div><h2>Questions?<br />Start here.</h2></div><div>{faqs.map(([q,a]) => <details key={q}><summary>{q}<span aria-hidden>+</span></summary><p>{a}</p></details>)}</div></section>
-    <section className="related-tools wrap"><div className="section-label">MORE AI IMAGE TOOLS</div><h2>A different way to transform.</h2><Link className="related-card" href="/face-swap"><h3>AI Face Swap <span aria-hidden>↗</span></h3><p>Upload a scene and a face. Create a new look with two photos.</p><p>Try now →</p></Link><p className="slot-hint">More tools coming soon.</p></section>
-    <section className="closing wrap"><span aria-hidden>✧</span><div><h2>See your photo differently.</h2><p>Start with something familiar. Make something unexpected.</p></div><a href="#studio" className="dark-button">Try a new style ↗</a></section>
+    <section className="related-tools wrap"><div className="section-label">MORE AI IMAGE TOOLS</div><h2>A different way to transform.</h2><Link className="related-card" href="/face-swap"><h3>AI Face Swap</h3><p>Upload a scene and a face. Create a new look with two photos.</p><p>Try now →</p></Link><p className="slot-hint">More tools coming soon.</p></section>
+    <section className="closing wrap"><span aria-hidden>✧</span><div><h2>See your photo differently.</h2><p>Start with something familiar. Make something unexpected.</p></div><a href="#studio" className="dark-button">Try a new style</a></section>
   </main>;
 }

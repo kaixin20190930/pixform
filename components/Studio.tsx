@@ -103,7 +103,7 @@ export default function Studio({ enabled, billingEnabled, initialStyle }: { enab
         <fieldset disabled={busy}><legend className="control-label"><span>02</span> Pick your perspective</legend><div className="style-options">
           {styles.map(s => <button type="button" key={s.id} aria-pressed={style === s.id} onClick={() => setStyle(s.id)} className={style === s.id ? "selected" : ""}><span aria-hidden style={{ background: s.color }}>{s.mark}</span>{s.name}</button>)}
         </div></fieldset>
-        <button className="generate" disabled={!file || busy} onClick={generate}>{busy ? "Creating your image…" : billingEnabled&&!session ? "Sign in to generate" : "Generate Image"}<span aria-hidden>{busy ? "◌" : "↗"}</span></button>
+        <button className="generate" disabled={!file || busy} onClick={generate}>{busy ? "Creating your image…" : billingEnabled&&!session ? "Sign in to generate" : "Generate Image"}{busy&&<span aria-hidden>◌</span>}</button>
         <p className="availability">{billingEnabled ? `1 credit per image${credits===null?"":` · ${credits} available`}` : enabled ? "Free to try · No signup · 10 attempts / hour" : "Preview the studio · Generation opens soon"}</p>
       </div>
       <div className="result-panel">
@@ -114,7 +114,7 @@ export default function Studio({ enabled, billingEnabled, initialStyle }: { enab
             <div className="empty-result"><div className="abstract-art" aria-hidden><span /><span /><span /><i>✳</i></div><p>A familiar photo.<br /><em>An entirely new feeling.</em></p><small>Your generated image will appear here.</small></div>}
         </div>
         <div className="result-actions">
-          {result ? <><button className="dark-button" onClick={download}>Download ↓</button><button onClick={() => { event("try_again", { style }); setResult(""); document.querySelector("fieldset button")?.scrollIntoView({ block: "nearest" }); }}>Try another style ↗</button><button onClick={() => { setFile(null); setResult(""); setToken(""); setStatus("idle"); if (input.current) input.current.value = ""; }}>Start over</button></> : <><span>◉ Original stays yours</span><span>Made for a little experimentation</span></>}
+          {result ? <><button className="dark-button" onClick={download}>Download ↓</button><button onClick={() => { event("try_again", { style }); setResult(""); document.querySelector("fieldset button")?.scrollIntoView({ block: "nearest" }); }}>Try another style</button><button onClick={() => { setFile(null); setResult(""); setToken(""); setStatus("idle"); if (input.current) input.current.value = ""; }}>Start over</button></> : <><span>◉ Original stays yours</span><span>Made for a little experimentation</span></>}
         </div>
       </div>
     </div>

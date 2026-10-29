@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <a className="skip" href="#main">Skip to content</a>
     <header className="header wrap">
       <Link className="brand" href="/" aria-label="Pixform home"><span className="brand-mark">p<span>✦</span></span>Pixform<span className="brand-dot">.</span></Link>
-      <nav aria-label="Main navigation"><Link href="/#styles">Explore styles <span aria-hidden>↗</span></Link><Link className="face-nav" href="/face-swap">Face Swap</Link><Link href="/pricing">Pricing</Link><AccountNav/></nav>
+      <nav aria-label="Main navigation"><Link href="/#styles">Explore styles</Link><Link className="face-nav" href="/face-swap">Face Swap</Link><Link href="/pricing">Pricing</Link><AccountNav/></nav>
     </header>
     {children}
     <footer className="footer wrap"><div><Link className="brand footer-brand" href="/">Pixform.</Link><p>A fresh perspective on your photos.</p><small>© 2026 Pixform</small></div>

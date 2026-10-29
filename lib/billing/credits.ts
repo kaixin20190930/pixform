@@ -4,6 +4,7 @@ import type { ToolKey } from "./catalog";
 export type Balance = {
   subscription_credits: number; permanent_credits: number; plan_key: string | null;
   subscription_status: string | null; current_period_end: number | null; cancel_at_period_end: number;
+  stripe_customer_id: string | null;
 };
 
 export async function ensureBillingAccount(env: Env, userId: string) {
@@ -17,7 +18,7 @@ export async function ensureBillingAccount(env: Env, userId: string) {
 
 export async function balance(env: Env, userId: string) {
   await ensureBillingAccount(env, userId);
-  return env.DB.prepare("SELECT subscription_credits,permanent_credits,plan_key,subscription_status,current_period_end,cancel_at_period_end FROM billing_accounts WHERE user_id=?")
+  return env.DB.prepare("SELECT subscription_credits,permanent_credits,plan_key,subscription_status,current_period_end,cancel_at_period_end,stripe_customer_id FROM billing_accounts WHERE user_id=?")
     .bind(userId).first<Balance>();
 }
 

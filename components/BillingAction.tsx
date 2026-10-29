@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 
-export function SignInButton({ children="Sign in with Google ↗" }: { children?:React.ReactNode }) {
+export function SignInButton({ children="Sign in with Google" }: { children?:React.ReactNode }) {
   const {data}=authClient.useSession();
-  return <button className="dark-button price-button" onClick={()=>data?window.location.assign("/account"):authClient.signIn.social({provider:"google",callbackURL:window.location.href})}>{data?"View account ↗":children}</button>;
+  return <button className="dark-button price-button" onClick={()=>data?window.location.assign("/account"):authClient.signIn.social({provider:"google",callbackURL:window.location.href})}>{data?"View account":children}</button>;
 }
 
 export function CheckoutButton({ offerKey, children, disabled=false }: { offerKey:string; children:React.ReactNode; disabled?:boolean }) {
@@ -21,5 +21,5 @@ export function CheckoutButton({ offerKey, children, disabled=false }: { offerKe
 export function PortalButton(){
   const [busy,setBusy]=useState(false);
   async function open(){setBusy(true);const r=await fetch("/api/billing/portal",{method:"POST"});const v=await r.json();if(r.ok&&v.url)window.location.assign(v.url);else{alert(v.error||"Billing portal is unavailable.");setBusy(false);}}
-  return <button className="dark-button" onClick={open} disabled={busy}>{busy?"Opening…":"Manage billing ↗"}</button>;
+  return <button className="dark-button" onClick={open} disabled={busy}>{busy?"Opening…":"Manage billing"}</button>;
 }
