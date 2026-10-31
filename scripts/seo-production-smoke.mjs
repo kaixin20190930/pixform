@@ -1,7 +1,7 @@
 const base = (process.env.SEO_BASE_URL || "https://pixform.ai").replace(/\/$/, "");
 const canonicalOrigin = (process.env.SEO_CANONICAL_ORIGIN || base).replace(/\/$/, "");
 const canonicalPaths = ["/", "/face-swap", "/pricing", "/about", "/privacy", "/terms"];
-const retiredClaims = /without signup|no account|per IP|per hour|attempts per/i;
+const retiredClaims = /without signup|no signup|no account|per IP|per hour|attempts per|attempts\s*\/\s*hour/i;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -55,6 +55,7 @@ for (const path of ["/", "/face-swap"]) {
   assert(/href="\/pricing"/.test(main), `${path} is missing a contextual link to /pricing`);
   assert(!retiredClaims.test(textContent(main)), `${path} still exposes a retired free-access claim`);
 }
+assert(!/href="[^"#]*\?style=/.test(mainHtml(pages.get("/"))), "homepage still exposes crawlable style query links");
 
 for (const path of ["/", "/face-swap", "/pricing"]) {
   const main = mainHtml(pages.get(path));
@@ -63,6 +64,9 @@ for (const path of ["/", "/face-swap", "/pricing"]) {
   assert(faq, `${path} is missing FAQPage structured data`);
   assert(faq.mainEntity?.length === visibleQuestions, `${path} FAQ schema has ${faq.mainEntity?.length || 0} questions but the page shows ${visibleQuestions}`);
 }
+const pricingSchema = jsonLd(mainHtml(pages.get("/pricing")));
+assert(pricingSchema.some((entry) => entry?.["@type"] === "WebPage"), "/pricing is missing WebPage structured data");
+assert(!pricingSchema.some((entry) => entry?.["@type"] === "Product" || entry?.["@type"] === "Offer"), "/pricing still exposes merchant Product or Offer structured data");
 
 const pricingWords = wordCount(textContent(mainHtml(pages.get("/pricing"))));
 assert(pricingWords >= 500 && pricingWords <= 700, `/pricing has ${pricingWords} words; expected 500-700`);
@@ -80,5 +84,23 @@ const robots = await robotsResponse.text();
 assert(robotsResponse.status === 200, `/robots.txt returned ${robotsResponse.status}`);
 assert(/Allow:\s*\//i.test(robots), "robots.txt does not allow the public site");
 assert(robots.includes(`${canonicalOrigin}/sitemap.xml`), "robots.txt is missing the canonical sitemap URL");
+
+if (base === canonicalOrigin && canonicalOrigin === "https://pixform.ai") {
+  for (const path of ["/", "/terms", "/?style=anime"]) {
+    const response = await fetch(`http://pixform.ai${path}`, { redirect: "manual" });
+    assert(response.status === 308, `HTTP ${path} returned ${response.status}; expected 308`);
+    assert(response.headers.get("location")?.startsWith("https://pixform.ai/"), `HTTP ${path} does not redirect to the HTTPS apex`);
+  }
+  const styleResponse = await fetch(`${base}/?style=anime`, { redirect: "manual" });
+  assert(styleResponse.status === 308, `style parameter URL returned ${styleResponse.status}; expected 308`);
+  assert(styleResponse.headers.get("location") === `${canonicalOrigin}/#studio-anime`, "style parameter URL has the wrong canonical destination");
+}
+
+for (const path of ["/icon?seo-check", "/apple-icon?seo-check", "/opengraph-image?seo-check", "/face-swap/opengraph-image"]) {
+  const response = await fetch(`${base}${path}`);
+  assert(response.status === 200, `${path} returned ${response.status}`);
+  assert(/\bnoindex\b/i.test(response.headers.get("x-robots-tag") || ""), `${path} is missing X-Robots-Tag noindex`);
+  assert((response.headers.get("content-type") || "").startsWith("image/"), `${path} is not served as an image`);
+}
 
 console.log(`SEO production smoke passed. /pricing visible word count: ${pricingWords}.`);

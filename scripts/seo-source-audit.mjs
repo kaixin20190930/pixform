@@ -10,10 +10,12 @@ const files = [
 ];
 const retiredClaims = [
   /without signup/i,
+  /no signup/i,
   /no account/i,
   /per IP/i,
   /per hour/i,
   /attempts per/i,
+  /attempts\s*\/\s*hour/i,
 ];
 
 const failures = [];

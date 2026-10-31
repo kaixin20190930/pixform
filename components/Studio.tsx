@@ -26,6 +26,17 @@ export default function Studio({ enabled, billingEnabled, initialStyle }: { enab
   const busy = ["starting", "processing", "uploading"].includes(status);
   useEffect(() => { setStyle(initialStyle); }, [initialStyle]);
   useEffect(() => {
+    function syncStyleHash() {
+      const match = window.location.hash.match(/^#studio-([a-z-]+)$/);
+      if (!match || !styles.some((candidate) => candidate.id === match[1])) return;
+      setStyle(match[1]);
+      window.requestAnimationFrame(() => document.getElementById("studio")?.scrollIntoView({ block: "start" }));
+    }
+    syncStyleHash();
+    window.addEventListener("hashchange", syncStyleHash);
+    return () => window.removeEventListener("hashchange", syncStyleHash);
+  }, []);
+  useEffect(() => {
     if (!file) { setPreview(""); return; }
     const url = URL.createObjectURL(file); setPreview(url);
     return () => URL.revokeObjectURL(url);
@@ -104,7 +115,7 @@ export default function Studio({ enabled, billingEnabled, initialStyle }: { enab
           {styles.map(s => <button type="button" key={s.id} aria-pressed={style === s.id} onClick={() => setStyle(s.id)} className={style === s.id ? "selected" : ""}><span aria-hidden style={{ background: s.color }}>{s.mark}</span>{s.name}</button>)}
         </div></fieldset>
         <button className="generate" disabled={!file || busy} onClick={generate}>{busy ? "Creating your image…" : billingEnabled&&!session ? "Sign in to generate" : "Generate Image"}{busy&&<span aria-hidden>◌</span>}</button>
-        <p className="availability">{billingEnabled ? `1 credit per image${credits===null?"":` · ${credits} available`}` : enabled ? "Free to try · No signup · 10 attempts / hour" : "Preview the studio · Generation opens soon"}</p>
+        <p className="availability">{billingEnabled ? `1 credit per image${credits===null?"":` · ${credits} available`}` : enabled ? "Limited preview access" : "Preview the studio · Generation opens soon"}</p>
       </div>
       <div className="result-panel">
         <div className="result-heading"><span>Your next perspective</span><span className="live-label">{result ? "AFTER" : "PREVIEW"}</span></div>

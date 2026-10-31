@@ -25,7 +25,7 @@ export default async function Pricing(){let enabled=false;try{enabled=billingRea
     ["Credits 700","$25 once","700 permanent credits","One-time pack. Credits do not expire.","credits_700_v1"],
   ] as const;
   const schema=[
-    {"@context":"https://schema.org","@type":"Product",name:"Pixform credits",description:"Credits for Pixform Image to Image and AI Face Swap tools.",offers:offers.slice(1).map(o=>({"@type":"Offer",name:o[0],description:o[2],price:o[1].match(/[\d.]+/)?.[0],priceCurrency:"USD",availability:enabled?"https://schema.org/InStock":"https://schema.org/PreOrder",url:"https://pixform.ai/pricing"}))},
+    {"@context":"https://schema.org","@type":"WebPage","@id":"https://pixform.ai/pricing#webpage",url:"https://pixform.ai/pricing",name:"Pricing — AI Image Credits | Pixform",description:"Start with 10 free Pixform credits, subscribe to Pro or buy permanent credit packs for Image to Image and AI Face Swap.",isPartOf:{"@type":"WebSite","@id":"https://pixform.ai/#website",url:"https://pixform.ai/",name:"Pixform"}},
     {"@context":"https://schema.org","@type":"FAQPage",mainEntity:pricingFaqs.map(([name,text])=>({"@type":"Question",name,acceptedAnswer:{"@type":"Answer",text}}))},
     {"@context":"https://schema.org","@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:"Home",item:"https://pixform.ai/"},{"@type":"ListItem",position:2,name:"Pricing",item:"https://pixform.ai/pricing"}]},
   ];
