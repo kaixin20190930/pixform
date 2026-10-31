@@ -67,6 +67,8 @@ for (const path of ["/", "/face-swap", "/pricing"]) {
 const pricingSchema = jsonLd(mainHtml(pages.get("/pricing")));
 assert(pricingSchema.some((entry) => entry?.["@type"] === "WebPage"), "/pricing is missing WebPage structured data");
 assert(!pricingSchema.some((entry) => entry?.["@type"] === "Product" || entry?.["@type"] === "Offer"), "/pricing still exposes merchant Product or Offer structured data");
+assert(pages.get("/pricing").includes("<title>Pricing — 10 Free Credits, Pro from $9/mo | Pixform</title>"), "/pricing has the wrong title");
+assert(pages.get("/pricing").includes('name="description" content="10 free credits to start, then Pro from $9/mo or one-time packs from $9. Image to Image costs 1 credit, AI Face Swap 2. Cancel anytime."'), "/pricing has the wrong meta description");
 
 const pricingWords = wordCount(textContent(mainHtml(pages.get("/pricing"))));
 assert(pricingWords >= 500 && pricingWords <= 700, `/pricing has ${pricingWords} words; expected 500-700`);

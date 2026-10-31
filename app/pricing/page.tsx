@@ -3,7 +3,9 @@ import { CheckoutButton, SignInButton } from "@/components/BillingAction";
 import { environment, billingReady } from "@/lib/cloudflare";
 
 export const dynamic="force-dynamic";
-export const metadata:Metadata={title:"Pricing — AI Image Credits | Pixform",description:"Start with 10 free Pixform credits, subscribe to Pro or buy permanent credit packs for Image to Image and AI Face Swap.",alternates:{canonical:"/pricing"}};
+const pricingTitle="Pricing — 10 Free Credits, Pro from $9/mo | Pixform";
+const pricingDescription="10 free credits to start, then Pro from $9/mo or one-time packs from $9. Image to Image costs 1 credit, AI Face Swap 2. Cancel anytime.";
+export const metadata:Metadata={title:pricingTitle,description:pricingDescription,alternates:{canonical:"/pricing"}};
 
 const pricingFaqs = [
   ["How many credits does each Pixform tool use?", "Image to Image uses 1 credit for each generation. Face Swap uses 2 credits because it processes and blends two uploaded photos."],
@@ -25,7 +27,7 @@ export default async function Pricing(){let enabled=false;try{enabled=billingRea
     ["Credits 700","$25 once","700 permanent credits","One-time pack. Credits do not expire.","credits_700_v1"],
   ] as const;
   const schema=[
-    {"@context":"https://schema.org","@type":"WebPage","@id":"https://pixform.ai/pricing#webpage",url:"https://pixform.ai/pricing",name:"Pricing — AI Image Credits | Pixform",description:"Start with 10 free Pixform credits, subscribe to Pro or buy permanent credit packs for Image to Image and AI Face Swap.",isPartOf:{"@type":"WebSite","@id":"https://pixform.ai/#website",url:"https://pixform.ai/",name:"Pixform"}},
+    {"@context":"https://schema.org","@type":"WebPage","@id":"https://pixform.ai/pricing#webpage",url:"https://pixform.ai/pricing",name:pricingTitle,description:pricingDescription,isPartOf:{"@type":"WebSite","@id":"https://pixform.ai/#website",url:"https://pixform.ai/",name:"Pixform"}},
     {"@context":"https://schema.org","@type":"FAQPage",mainEntity:pricingFaqs.map(([name,text])=>({"@type":"Question",name,acceptedAnswer:{"@type":"Answer",text}}))},
     {"@context":"https://schema.org","@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:"Home",item:"https://pixform.ai/"},{"@type":"ListItem",position:2,name:"Pricing",item:"https://pixform.ai/pricing"}]},
   ];
