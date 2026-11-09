@@ -16,7 +16,10 @@ function textContent(html) {
     .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
     .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]+>/g, " ")
-    .replace(/&(?:nbsp|amp|quot|#x27|#39);/gi, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&(?:apos|#x27|#39);/gi, "'")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -57,12 +60,26 @@ for (const path of ["/", "/face-swap", "/about"]) {
 }
 assert(!/href="[^"#]*\?style=/.test(mainHtml(pages.get("/"))), "homepage still exposes crawlable style query links");
 
+const expectedFaqCounts = new Map([["/", 8], ["/face-swap", 9], ["/pricing", 8]]);
 for (const path of ["/", "/face-swap", "/pricing"]) {
   const main = mainHtml(pages.get(path));
   const faq = jsonLd(main).find((entry) => entry?.["@type"] === "FAQPage");
-  const visibleQuestions = [...main.matchAll(/<summary\b/g)].length;
+  const visibleFaqs = [...main.matchAll(/<details\b[^>]*>([\s\S]*?)<\/details>/gi)].map((match) => {
+    const block = match[1];
+    const summary = block.match(/<summary\b[^>]*>([\s\S]*?)<\/summary>/i)?.[1] || "";
+    const answer = block.match(/<p\b[^>]*>([\s\S]*?)<\/p>/i)?.[1] || "";
+    return {
+      name: textContent(summary.replace(/<span\b[^>]*aria-hidden[^>]*>[\s\S]*?<\/span>/gi, "")),
+      text: textContent(answer),
+    };
+  });
   assert(faq, `${path} is missing FAQPage structured data`);
-  assert(faq.mainEntity?.length === visibleQuestions, `${path} FAQ schema has ${faq.mainEntity?.length || 0} questions but the page shows ${visibleQuestions}`);
+  assert(visibleFaqs.length === expectedFaqCounts.get(path), `${path} shows ${visibleFaqs.length} FAQs; expected ${expectedFaqCounts.get(path)}`);
+  assert(faq.mainEntity?.length === visibleFaqs.length, `${path} FAQ schema has ${faq.mainEntity?.length || 0} questions but the page shows ${visibleFaqs.length}`);
+  faq.mainEntity.forEach((entry, index) => {
+    assert(entry.name === visibleFaqs[index].name, `${path} FAQ ${index + 1} question text differs from JSON-LD`);
+    assert(entry.acceptedAnswer?.text === visibleFaqs[index].text, `${path} FAQ ${index + 1} answer text differs from JSON-LD`);
+  });
 }
 const pricingSchema = jsonLd(mainHtml(pages.get("/pricing")));
 assert(pricingSchema.some((entry) => entry?.["@type"] === "WebPage"), "/pricing is missing WebPage structured data");
