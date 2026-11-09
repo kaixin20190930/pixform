@@ -1,9 +1,10 @@
-export const faceTitle = "AI Face Swap — Free Online Face Swapper";
-export const faceDescription = "Swap faces in any photo with Pixform's AI face swapper. Get 10 free credits, upload two photos and download without an added watermark.";
+export const faceTitle = "AI Face Swap — Free Online Face Swapper | Pixform";
+export const faceDescription = "Swap faces in two photos online. Get 10 free credits with Google sign-in — 2 credits per swap, no added watermark, and no credit card required.";
 export const faceFaqs = [
-  ["Is this AI face swap free to use?", "Yes. Sign in with Google to receive 10 free credits once; a credit card is not required. Face Swap uses 2 credits for each generation, so the welcome balance covers up to five face swaps. Pixform adds no watermark."],
+  ["How many face swaps do I get for free?", "Your first Google sign-in adds 10 free credits, and each successful Face Swap uses 2 credits, so the welcome balance covers up to five swaps. No credit card is required. See the pricing page for more credits."],
   ["How long does a face swap take?", "Processing time varies with demand, image size and model startup. A cold start may take a few minutes. To do a face swap, upload the scene to keep, upload the face to use, confirm permission and select Swap Faces. The tool shows the real status and elapsed time."],
   ["Can I swap multiple faces in one photo?", "This release is designed for one face in each photo. AI multiple face swap with selectable faces is not available. Group photos may produce unpredictable results, so use a clear single-person portrait."],
+  ["What happens if the swap fails?", "Credits are reserved while the model runs and returned to your balance automatically if Pixform cannot complete and save the result. You are not charged for an error."],
   ["Do you store my uploaded photos?", "Both uploads and the result are stored privately for temporary processing. They become inaccessible one hour after processing finishes and are deleted on the next cleanup run. Unfinished jobs expire after two hours. Replicate also processes the photos under its own retention policy. Download your result before it expires."],
   ["What image formats work for face swap?", "Upload JPG, PNG or WEBP files, up to 10 MB per photo. Choose well-lit, front-facing portraits with unobstructed faces. Face swap GIF, video and realtime camera input are not supported in this release."],
   ["Can I do a face swap on my phone?", "Yes. Sign in to Pixform in a modern mobile browser, choose two photos from your device and download the result on the same page. You do not need to install an app."],

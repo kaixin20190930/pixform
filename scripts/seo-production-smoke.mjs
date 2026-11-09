@@ -1,7 +1,7 @@
 const base = (process.env.SEO_BASE_URL || "https://pixform.ai").replace(/\/$/, "");
 const canonicalOrigin = (process.env.SEO_CANONICAL_ORIGIN || base).replace(/\/$/, "");
 const canonicalPaths = ["/", "/face-swap", "/pricing", "/about", "/privacy", "/terms"];
-const retiredClaims = /without signup|no signup|no account|per IP|per hour|attempts per|attempts\s*\/\s*hour/i;
+const retiredClaims = /without signup|without an account|no signup|no account|per IP|per hour|attempts per|attempts\s*\/\s*hour/i;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -50,7 +50,7 @@ for (const path of canonicalPaths) {
   pages.set(path, html);
 }
 
-for (const path of ["/", "/face-swap"]) {
+for (const path of ["/", "/face-swap", "/about"]) {
   const main = mainHtml(pages.get(path));
   assert(/href="\/pricing"/.test(main), `${path} is missing a contextual link to /pricing`);
   assert(!retiredClaims.test(textContent(main)), `${path} still exposes a retired free-access claim`);

@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 const files = [
   "app/page.tsx",
   "app/face-swap/page.tsx",
+  "app/about/page.tsx",
   "lib/content.ts",
   "lib/face-content.ts",
   "components/Studio.tsx",
@@ -12,6 +13,7 @@ const retiredClaims = [
   /without signup/i,
   /no signup/i,
   /no account/i,
+  /without an account/i,
   /per IP/i,
   /per hour/i,
   /attempts per/i,
