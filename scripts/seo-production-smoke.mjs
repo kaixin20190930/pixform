@@ -1,6 +1,6 @@
 const base = (process.env.SEO_BASE_URL || "https://pixform.ai").replace(/\/$/, "");
 const canonicalOrigin = (process.env.SEO_CANONICAL_ORIGIN || base).replace(/\/$/, "");
-const canonicalPaths = ["/", "/face-swap", "/pricing", "/about", "/privacy", "/terms"];
+const canonicalPaths = ["/", "/face-swap", "/multiple-face-swap", "/pricing", "/about", "/privacy", "/terms"];
 const retiredClaims = /without signup|without an account|no signup|no account|per IP|per hour|attempts per|attempts\s*\/\s*hour/i;
 
 function assert(condition, message) {
@@ -60,8 +60,8 @@ for (const path of ["/", "/face-swap", "/about"]) {
 }
 assert(!/href="[^"#]*\?style=/.test(mainHtml(pages.get("/"))), "homepage still exposes crawlable style query links");
 
-const expectedFaqCounts = new Map([["/", 8], ["/face-swap", 9], ["/pricing", 8]]);
-for (const path of ["/", "/face-swap", "/pricing"]) {
+const expectedFaqCounts = new Map([["/", 8], ["/face-swap", 9], ["/pricing", 8], ["/multiple-face-swap", 8]]);
+for (const path of ["/", "/face-swap", "/pricing", "/multiple-face-swap"]) {
   const main = mainHtml(pages.get(path));
   const faq = jsonLd(main).find((entry) => entry?.["@type"] === "FAQPage");
   const visibleFaqs = [...main.matchAll(/<details\b[^>]*>([\s\S]*?)<\/details>/gi)].map((match) => {

@@ -31,3 +31,14 @@ test("provider requests work in workerd and reject redirects without following t
     assert.deepEqual(await redirect.json(), { error: "Provider HTTP 302" });
   } finally { await mf.dispose(); }
 });
+
+
+test("PNG encoding, decoding and composition run inside Cloudflare workerd", async () => {
+  const { build } = await import("esbuild");
+  const bundle = await build({stdin:{contents:`import {encodePng,decodePng,pasteResult} from "./lib/multiple-image.ts";
+    export default {async fetch(){const image={width:100,height:100,data:new Uint8Array(40000)};
+      const base=decodePng(encodePng(image));pasteResult(base,{width:40,height:40,data:new Uint8Array(6400).fill(255)},{x:20,y:20,width:40,height:40});
+      const result=decodePng(encodePng(base));return Response.json({inside:result.data[(40*100+40)*4],outside:result.data[0],width:result.width});}};`,resolveDir:process.cwd(),loader:"ts"},bundle:true,write:false,platform:"node",format:"esm"});
+  const mf=new Miniflare(convertV4MiniflareOptions({modules:true,compatibilityDate:"2026-10-20",compatibilityFlags:["nodejs_compat"],script:bundle.outputFiles[0].text}));
+  try{const result=await mf.dispatchFetch("http://localhost/");const body=await result.text();assert.equal(result.status,200,body);assert.deepEqual(JSON.parse(body),{inside:255,outside:0,width:100});}finally{await mf.dispose();}
+});

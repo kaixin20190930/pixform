@@ -1,0 +1,12 @@
+export const multipleTitle = "Multiple Face Swap — Several Faces, One Photo | Pixform";
+export const multipleDescription = "Swap several faces in one photo at once. Pick which faces to change, leave the rest untouched. 2 credits per face, 10 free with Google sign-in.";
+export const multipleFaqs = [
+ ["Can I swap more than one face at once?", "Yes. Upload a group photo, choose one reference face and select up to five detected faces. Pixform processes each selected region from the original photo and combines the results into one image."],
+ ["How many credits does it cost?", "Each selected face costs 2 credits. Selecting three faces costs 6 credits; five faces cost 10. Credits are reserved before processing and charged once the complete image is saved. If the job fails, all reserved credits are returned."],
+ ["Is there a free multiple face swap?", "New accounts receive 10 free credits once after Google sign-in, with no credit card required. That is enough for a three-face photo costing 6 credits, or up to five selected faces if you use the full welcome balance."],
+ ["Does it work on group photos with more than two people?", "Yes. You can select up to five clear, sufficiently separated faces in a larger group photo. Faces that are too small, obscured or too close to isolate may need a different photo."],
+ ["What happens to faces I don't select?", "Pixform combines only the selected face regions with the original photo and exports a PNG. Unselected regions remain unchanged in the processed image. Photos are resized to a maximum of 1600 pixels on the longest side before detection and processing."],
+ ["Can I swap different source faces onto different people?", "This version uses the same reference face for every selected person. Assigning different reference faces within one job is not supported. Use a reference portrait containing exactly one clear face."],
+ ["Does it work on side profiles or covered faces?", "Front-facing, unobstructed faces work best. Strong side profiles, masks, hair and hands can prevent detection or produce a poor blend. Faces need at least 40 by 40 pixels after preparation, and more detail usually gives better results. Missing faces cannot be selected manually."],
+ ["Do I need an account?", "Yes. Sign in with Google to use your credits and create a result. New accounts receive 10 free credits once. No credit card is needed to use the welcome credits."],
+] as const;

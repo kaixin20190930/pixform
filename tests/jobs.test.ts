@@ -13,6 +13,7 @@ function fixture() {
   db.exec(readFileSync(new URL("../migrations/0002_daily_metrics.sql", import.meta.url), "utf8"));
   db.exec(readFileSync(new URL("../migrations/0003_auth_billing.sql", import.meta.url), "utf8"));
   db.exec(readFileSync(new URL("../migrations/0004_billing_safety.sql", import.meta.url), "utf8"));
+  db.exec(readFileSync(new URL("../migrations/0005_multiple_face_swap.sql", import.meta.url), "utf8"));
   const objects = new Map<string, unknown>();
   const env = {
     DB: { prepare(sql: string) {
@@ -98,4 +99,10 @@ test("face swap uses the selected scene and a separately scoped face URL", async
     assert.equal(await verify(env.JOB_SIGNING_SECRET!, face, "input"), null);
     assert.equal(await verify(env.JOB_SIGNING_SECRET!, scene, "face"), null);
   } finally {globalThis.fetch=original;db.close();}
+});
+
+test("isolated group face crops always use source and destination index zero",async()=>{
+ const {db,env,job}=fixture();job.style="face-crop";env.REPLICATE_MULTI_FACE_SWAP_VERSION="group-version";
+ const original=globalThis.fetch;let body:any;globalThis.fetch=async(_url,init)=>{body=JSON.parse(String(init?.body));return Response.json({id:"isolated",status:"starting"});};
+ try{await createPrediction(env,job,"https://pixform.ai");assert.equal(body.version,"group-version");assert.equal(body.input.destination_face_index,0);assert.equal(body.input.source_face_index,0);assert.ok(await verify(env.JOB_SIGNING_SECRET!,body.input.destination_image.split("/").pop(),"input"));}finally{globalThis.fetch=original;db.close();}
 });

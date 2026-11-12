@@ -16,6 +16,14 @@ export async function provider(env: Env, path: string, init?: RequestInit): Prom
   return res.json();
 }
 export async function createPrediction(env: Env, job: Job, origin: string) {
+  if (job.style === "face-crop") {
+    const input = await sign(env.JOB_SIGNING_SECRET!, job.id, "input", job.expires_at);
+    const face = await sign(env.JOB_SIGNING_SECRET!, job.id, "face", job.expires_at);
+    return provider(env, "predictions", { method: "POST", headers: { "Cancel-After": "5m" }, body: JSON.stringify({
+      version: env.REPLICATE_MULTI_FACE_SWAP_VERSION,
+      input: { destination_image: `${origin}/api/media/${input}`, source_face_image: `${origin}/api/media/${face}`, source_face_index: 0, destination_face_index: 0 },
+    }) });
+  }
   if (job.style === "face-swap") {
     const input = await sign(env.JOB_SIGNING_SECRET!, job.id, "input", job.expires_at);
     const face = await sign(env.JOB_SIGNING_SECRET!, job.id, "face", job.expires_at);
@@ -59,7 +67,7 @@ export async function poll(env: Env, job: Job, origin: string) {
     }
     return;
   }
-  if (["failed", "canceled"].includes(prediction.status)) {
+  if (["failed", "canceled", "aborted"].includes(prediction.status)) {
     await finish(env, job, "failed", "We couldn't transform this image. Try a different photo or style. Your original is still here.");
     return;
   }

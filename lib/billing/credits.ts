@@ -27,7 +27,7 @@ export async function reserveCredits(env: Env, input: { jobId: string; userId: s
     (job_id,user_id,tool,credits,subscription_used,permanent_used,state,created_at)
     SELECT ?,user_id,?,?,min(subscription_credits,?),?-min(subscription_credits,?),'reserved',?
     FROM billing_accounts WHERE user_id=? AND frozen_at IS NULL AND subscription_credits+permanent_credits>=?
-    RETURNING job_id`).bind(input.jobId,input.userId,input.tool,input.credits,input.credits,input.credits,input.credits,Date.now(),input.userId,input.credits).first();
+    RETURNING job_id`).bind(input.jobId,input.tool,input.credits,input.credits,input.credits,input.credits,Date.now(),input.userId,input.credits).first();
   return !!row;
 }
 

@@ -7,6 +7,8 @@ export async function sweep(env: Env) {
   for (const job of active.results) {
     try { await poll(env, job, "https://pixform.ai"); } catch { /* Retry read-only reconciliation next minute. */ }
   }
+  const parents = await env.DB.prepare("SELECT * FROM jobs WHERE style='multiple-face-swap' AND status IN ('processing','saving') AND expires_at>? LIMIT 10").bind(Date.now()).all<Job>();
+  if(parents.results.length){const {pollMultiple}=await import("./multiple-jobs");for(const parent of parents.results){try{await pollMultiple(env,parent,"https://pixform.ai");}catch{/* Reconcile next minute. */}}}
   const expired = await env.DB.prepare("SELECT id,status,credits_reserved FROM jobs WHERE expires_at <= ? LIMIT 100").bind(Date.now()).all<{ id: string; status:string; credits_reserved:number }>();
   for (const { id,status,credits_reserved } of expired.results) {
     if (credits_reserved) {
@@ -15,6 +17,7 @@ export async function sweep(env: Env) {
     }
     // Never remove the record until all uploaded and output objects are deleted, so cleanup can retry.
     await env.MEDIA.delete([`input/${id}`, `face/${id}`, `output/${id}`]);
+    await env.DB.prepare("DELETE FROM multiple_face_jobs WHERE job_id = ?").bind(id).run();
     await env.DB.prepare("DELETE FROM jobs WHERE id = ? AND expires_at <= ?").bind(id, Date.now()).run();
   }
   await env.DB.prepare("DELETE FROM usage WHERE created_at <= ?").bind(Date.now() - 3600000).run();

@@ -1,6 +1,7 @@
 export const TOOL_RATES = {
   "image-to-image": 1,
   "face-swap": 2,
+  "multiple-face-swap": 2,
 } as const;
 
 export type ToolKey = keyof typeof TOOL_RATES;

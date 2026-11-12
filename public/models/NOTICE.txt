@@ -1,0 +1,6 @@
+MediaPipe Tasks Vision 1.2.3 and BlazeFace short-range model
+Copyright Google LLC / The MediaPipe Authors. Licensed under Apache License 2.0; see LICENSE-APACHE-2.0.txt.
+Runtime files are unmodified copies of @mediapipe/tasks-vision/wasm.
+Model: https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite
+Model card: https://storage.googleapis.com/mediapipe-assets/MediaPipe%20BlazeFace%20Model%20Card%20%28Short%20Range%29.pdf
+Detection runs locally in the browser. No photos are sent to Google for detection.
