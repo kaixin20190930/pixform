@@ -2,7 +2,8 @@ import type { FaceBox } from "./multiple-image";
 import type { FaceDetector } from "@mediapipe/tasks-vision";
 let detector:Promise<FaceDetector>|undefined;
 async function loadDetector(){
-  if(!detector)detector=import("@mediapipe/tasks-vision").then(async({FaceDetector,FilesetResolver})=>FaceDetector.createFromOptions(await FilesetResolver.forVisionTasks("/models/vision"),{baseOptions:{modelAssetPath:"/models/blaze-face.tflite",delegate:"CPU"},runningMode:"IMAGE",minDetectionConfidence:.5})).catch(e=>{detector=undefined;throw e;});
+  // Group photos can contain clear faces below 0.5 confidence; keep them selectable.
+  if(!detector)detector=import("@mediapipe/tasks-vision").then(async({FaceDetector,FilesetResolver})=>FaceDetector.createFromOptions(await FilesetResolver.forVisionTasks("/models/vision"),{baseOptions:{modelAssetPath:"/models/blaze-face.tflite",delegate:"CPU"},runningMode:"IMAGE",minDetectionConfidence:.3})).catch(e=>{detector=undefined;throw e;});
   return detector;
 }
 export async function prepareFacePhoto(file:File):Promise<{file:File;url:string;boxes:FaceBox[];width:number;height:number}>{
