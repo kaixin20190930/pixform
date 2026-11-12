@@ -2,7 +2,7 @@ import type { Env } from "./cloudflare";
 import { ensureBillingAccount, reserveCredits, settleCredits } from "./billing/credits.ts";
 import { finish, getJob, json, poll, representation, createPrediction, type Job } from "./jobs.ts";
 import { digest, sign } from "./security.ts";
-import { checkedBoxes, cropBox, decodePng, decodeResult, encodePng, extract, pasteResult, selectedCrops, type FaceBox } from "./multiple-image.ts";
+import { checkedBoxes, decodePng, decodeResult, encodePng, extract, pasteResult, selectedCrops, type FaceBox } from "./multiple-image.ts";
 
 type Manifest={job_id:string;children:string;crops:string;composing_at:number|null};
 // A late poll cannot change a completed parent or reverse its settled credits.
@@ -32,8 +32,8 @@ export async function generateMultiple(request:Request,env:Env){
     const image=form.get("image"),face=form.get("face");
     if(!(image instanceof File)||!(face instanceof File)||!image.size||!face.size||image.size>10*1024*1024||face.size>10*1024*1024)return json({error:"Each photo must be under 10 MB."},400);
     const original=decodePng(new Uint8Array(await image.arrayBuffer()));const reference=decodePng(new Uint8Array(await face.arrayBuffer()));
-    let crops:FaceBox[],referenceCrop:FaceBox;
-    try{const boxes=checkedBoxes(JSON.parse(String(form.get("boxes"))),original.width,original.height);crops=selectedCrops(boxes,JSON.parse(String(form.get("selected"))),original.width,original.height);const refs=checkedBoxes(JSON.parse(String(form.get("referenceBoxes"))),reference.width,reference.height);if(refs.length!==1)throw new Error("Use a reference photo with exactly one clear face.");referenceCrop=cropBox(refs[0],reference.width,reference.height);}catch(e){return json({error:e instanceof Error?e.message:"Detect the faces again."},400);}
+    let crops:FaceBox[];
+    try{const boxes=checkedBoxes(JSON.parse(String(form.get("boxes"))),original.width,original.height);crops=selectedCrops(boxes,JSON.parse(String(form.get("selected"))),original.width,original.height);const refs=checkedBoxes(JSON.parse(String(form.get("referenceBoxes"))),reference.width,reference.height);if(refs.length!==1)throw new Error("Use a reference photo with exactly one clear face.");}catch(e){return json({error:e instanceof Error?e.message:"Detect the faces again."},400);}
     const now=Date.now();const ipHash=await digest(env.JOB_SIGNING_SECRET!,`multi:${ip}`);
     const allowed=await env.DB.prepare("INSERT INTO usage(id,ip_hash,created_at) SELECT ?,?,? WHERE (SELECT COUNT(*) FROM usage WHERE ip_hash=? AND created_at>?)<10 RETURNING id").bind(id,ipHash,now,ipHash,now-3600000).first();if(!allowed)return json({error:"Too many requests. Please wait and try again."},429);
     await ensureBillingAccount(env,session.user.id);const credits=crops.length*2;
@@ -45,7 +45,8 @@ export async function generateMultiple(request:Request,env:Env){
       ...children.map(child=>env.DB.prepare("INSERT INTO jobs(id,status,style,attempts,created_at,expires_at,user_id,tool,credits_reserved) VALUES (?,'pending','face-crop',1,?,?,?,'multiple-face-swap',0)").bind(child,now,parent!.expires_at,session.user.id)),
       env.DB.prepare("INSERT INTO multiple_face_jobs(job_id,children,crops) VALUES (?,?,?)").bind(id,JSON.stringify(children),JSON.stringify(crops)),
     ]);
-    const faceBytes=encodePng(extract(reference,referenceCrop));
+    // Keep the single-face reference intact: tight crops can defeat provider detection.
+    const faceBytes=encodePng(reference);
     await env.MEDIA.put(`input/${id}`,encodePng(original),{httpMetadata:{contentType:"image/png"}});
     for(let i=0;i<children.length;i++){
       await env.MEDIA.put(`input/${children[i]}`,encodePng(extract(original,crops[i])),{httpMetadata:{contentType:"image/png"}});
