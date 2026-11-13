@@ -1,0 +1,28 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "pixform-coloring-preview",
+  "account_id": "23e53b75ddd6ee2d8b80031f6a1e45e0",
+  "main": "../../worker.ts",
+  "compatibility_date": "2026-10-20",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "routes": [],
+  "assets": { "directory": "../../.open-next/assets", "binding": "ASSETS" },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "pixform-coloring-preview" }],
+  "vars": {
+    "APP_ORIGIN": "https://pixform-coloring-preview.liukai19911010.workers.dev",
+    "COLORING_PREVIEW_ENABLED": "true",
+    "COLORING_ENABLED": "false",
+    "BILLING_ENABLED": "true",
+    "GENERATION_ENABLED": "false",
+    "MULTIPLE_FACE_SWAP_ENABLED": "false"
+  },
+  "d1_databases": [{
+    "binding": "DB", "database_name": "pixform-coloring-preview",
+    "database_id": "669d262f-8f72-451c-844b-baa3ad7b20df",
+    "migrations_dir": "../../migrations"
+  }],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "pixform-coloring-preview" }],
+  "triggers": { "crons": ["* * * * *"] },
+  "observability": { "enabled": false }
+}

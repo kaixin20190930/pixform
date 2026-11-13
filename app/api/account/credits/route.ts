@@ -1,5 +1,5 @@
 import { environment, billingReady } from "@/lib/cloudflare";
-import { coloringEnabled } from "@/lib/coloring-jobs";
+import { coloringEnabled } from "@/lib/coloring-config";
 import { currentSession } from "@/lib/session";
 import { balance } from "@/lib/billing/credits";
 import { json } from "@/lib/jobs";

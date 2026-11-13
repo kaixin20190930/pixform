@@ -1,0 +1,151 @@
+{
+  "date": "2026-11-14",
+  "scope": "Photo to Coloring Page release preparation; isolated Cloudflare acceptance only. No production deploy, no Stripe payment.",
+  "preview_url": "https://pixform-coloring-preview.liukai19911010.workers.dev/photo-to-coloring-page",
+  "environment": {
+    "worker": "pixform-coloring-preview",
+    "database": "pixform-coloring-preview",
+    "database_id": "669d262f-8f72-451c-844b-baa3ad7b20df",
+    "private_bucket": "pixform-coloring-preview",
+    "production_resources_modified": false,
+    "stripe_credentials_present": false,
+    "replicate_credentials_present": false
+  },
+  "changes": [
+    "Explicit production COLORING_ENABLED gate, disabled by default; preview restricted to named isolated origins.",
+    "Homepage and Face Swap entry links, pricing rate and FAQ, canonical metadata and sitemap become available with the same feature gate.",
+    "Preview remains noindex and excluded from production sitemap.",
+    "Use another photo resets upload and request state.",
+    "fal request-history input/output storage disabled; media expiration requested at one hour; privacy statement separates provider retention from Pixform storage.",
+    "Existing production smoke automatically includes the coloring page once it appears in the public sitemap; no new scheduled task."
+  ],
+  "local_checks": {
+    "tests": "33/33 passed",
+    "typecheck": "passed",
+    "cloudflare_build": "passed",
+    "seo_source_audit": "passed, 62 files",
+    "retired_claims_scan": "no matches in app/lib/components; no content directory exists",
+    "production_flag_local_workerd": {
+      "production_flag_metadata_and_labels": true,
+      "production_flag_sitemap": true,
+      "home_and_face_swap_links": true,
+      "pricing_words": 694
+    },
+    "live_production_smoke": "passed; existing pricing 691 words"
+  },
+  "provider_retention_sources": [
+    "https://fal.ai/docs/documentation/model-apis/media-expiration"
+  ],
+  "production_release_steps_remaining": [
+    "Add FAL_KEY to production Worker only when release is authorized; reuse existing production auth and signing secrets.",
+    "Set COLORING_ENABLED=true and deploy the prepared build to production only after explicit authorization.",
+    "Verify existing production Google sign-in, one 2-credit generation and download, indexed metadata, sitemap and smoke after release; no Stripe real payment required."
+  ],
+  "limitations": [
+    "Remote preview uses a seeded user and signed Better Auth session in isolated D1. Google OAuth client credentials are placeholders, so external Google OAuth is not covered by this preview test.",
+    "AI redraw is not exact tracing; previous 12-sample validation passed 10, with night scenes remaining weak.",
+    "Provider cost is estimated from current public pricing; no verified invoice amount is claimed."
+  ],
+  "remote_acceptance": {
+    "environment": "isolated Cloudflare Worker, remote preview D1 and R2 only",
+    "scheduled_completion_without_client_poll": true,
+    "production_changed": false,
+    "stripe_calls": 0,
+    "model": "fal-ai/flux-2/klein/4b/edit",
+    "paid_model_jobs": 1,
+    "provider_request_id": "01a1d5e6-6c8a-7a01-8837-e85e5515d9b3",
+    "budget_reserved_usd": 0.02,
+    "model_cost_estimate_usd": 0.01,
+    "actual_invoice_verified": false,
+    "elapsed_seconds": 172.1,
+    "credits_before": 10,
+    "credits_after": 8,
+    "reservation": [
+      2,
+      "captured"
+    ],
+    "ledger": [
+      [
+        -2,
+        "generation_reserve"
+      ]
+    ],
+    "output_size": [
+      768,
+      512
+    ],
+    "preview_download_identical": true,
+    "repeat_download_free": true,
+    "idempotent_replay": true,
+    "anonymous_http": 401,
+    "invalid_upload_http": 400,
+    "faq_visible_and_schema_count": 8,
+    "noindex": true,
+    "excluded_from_sitemap": true,
+    "download_sha256": "c0ea221e92448ecec3f3ee08f09a42397593563a15e2e20b2cd47e8d3d9685d9",
+    "elapsed_seconds_note": "Duration shown is the observation resumed after initial 160-second wait. Initial trigger propagation is included in job timestamps, not model execution time.",
+    "pricing_words": 694
+  },
+  "result_artifact": "COLORING_CLOUDFLARE_RESULT_2026-11-14.png",
+  "preview_deployment_version": "e5924fef-7668-461c-96d9-f7aebe80e932",
+  "production_current_page_http": 404,
+  "remote_cleanup": {
+    "remote_cron_expired_job_removed": true,
+    "failed_expired_reservation_released_once": true,
+    "successful_job_not_refunded": true,
+    "remote_R2_input_and_output_deleted": true,
+    "final_balance": 8,
+    "additional_model_calls": 0
+  },
+  "remote_page_checks": {
+    "/": {
+      "status": 200,
+      "noindex": "noindex, nofollow",
+      "tool_link": true
+    },
+    "/face-swap": {
+      "status": 200,
+      "noindex": "noindex, nofollow",
+      "tool_link": true
+    },
+    "/pricing": {
+      "status": 200,
+      "noindex": "noindex, nofollow",
+      "tool_link": true,
+      "matched_faq_count": 8,
+      "word_count": 694,
+      "word_count_method": "same token expression used for local release check; current preview after final deployment"
+    },
+    "/photo-to-coloring-page": {
+      "status": 200,
+      "noindex": "noindex, nofollow",
+      "tool_link": false,
+      "matched_faq_count": 8
+    }
+  },
+  "observed_scheduled_events": [
+    {
+      "cron": "* * * * *",
+      "scheduled_time": 1794590354124,
+      "outcome": "ok",
+      "cpu_ms": 148,
+      "exception_count": 0
+    },
+    {
+      "cron": "* * * * *",
+      "scheduled_time": 1794590414124,
+      "outcome": "ok",
+      "cpu_ms": 3,
+      "exception_count": 0
+    },
+    {
+      "cron": "* * * * *",
+      "scheduled_time": 1794590474124,
+      "outcome": "ok",
+      "cpu_ms": 6,
+      "exception_count": 0
+    }
+  ],
+  "cron_note": "New Cron activation required initial propagation wait. The fal job was not re-submitted; completion was observed through remote D1 before any client job polling. Expiry was accelerated only for isolated test rows.",
+  "cron_documentation": "https://developers.cloudflare.com/workers/configuration/cron-triggers/"
+}

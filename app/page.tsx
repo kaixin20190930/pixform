@@ -1,3 +1,4 @@
+import { coloringEnabled } from "@/lib/coloring-config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Studio from "@/components/Studio";
@@ -16,8 +17,8 @@ export const metadata: Metadata = {
 export default async function Home({ searchParams }: { searchParams: Promise<{ style?: string }> }) {
   const requestedStyle = (await searchParams).style;
   const initialStyle = styles.some(s => s.id === requestedStyle) ? requestedStyle! : "watercolor";
-  let enabled = false,billing=false;
-  try { const env=await environment();enabled = ready(env);billing=billingReady(env); } catch { /* Local preview without Cloudflare bindings. */ }
+  let enabled = false,billing=false,coloring=false;
+  try { const env=await environment();enabled = ready(env);billing=billingReady(env);coloring=coloringEnabled(env); } catch { /* Local preview without Cloudflare bindings. */ }
   const schema = [
     { "@context": "https://schema.org", "@type": "WebApplication", name: "Pixform", url: "https://pixform.ai/", applicationCategory: "MultimediaApplication", operatingSystem: "Web", ...(enabled ? { offers: { "@type": "Offer", price: "0", priceCurrency: "USD" } } : {}) },
     { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) },
@@ -56,7 +57,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
     </div></section>
     <section className="explain wrap"><div><div className="section-label">START WITH A PHOTO OR A PROMPT?</div><h2>Image to image or text to image?</h2></div><div className="prose"><p>Text to image starts from nothing: you describe a scene and the model invents it. Image to image — often written <strong>img2img</strong> — starts from a picture you already have and uses its composition, framing and subject as a visual reference while changing the treatment. If you want the same picture in a different medium, use image to image. If you want a picture that does not exist yet, use text to image.</p></div></section>
     <section className="faq wrap"><div><div className="section-label">A FEW THINGS TO KNOW</div><h2>Questions?<br />Start here.</h2></div><div>{faqs.map(([q,a]) => <details key={q}><summary>{q}<span aria-hidden>+</span></summary><p>{q === "How much does one image cost?" ? <>{a.slice(0, -"See the pricing page for the full list.".length)}<Link href="/pricing">See the pricing page for the full list.</Link></> : a}</p></details>)}</div></section>
-    <section className="related-tools wrap"><div className="section-label">MORE AI IMAGE TOOLS</div><h2>A different way to transform.</h2><Link className="related-card" href="/face-swap"><h3>AI Face Swap</h3><p>Upload a scene and a face. Create a new look with two photos.</p><p>Try now →</p></Link><Link className="related-card" href="/multiple-face-swap"><h3>Multiple Face Swap</h3><p>Pick up to five faces in a group photo. Use one reference face.</p><p>Try now →</p></Link></section>
+    <section className="related-tools wrap"><div className="section-label">MORE AI IMAGE TOOLS</div><h2>A different way to transform.</h2><Link className="related-card" href="/face-swap"><h3>AI Face Swap</h3><p>Upload a scene and a face. Create a new look with two photos.</p><p>Try now →</p></Link><Link className="related-card" href="/multiple-face-swap"><h3>Multiple Face Swap</h3><p>Pick up to five faces in a group photo. Use one reference face.</p><p>Try now →</p></Link>{coloring&&<Link className="related-card" href="/photo-to-coloring-page"><h3>Photo to Coloring Page</h3><p>Create clean black-and-white outlines from a photo. 2 credits per image.</p><p>Try now →</p></Link>}</section>
     <section className="closing wrap"><span aria-hidden>✧</span><div><h2>See your photo differently.</h2><p>Start with something familiar. Make something unexpected.</p></div><a href="#studio" className="dark-button">Try a new style</a></section>
   </main>;
 }

@@ -1,3 +1,4 @@
+import { coloringEnabled } from "@/lib/coloring-config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import FaceSwapStudio from "@/components/FaceSwapStudio";
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title, description, images: ["/face-swap/opengraph-image"] },
 };
 export default async function FaceSwap() {
-  let enabled = false,billing=false; try { const env=await environment();enabled = ready(env, true);billing=billingReady(env); } catch { /* Local preview. */ }
+  let enabled = false,billing=false,coloring=false; try { const env=await environment();enabled = ready(env, true);billing=billingReady(env);coloring=coloringEnabled(env); } catch { /* Local preview. */ }
   const schema = [
     { "@context": "https://schema.org", "@type": "WebApplication", name: "Pixform AI Face Swap", url: "https://pixform.ai/face-swap", applicationCategory: "MultimediaApplication", operatingSystem: "Web", ...(enabled ? { offers: { "@type": "Offer", price: "0", priceCurrency: "USD" } } : {}) },
     { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faceFaqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) },
@@ -48,6 +49,6 @@ export default async function FaceSwap() {
       <h3>Review the result before sharing</h3><p>Look closely at the eyes, teeth, jawline and the boundary between the face and surrounding hair. Check that the lighting feels consistent with the body and background. Download a result you like before its temporary link expires. If a blend looks awkward, use a better-matched pair of photos and try again with your available credits. Label the image as an edit when the context could otherwise mislead someone.</p>
     </div></section>
     <section className="faq wrap"><div><div className="section-label">A FEW THINGS TO KNOW</div><h2>Face swap questions.</h2></div><div>{faceFaqs.map(([q,a]) => <details key={q}><summary>{q}<span aria-hidden>+</span></summary><p>{q === "How many face swaps do I get for free?" ? <>{a.slice(0, -"See the pricing page for more credits.".length)}<Link href="/pricing">See the pricing page for more credits.</Link></> : a}</p></details>)}</div></section>
-    <section className="related-tools wrap"><div className="section-label">RELATED TOOLS</div><h2>Keep experimenting.</h2><Link className="related-card" href="/"><h3>Image to Image AI</h3><p>Transform your photos with six artistic styles.</p><p>Try now →</p></Link><p className="slot-hint">More AI image tools coming soon.</p></section>
+    <section className="related-tools wrap"><div className="section-label">RELATED TOOLS</div><h2>Keep experimenting.</h2><Link className="related-card" href="/"><h3>Image to Image AI</h3><p>Transform your photos with six artistic styles.</p><p>Try now →</p></Link><p className="slot-hint">More AI image tools coming soon.</p>{coloring&&<Link className="related-card" href="/photo-to-coloring-page"><h3>Photo to Coloring Page</h3><p>Create clean black-and-white outlines from a photo. 2 credits per image.</p><p>Try now →</p></Link>}</section>
   </main>;
 }

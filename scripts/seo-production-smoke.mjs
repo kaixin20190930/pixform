@@ -1,6 +1,10 @@
 const base = (process.env.SEO_BASE_URL || "https://pixform.ai").replace(/\/$/, "");
 const canonicalOrigin = (process.env.SEO_CANONICAL_ORIGIN || base).replace(/\/$/, "");
 const canonicalPaths = ["/", "/face-swap", "/multiple-face-swap", "/pricing", "/about", "/privacy", "/terms"];
+// Auto-discover a released coloring page from the same public sitemap; no extra scheduled task.
+const initialSitemap = await fetch(`${base}/sitemap.xml`).then(r => r.text());
+const coloringPublished = initialSitemap.includes(`${canonicalOrigin}/photo-to-coloring-page</loc>`);
+if (coloringPublished) canonicalPaths.push("/photo-to-coloring-page");
 const retiredClaims = /without signup|without an account|no signup|no account|per IP|per hour|attempts per|attempts\s*\/\s*hour/i;
 
 function assert(condition, message) {
@@ -61,7 +65,8 @@ for (const path of ["/", "/face-swap", "/multiple-face-swap", "/about"]) {
 assert(!/href="[^"#]*\?style=/.test(mainHtml(pages.get("/"))), "homepage still exposes crawlable style query links");
 
 const expectedFaqCounts = new Map([["/", 8], ["/face-swap", 9], ["/pricing", 8], ["/multiple-face-swap", 9]]);
-for (const path of ["/", "/face-swap", "/pricing", "/multiple-face-swap"]) {
+if (coloringPublished) expectedFaqCounts.set("/photo-to-coloring-page", 8);
+for (const path of expectedFaqCounts.keys()) {
   const main = mainHtml(pages.get(path));
   const faq = jsonLd(main).find((entry) => entry?.["@type"] === "FAQPage");
   const visibleFaqs = [...main.matchAll(/<details\b[^>]*>([\s\S]*?)<\/details>/gi)].map((match) => {
@@ -80,6 +85,13 @@ for (const path of ["/", "/face-swap", "/pricing", "/multiple-face-swap"]) {
     assert(entry.name === visibleFaqs[index].name, `${path} FAQ ${index + 1} question text differs from JSON-LD`);
     assert(entry.acceptedAnswer?.text === visibleFaqs[index].text, `${path} FAQ ${index + 1} answer text differs from JSON-LD`);
   });
+}
+if (coloringPublished) {
+  for (const path of ["/", "/face-swap"]) assert(pages.get(path).includes('href="/photo-to-coloring-page"'), `${path} is missing the coloring-page link`);
+  const main = mainHtml(pages.get("/photo-to-coloring-page"));
+  assert(main.includes('href="/pricing"'), "coloring page is missing its pricing link");
+  assert(!retiredClaims.test(textContent(main)), "coloring page exposes a retired free-access claim");
+  assert(!main.includes("ISOLATED PREVIEW"), "coloring page still shows preview labels");
 }
 const pricingSchema = jsonLd(mainHtml(pages.get("/pricing")));
 assert(pricingSchema.some((entry) => entry?.["@type"] === "WebPage"), "/pricing is missing WebPage structured data");

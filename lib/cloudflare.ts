@@ -5,6 +5,7 @@ export type Env = {
   DB: D1Database;
   FAL_KEY?: string;
   COLORING_PREVIEW_ENABLED?: string;
+  COLORING_ENABLED?: string;
   APP_ORIGIN?: string;
   MEDIA: R2Bucket;
   REPLICATE_API_TOKEN?: string;

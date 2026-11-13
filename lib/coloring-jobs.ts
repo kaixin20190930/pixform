@@ -4,20 +4,15 @@ import { digest, sign, MAX_BODY_BYTES, MAX_IMAGE_BYTES } from "./security.ts";
 import { ensureBillingAccount, reserveCredits, settleCredits } from "./billing/credits.ts";
 import { TOOL_RATES } from "./billing/catalog.ts";
 import { coloringImage, blackWhitePng } from "./coloring-image.ts";
+export { coloringEnabled } from "./coloring-config.ts";
 
 export const COLORING_TOOL = "photo-to-coloring-page";
 export const COLORING_MODEL = "fal-ai/flux-2/klein/4b/edit";
 export const COLORING_PROMPT = "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.";
 
-export function coloringEnabled(env: Env) {
-  if (env.COLORING_PREVIEW_ENABLED !== "true" || env.BILLING_ENABLED !== "true" || !env.APP_ORIGIN || !env.FAL_KEY || (env.JOB_SIGNING_SECRET?.length || 0) < 32) return false;
-  const url = new URL(env.APP_ORIGIN);
-  return ["localhost", "127.0.0.1", "pixform-coloring-preview.workers.dev"].includes(url.hostname);
-}
-
 class FalError extends Error { status: number; constructor(status: number) { super(`Fal HTTP ${status}`); this.status=status; } }
 async function fal(env: Env, path: string, init: RequestInit = {}) {
-  const response = await fetch(`https://queue.fal.run/${path}`, { ...init, headers: { Authorization: `Key ${env.FAL_KEY}`, "Content-Type": "application/json", "X-Fal-No-Retry": "1", "X-Fal-Request-Start-Timeout": "120", ...init.headers }, signal: AbortSignal.timeout(20000), redirect: "manual", cache: "no-store" });
+  const response = await fetch(`https://queue.fal.run/${path}`, { ...init, headers: { Authorization: `Key ${env.FAL_KEY}`, "Content-Type": "application/json", "X-Fal-No-Retry": "1", "X-Fal-Request-Start-Timeout": "120", "X-Fal-Store-IO": "0", "X-Fal-Object-Lifecycle-Preference": JSON.stringify({ expiration_duration_seconds: 3600 }), ...init.headers }, signal: AbortSignal.timeout(20000), redirect: "manual", cache: "no-store" });
   if (!response.ok) throw new FalError(response.status);
   return response.json();
 }

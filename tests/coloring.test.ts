@@ -26,8 +26,11 @@ function fixture() {
 }
 function output() {const data=new Uint8Array(256*256*3).fill(255);data.fill(0,0,256*3);return encode({width:256,height:256,depth:8,channels:3,data});}
 
-test("coloring is preview-only and rejects external output URLs",()=>{
+test("coloring requires a separate production switch and rejects external output URLs",()=>{
   const f=fixture();assert.equal(coloringEnabled(f.env),true);assert.equal(coloringEnabled({...f.env,APP_ORIGIN:"https://pixform.ai"}),false);assert.equal(coloringEnabled({...f.env,COLORING_PREVIEW_ENABLED:undefined}),false);
+  assert.equal(coloringEnabled({...f.env,APP_ORIGIN:"https://pixform.ai",COLORING_ENABLED:"true"}),true);
+  assert.equal(coloringEnabled({...f.env,APP_ORIGIN:"https://pixform.ai",COLORING_ENABLED:"false"}),false);
+  assert.equal(coloringEnabled({...f.env,APP_ORIGIN:"https://attacker.test",COLORING_ENABLED:"true"}),false);
   assert.throws(()=>falImageUrl("http://v3.fal.media/result.png"));assert.throws(()=>falImageUrl("https://fal.media.attacker.test/result.png"));assert.throws(()=>falImageUrl("https://user:pass@fal.media/x"));f.db.close();
 });
 
@@ -35,7 +38,7 @@ test("coloring generates once, captures 2 credits, and persists a black-white PN
   const f=fixture(), original=globalThis.fetch;let submits=0;
   globalThis.fetch=async(url,init)=>{
     const path=String(url);
-    if(init?.method==="POST"){submits++;const payload=JSON.parse(String(init.body));assert.equal(payload.num_images,1);assert.equal(payload.num_inference_steps,4);assert.equal(payload.enable_safety_checker,true);return Response.json({request_id:"test-fal-request"});}
+    if(init?.method==="POST"){submits++;assert.equal(new Headers(init.headers).get("X-Fal-Store-IO"),"0");assert.equal(JSON.parse(new Headers(init.headers).get("X-Fal-Object-Lifecycle-Preference")!).expiration_duration_seconds,3600);const payload=JSON.parse(String(init.body));assert.equal(payload.num_images,1);assert.equal(payload.num_inference_steps,4);assert.equal(payload.enable_safety_checker,true);return Response.json({request_id:"test-fal-request"});}
     if(path.endsWith("/status"))return Response.json({status:"COMPLETED"});
     if(path.includes("/requests/"))return Response.json({images:[{url:"https://v3.fal.media/result.png"}],has_nsfw_concepts:[false]});
     return new Response(new Uint8Array(output()),{headers:{"Content-Type":"image/png"}});
