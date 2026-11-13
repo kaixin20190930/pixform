@@ -2,7 +2,7 @@ import type { Env } from "./cloudflare";
 import { ensureBillingAccount, reserveCredits, settleCredits } from "./billing/credits.ts";
 import { finish, getJob, json, poll, representation, createPrediction, type Job } from "./jobs.ts";
 import { digest, sign } from "./security.ts";
-import { checkedBoxes, decodePng, decodeResult, encodePng, extract, pasteResult, selectedCrops, type FaceBox } from "./multiple-image.ts";
+import { checkedBoxes, decodePng, decodeResult, encodePng, extract, padFaceCrop, unpadFaceResult, pasteResult, selectedCrops, type FaceBox } from "./multiple-image.ts";
 
 type Manifest={job_id:string;children:string;crops:string;composing_at:number|null};
 // A late poll cannot change a completed parent or reverse its settled credits.
@@ -49,7 +49,7 @@ export async function generateMultiple(request:Request,env:Env){
     const faceBytes=encodePng(reference);
     await env.MEDIA.put(`input/${id}`,encodePng(original),{httpMetadata:{contentType:"image/png"}});
     for(let i=0;i<children.length;i++){
-      await env.MEDIA.put(`input/${children[i]}`,encodePng(extract(original,crops[i])),{httpMetadata:{contentType:"image/png"}});
+      await env.MEDIA.put(`input/${children[i]}`,encodePng(padFaceCrop(extract(original,crops[i]))),{httpMetadata:{contentType:"image/png"}});
       await env.MEDIA.put(`face/${children[i]}`,faceBytes,{httpMetadata:{contentType:"image/png"}});
     }
     // The manifest remains unready until all crops have been uploaded.
@@ -79,7 +79,7 @@ export async function pollMultiple(env:Env,parent:Job,origin:string){
   await env.DB.prepare("UPDATE jobs SET status='saving' WHERE id=? AND status='processing'").bind(parent.id).run();
   try{
     const original=await env.MEDIA.get(`input/${parent.id}`);if(!original)throw new Error("Missing original");const base=decodePng(new Uint8Array(await original.arrayBuffer()));
-    for(let i=0;i<children.length;i++){const obj=await env.MEDIA.get(children[i].output_key!);if(!obj)throw new Error("Missing face");pasteResult(base,decodeResult(new Uint8Array(await obj.arrayBuffer())),crops[i]);}
+    for(let i=0;i<children.length;i++){const obj=await env.MEDIA.get(children[i].output_key!);if(!obj)throw new Error("Missing face");pasteResult(base,unpadFaceResult(decodeResult(new Uint8Array(await obj.arrayBuffer())),crops[i]),crops[i]);}
     const key=`output/${parent.id}`;await env.MEDIA.put(key,encodePng(base),{httpMetadata:{contentType:"image/png"}});
     await env.DB.prepare("UPDATE jobs SET output_key=?,output_type='image/png' WHERE id=?").bind(key,parent.id).run();parent.output_key=key;parent.output_type="image/png";await finishParent(env,parent,"succeeded");
   }catch{await finishParent(env,parent,"failed","We couldn't combine all selected faces. Your credits were returned.");}

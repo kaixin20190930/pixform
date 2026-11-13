@@ -4,7 +4,7 @@ import { DatabaseSync } from "node:sqlite";
 import { readFileSync } from "node:fs";
 import { pollMultiple } from "../lib/multiple-jobs.ts";
 import { reserveCredits } from "../lib/billing/credits.ts";
-import { decodePng, encodePng } from "../lib/multiple-image.ts";
+import { decodePng, encodePng, padFaceCrop } from "../lib/multiple-image.ts";
 import type { Env } from "../lib/cloudflare.ts";
 import type { Job } from "../lib/jobs.ts";
 
@@ -29,6 +29,9 @@ async function fixture(count:number) {
 test("five independent results compose once and capture ten credits once",async()=>{
  const {db,env,parent,children,objects}=await fixture(5);
  try{
+  // Mix a new padded provider result with older in-flight unpadded results.
+  const key=`output/${children[0]}`;
+  objects.set(key,encodePng(padFaceCrop(decodePng(objects.get(key)!))));
   assert.equal(db.prepare("SELECT permanent_credits FROM billing_accounts").get()?.permanent_credits,0);
   await Promise.all([pollMultiple(env,{...parent},"https://pixform.ai"),pollMultiple(env,{...parent},"https://pixform.ai")]);
   const saved=db.prepare("SELECT * FROM jobs WHERE id=?").get(parent.id) as unknown as Job;

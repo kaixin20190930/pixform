@@ -1,6 +1,20 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {checkedBoxes,selectedCrops,decodePng,encodePng,extract,pasteResult} from "../lib/multiple-image.ts";
+import {checkedBoxes,selectedCrops,decodePng,encodePng,extract,pasteResult,padFaceCrop,unpadFaceResult} from "../lib/multiple-image.ts";
+
+test("provider padding round-trips a non-square crop without shifting pixels",()=>{
+ const box={x:50,y:80,width:382,height:300};
+ const original={width:box.width,height:box.height,data:Uint8Array.from({length:box.width*box.height*4},(_,i)=>i%251)};
+ const padded=padFaceCrop(original);
+ assert.equal(padded.width,638);assert.equal(padded.height,556);
+ assert.deepEqual([...padded.data.subarray(0,4)],[128,128,128,255]);
+ assert.deepEqual(unpadFaceResult(decodePng(encodePng(padded)),box),original);
+ assert.equal(unpadFaceResult(original,box),original);
+ assert.throws(()=>unpadFaceResult({...padded,width:637},box),/dimensions/);
+ const large={width:1500,height:40,data:new Uint8Array(1500*40*4)};
+ assert.equal(padFaceCrop(large).width,1600);
+ assert.deepEqual(unpadFaceResult(padFaceCrop(large),{x:0,y:0,width:1500,height:40}),large);
+});
 
 test("selection rejects duplicate IDs, more than five and neighboring crop overlap",()=>{
  const boxes=checkedBoxes([{x:50,y:50,width:80,height:80},{x:250,y:50,width:80,height:80}],500,300);

@@ -48,6 +48,26 @@ export function extract(image:Raster,box:FaceBox): Raster {
   for(let y=0;y<box.height;y++) data.set(image.data.subarray(((box.y+y)*image.width+box.x)*4,((box.y+y)*image.width+box.x+box.width)*4),y*box.width*4);
   return {width:box.width,height:box.height,data};
 }
+// The provider can miss a face that fills a tight crop. Add context without
+// enlarging the selected region in the group photo or including another face.
+function facePadding(width:number,height:number) {
+  return Math.min(128,Math.floor((MAX_SIDE-Math.max(width,height))/2));
+}
+export function padFaceCrop(image:Raster): Raster {
+  const pad=facePadding(image.width,image.height);
+  const width=image.width+pad*2,height=image.height+pad*2;
+  const data=new Uint8Array(width*height*4);
+  for(let i=0;i<data.length;i+=4){data[i]=data[i+1]=data[i+2]=128;data[i+3]=255;}
+  for(let y=0;y<image.height;y++)data.set(image.data.subarray(y*image.width*4,(y+1)*image.width*4),((y+pad)*width+pad)*4);
+  return {width,height,data};
+}
+export function unpadFaceResult(image:Raster,box:FaceBox): Raster {
+  // Jobs submitted before this change still return an unpadded result.
+  if(image.width===box.width&&image.height===box.height)return image;
+  const pad=facePadding(box.width,box.height);
+  if(image.width!==box.width+pad*2||image.height!==box.height+pad*2)throw new Error("The model changed the crop dimensions.");
+  return extract(image,{x:pad,y:pad,width:box.width,height:box.height});
+}
 export function decodeResult(bytes:Uint8Array):Raster {
   if(bytes[0]===137)return decodePng(bytes);
   return jpeg.decode(bytes,{useTArray:true,maxResolutionInMP:4,maxMemoryUsageInMB:48,tolerantDecoding:false});
