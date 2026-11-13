@@ -1,0 +1,1635 @@
+{
+  "date": "2026-11-14",
+  "scope": "更适合Photo to Coloring Page的干净轮廓候选；同一批12张照片×2模型=24次调用。无生产功能修改、无部署、无Stripe付款。",
+  "commercial_review": {
+    "klein": {
+      "public_hosted_api_commercial_basis": true,
+      "upstream_license": "Apache-2.0；确认的是FLUX.2-klein-4B，不混同9B或其他变体。",
+      "sources": [
+        "https://huggingface.co/black-forest-labs/FLUX.2-klein-4B",
+        "https://fal.ai/models/fal-ai/flux-2/klein/4b/edit",
+        "https://fal.ai/legal/api-services"
+      ]
+    },
+    "bria": {
+      "public_hosted_api_commercial_basis": true,
+      "basis": "fal标注Commercial use和Partner，官方API明确提供Coloring Book预设；按托管商业服务条款使用，不宣称其为开源无限制权重许可。",
+      "sources": [
+        "https://fal.ai/models/bria/fibo-edit/restyle",
+        "https://fal.ai/models/bria/fibo-edit/restyle/api",
+        "https://fal.ai/legal/api-services"
+      ]
+    },
+    "limits": "模型商用许可和托管条款不代替输入照片的权利许可；未做托管容器内权重独立审计，未保证输出版权或完全无第三方权利风险。"
+  },
+  "candidate_selection": {
+    "tested": [
+      "bria/fibo-edit/restyle 的Coloring Book预设",
+      "fal-ai/flux-2/klein/4b/edit 的固定干净轮廓指令"
+    ],
+    "not_tested": [
+      {
+        "model": "fal-ai/flux-pro/kontext",
+        "verified_price": "$0.04/image",
+        "reason": "本轮优先验证专门涂色预设及更低成本、明确Apache许可的4B候选，不扩大调用。"
+      },
+      {
+        "model": "fal-ai/qwen-image-edit-2511",
+        "verified_price": "$0.03/megapixel",
+        "reason": "成本高于Klein；本轮未跑，不推断效果。"
+      },
+      {
+        "model": "Replicate coloring/stencil LoRA搜索候选",
+        "reason": "未作为本轮最终候选；不把仅有标题的涂色/黑白stencil能力或缺少核实的许可当作可商用结论。"
+      }
+    ]
+  },
+  "pricing": {
+    "official_pricing_api_response": {
+      "prices": [
+        {
+          "endpoint_id": "bria/fibo-edit/restyle",
+          "unit_price": 0.04,
+          "unit": "images",
+          "currency": "USD"
+        },
+        {
+          "endpoint_id": "fal-ai/flux-pro/kontext",
+          "unit_price": 0.04,
+          "unit": "images",
+          "currency": "USD"
+        },
+        {
+          "endpoint_id": "fal-ai/qwen-image-edit-2511",
+          "unit_price": 0.03,
+          "unit": "megapixels",
+          "currency": "USD"
+        },
+        {
+          "endpoint_id": "fal-ai/flux-2/klein/4b/edit",
+          "unit_price": 0.01,
+          "unit": "megapixels",
+          "currency": "USD"
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    },
+    "combined_24_call_official_historical_estimate": {
+      "estimate_type": "historical_api_price",
+      "total_cost": 0.6,
+      "currency": "USD"
+    },
+    "klein_12_call_official_historical_estimate": {
+      "estimate_type": "historical_api_price",
+      "total_cost": 0.12,
+      "currency": "USD"
+    },
+    "bria_12_images_fixed_price_usd": 0.48,
+    "budget_authorized_usd": 1,
+    "reserved_total_usd": 0.72,
+    "reservation_basis": "Bria每张$0.04；Klein每次保守预留$0.02，输入/输出均低于1MP，不自动重试，最多各12次。",
+    "nominal_price_note": "Klein官方价格$0.01/MP，按原始像素线性计算并不一定等于实际账单，可能有最小计费/取整；采用官方12次historical_api_price预估$0.12，而不宣传每张只需$0.004。",
+    "actual_invoiced_usd": null,
+    "billing_access": "上一轮确认Key无usage账单读取权限；本轮没有扩大权限，也未将预估称作对账金额。",
+    "unit_economics": "年付每credit毛收入$86/3600≈$0.02389，40%模型成本线为每credit≈$0.00956。Klein若按预估$0.01/张，1credit已略超40%线，推荐未来按2credits评估；Bria$0.04/张若坚持该线需至少5credits。此为收入/模型成本比较，不是净利润，未改生产定价。",
+    "source": "https://fal.ai/docs/documentation/model-apis/pricing"
+  },
+  "method": {
+    "unique_inputs": 12,
+    "matching_sha256_manifest": ".cache/coloring-validation-2026-11-13/fixtures.json",
+    "categories": "人像2、长/短毛宠物各1、房屋2、汽车2、低对比2、夜景2。",
+    "input_dependence": "两张人像来自同一NASA合影的不同人物裁图；小样本探索，不是随机独立大样本。",
+    "repeat_seeds": false,
+    "seed_for_klein": 20261114,
+    "per_image_prompt_tuning": false,
+    "retries": 0,
+    "safety_checker": "保持默认安全检查/明确开启Klein安全检查。",
+    "postprocessing": "原始下载输出与统一灰度阈值200二值化分别评估；不反相、不做局部修补、不开闭运算、不手动擦线。",
+    "gate": "至少9/12张同时满足：主体基本姿态/轮廓可辨、有可涂色空间、无明显素描排线；近白>=240占比>70%、近黑<=40占比<20%、灰阶占比<10%。允许背景简化和卡通化，不承诺像素/五官/结构细节精确还原。",
+    "subject_fidelity": "不把干净线条自动计为通过；主体姿态或构图明显改动、夜景暗部重建不能可靠核对时保守失败。",
+    "reviewer": "Codex视觉评估，非独立人工盲测；scores是探索判断，不是总体成功率。",
+    "timing": "inference_time来自fal metrics；wall包括上传、网络与状态轮询，止于首次观察完成，不含图片下载；未刻意制造冷启动，不宣称生产p95。",
+    "versioning": "fal未暴露可固定的服务权重版本；本次记录端点、参数、日期和输入/输出哈希。",
+    "output_geometry": "模型可能调整输出尺寸或比例，已逐张记录；不承诺与原图像素尺寸相同。"
+  },
+  "models": {
+    "klein": {
+      "endpoint": "fal-ai/flux-2/klein/4b/edit",
+      "successful_outputs": 12,
+      "failed_or_canceled_requests": 0,
+      "mean_inference_seconds": 0.7677500247955322,
+      "inference_seconds_range": [
+        0.6059999465942383,
+        1.0090000629425049
+      ],
+      "observed_submit_to_completed_seconds_range": [
+        4.860881209024228,
+        5.545611915993504
+      ],
+      "raw_pixel_pass_count": 10,
+      "binary_pixel_pass_count": 12,
+      "visual_and_subject_pass_count": 10,
+      "raw_combined_pass_count": 10,
+      "binary_combined_pass_count": 10,
+      "quality_gate_pass": true,
+      "cases": [
+        {
+          "sample": "01-portrait",
+          "category": "portrait",
+          "source": "NASA STS-104 official crew portrait, existing clean portrait crop",
+          "input_sha256": "e0f0dffea816162167b7683c4dac0d98f34fe784a27fcc47edd74a236ebc4b06",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b4-2470-7bd2-9aca-d2244e8f4de5",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 768,
+              "height": 512
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.7980000972747803,
+          "observed_submit_to_completed_seconds": 5.0424655000679195,
+          "output_sha256": "6409b89ff1e2e96f6a6990835896d5f2d4d0ac54ae8a26d30755a77192af76f0",
+          "output_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "01-portrait",
+              "variant": "output",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.92779541015625,
+              "black": 0.020754496256510418,
+              "gray": 0.051450093587239586,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 6.612141927083333e-05
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "01-portrait",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9426294962565104,
+              "black": 0.057370503743489586,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "干净连续轮廓，保留人物及宇航服；五官和发型被卡通化，不是精确描摹。"
+        },
+        {
+          "sample": "02-portrait",
+          "category": "portrait",
+          "source": "NASA STS-104 official crew portrait, existing clean portrait crop",
+          "input_sha256": "e3cc6533959ba7b2d76604d3efaee3a061295b0af115ca6e8873c077f2666ffc",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b4-ce09-7bc1-ba71-cf3561e8774a",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 768,
+              "height": 512
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.9140000343322754,
+          "observed_submit_to_completed_seconds": 4.9857815420255065,
+          "output_sha256": "5752e37235995f2ff1644cade8041c39b233a75a4748e07370f183bbf34c5995",
+          "output_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "02-portrait",
+              "variant": "output",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.935028076171875,
+              "black": 0.0214996337890625,
+              "gray": 0.0434722900390625,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 2.0345052083333332e-05
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "02-portrait",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9476852416992188,
+              "black": 0.05231475830078125,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "主要姿态与宇航服布局保留，五官有所简化。"
+        },
+        {
+          "sample": "03-long-fur",
+          "category": "pet_long_fur",
+          "source": "https://www.pexels.com/photo/16577236/",
+          "input_sha256": "3f29f3c1ff6e5b1849b587ea8e0129ad9a16cbb03a8ac758e0a6e681698186a4",
+          "input_size": [
+            576,
+            768
+          ],
+          "request_id": "01a1d5b4-ef1a-7630-ba8c-e8ee96360a99",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 576,
+              "height": 768
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 1.0090000629425049,
+          "observed_submit_to_completed_seconds": 5.274655749904923,
+          "output_sha256": "16614b5b5ff3fde56bcb3750560d57c4012bfb8de40992a05864524aa42318b1",
+          "output_size": [
+            576,
+            768
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "03-long-fur",
+              "variant": "output",
+              "size": [
+                576,
+                768
+              ],
+              "white": 0.9734248408564815,
+              "black": 0.009526005497685185,
+              "gray": 0.017049153645833332,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 9.04224537037037e-06
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "03-long-fur",
+              "variant": "binary200",
+              "size": [
+                576,
+                768
+              ],
+              "white": 0.9784229419849537,
+              "black": 0.021577058015046297,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "白色长毛犬身体和四肢可辨，背景被去除，毛发细节简化。"
+        },
+        {
+          "sample": "04-short-fur",
+          "category": "pet_short_fur",
+          "source": "https://www.pexels.com/photo/4044201/",
+          "input_sha256": "eaf28f7d0ecbb4ac874bb546c65bee9872f0b65d34ea851665495697816a7aef",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b5-1085-7492-bb8c-c18a9d4c01fc",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 768,
+              "height": 512
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.6059999465942383,
+          "observed_submit_to_completed_seconds": 5.222246750025079,
+          "output_sha256": "8c2a7297e1977a6aca643612b88af6ba4128b28e55803a4cb5a7650ce5e882d2",
+          "output_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "04-short-fur",
+              "variant": "output",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9697341918945312,
+              "black": 0.008199055989583334,
+              "gray": 0.022066752115885418,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 7.62939453125e-06
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "04-short-fur",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9764455159505209,
+              "black": 0.023554484049479168,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "犬脸与肩部轮廓完整；部分毛发细节和线条仍偏细。"
+        },
+        {
+          "sample": "05-house",
+          "category": "house",
+          "source": "https://www.pexels.com/photo/106399/",
+          "input_sha256": "a5b12e6320d777ac821a67bfec79ae387243399cda53db3d3d737b5f85305222",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b5-33a3-7be0-8f4d-0400924e9b20",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 768,
+              "height": 512
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.8569998741149902,
+          "observed_submit_to_completed_seconds": 5.311994292074814,
+          "output_sha256": "240cd6f573904b567c509a0e11471cfb040bd0a4d7dbb9e0ca9c6f994321bee2",
+          "output_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "05-house",
+              "variant": "output",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8917694091796875,
+              "black": 0.02155303955078125,
+              "gray": 0.08667755126953125,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 1.2715657552083334e-05
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "05-house",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9228185017903646,
+              "black": 0.07718149820963542,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "房屋主要屋顶与车库布局保留，植被被简化，有大块留白。"
+        },
+        {
+          "sample": "06-house",
+          "category": "house",
+          "source": "https://www.pexels.com/photo/house-exterior-during-daytime-6422939/",
+          "input_sha256": "446b30932e718818d3143e4d87736d15303b8b21baf0169c7dc2113a51ab5350",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b5-54bf-78f2-88f6-9841c06afd95",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 768,
+              "height": 512
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.6679999828338623,
+          "observed_submit_to_completed_seconds": 5.258840499911457,
+          "output_sha256": "8ee329a0d1aec368c6f6ee0f7015a02d5f59b8f13d58720627d47b691acefcbc",
+          "output_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "06-house",
+              "variant": "output",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8764724731445312,
+              "black": 0.0323638916015625,
+              "gray": 0.09116363525390625,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0004679361979166667
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "06-house",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9020945231119791,
+              "black": 0.09790547688802083,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "建筑透视与主要外轮廓保留，植物简化；局部结构线有重画。"
+        },
+        {
+          "sample": "07-car",
+          "category": "car",
+          "source": "https://www.pexels.com/photo/170811/",
+          "input_sha256": "ecd9f7004db236d09a1512591bba5191acdd1980b11d9276e6ca39146b65d27a",
+          "input_size": [
+            768,
+            432
+          ],
+          "request_id": "01a1d5b5-7ae1-7263-a44d-8b040335e1ab",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 768,
+              "height": 432
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.7139999866485596,
+          "observed_submit_to_completed_seconds": 5.389927041949704,
+          "output_sha256": "ace3c62a9ef71115ea9781822cec150a0b27b25c5d27d8d8928a73eeade25791",
+          "output_size": [
+            928,
+            512
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "07-car",
+              "variant": "output",
+              "size": [
+                928,
+                512
+              ],
+              "white": 0.8816423087284483,
+              "black": 0.028814907731681036,
+              "gray": 0.08954278353987069,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 9.050040409482759e-05
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "07-car",
+              "variant": "binary200",
+              "size": [
+                928,
+                512
+              ],
+              "white": 0.9066183155980604,
+              "black": 0.09338168440193965,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "汽车主体、姿态可辨，窗和车身留白；格栅轮圈较细。"
+        },
+        {
+          "sample": "08-car",
+          "category": "car",
+          "source": "https://www.pexels.com/photo/358070/",
+          "input_sha256": "a02c4177f2a5d5457b2ce8e43ea7203841b9c445b3d6c7abc67e93b4683228a3",
+          "input_size": [
+            768,
+            432
+          ],
+          "request_id": "01a1d5b5-a0e6-70a1-9f4a-3b4e1b301313",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 768,
+              "height": 432
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.7050001621246338,
+          "observed_submit_to_completed_seconds": 5.16008870897349,
+          "output_sha256": "6f60c6c13af0d1ff90aa4caec64fcea810711925bdfc76dd495bf1d4fe63f1fe",
+          "output_size": [
+            928,
+            512
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "08-car",
+              "variant": "output",
+              "size": [
+                928,
+                512
+              ],
+              "white": 0.8938367120150862,
+              "black": 0.02783624057112069,
+              "gray": 0.07832704741379311,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0003072804418103448
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "08-car",
+              "variant": "binary200",
+              "size": [
+                928,
+                512
+              ],
+              "white": 0.9158030542834051,
+              "black": 0.08419694571659483,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "汽车轮廓完整，反光被转换为留白；轮圈细节较密。"
+        },
+        {
+          "sample": "09-low-contrast",
+          "category": "low_contrast",
+          "source": "https://www.pexels.com/photo/8545778/",
+          "input_sha256": "d8572bb8e69aca7097e98ef8d4b43e1ac55a452bb601328700ee37320ea414de",
+          "input_size": [
+            512,
+            768
+          ],
+          "request_id": "01a1d5b5-c0df-74b1-adb7-f09801bab91e",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 512,
+              "height": 768
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.755000114440918,
+          "observed_submit_to_completed_seconds": 5.063466208986938,
+          "output_sha256": "4e77e3f2ba4a7d032e7e99b17e8766577226bc6f004594d055a21b1c5a696325",
+          "output_size": [
+            512,
+            768
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "09-low-contrast",
+              "variant": "output",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.93218994140625,
+              "black": 0.022997538248697918,
+              "gray": 0.044812520345052086,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 4.0690104166666664e-05
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "09-low-contrast",
+              "variant": "binary200",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.9448140462239584,
+              "black": 0.055185953776041664,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "花瓣轮廓清楚，花瓣数量/形状有简化，不保证植物细节精确。"
+        },
+        {
+          "sample": "10-low-contrast",
+          "category": "low_contrast",
+          "source": "https://www.pexels.com/photo/1993424/",
+          "input_sha256": "0472eb64beca3232d70da878da9d25384a6e9eb007a3cd73d1f01051e62aa2b9",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b5-dfd0-75f3-a78c-a96fd96a9d13",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 768,
+              "height": 512
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.7070000171661377,
+          "observed_submit_to_completed_seconds": 4.860881209024228,
+          "output_sha256": "c18a19be065fdd11746cb07de700f9d453227461ea645697a028f679235d65b6",
+          "output_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "10-low-contrast",
+              "variant": "output",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9683609008789062,
+              "black": 0.009485880533854166,
+              "gray": 0.022153218587239582,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 5.0862630208333336e-05
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "10-low-contrast",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9751866658528646,
+              "black": 0.024813334147135418,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "雪中白犬身体、尾巴与四肢轮廓保住，毛发被简化。"
+        },
+        {
+          "sample": "11-night",
+          "category": "night",
+          "source": "https://www.pexels.com/photo/night-city-street-19488222/",
+          "input_sha256": "a2e9eb0125238d3e600706927e7eebcac1077d9d85e2172973384b1ae6d1515d",
+          "input_size": [
+            512,
+            768
+          ],
+          "request_id": "01a1d5b5-ff93-77e3-aa95-c5c9c58dc024",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 512,
+              "height": 768
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.7929999828338623,
+          "observed_submit_to_completed_seconds": 5.073229708010331,
+          "output_sha256": "de279e755754dcc57506b7fd33795c039aa96373087c789af6c07a1244278be2",
+          "output_size": [
+            512,
+            768
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "11-night",
+              "variant": "output",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.8671773274739584,
+              "black": 0.0285491943359375,
+              "gray": 0.10427347819010417,
+              "pixel_pass": false,
+              "colored_pixel_fraction_delta_gt20": 0.00012715657552083334
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "11-night",
+              "variant": "binary200",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.8986918131510416,
+              "black": 0.10130818684895833,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_and_subject_pass": false,
+          "raw_combined_pass": false,
+          "binary_combined_pass": false,
+          "review_note": "夜景街道重画/补画细节，暗部不可可靠核对；不把线条干净等同忠实还原。"
+        },
+        {
+          "sample": "12-night",
+          "category": "night",
+          "source": "https://www.pexels.com/photo/169677/",
+          "input_sha256": "8ea0f36cce4b693a953361d783c122518a2cb0223c4f29e5114d5fe17037d365",
+          "input_size": [
+            768,
+            513
+          ],
+          "request_id": "01a1d5b6-20f5-77f3-bef4-3195bff77fb1",
+          "parameters": {
+            "prompt": "Convert this exact photo into a clean printable coloring book page. Preserve the main subject, its identity, pose, proportions, and composition. Draw only smooth continuous black outlines on a pure white background, with large empty enclosed regions for coloring. Simplify small textures and background clutter. No pencil sketch, no hatching, no crosshatching, no shading, no gray fill, no color, no gradients, no solid black areas, no text or border. Keep every main subject complete and recognizable.",
+            "seed": 20261114,
+            "num_inference_steps": 4,
+            "num_images": 1,
+            "image_size": {
+              "width": 768,
+              "height": 512
+            },
+            "enable_safety_checker": true,
+            "output_format": "png"
+          },
+          "inference_seconds": 0.687000036239624,
+          "observed_submit_to_completed_seconds": 5.545611915993504,
+          "output_sha256": "9d300c469d52380c41540b53bcb095fdfea6414d2f243cd06e138e961f700c30",
+          "output_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "klein",
+              "sample": "12-night",
+              "variant": "output",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.7723058064778646,
+              "black": 0.027882893880208332,
+              "gray": 0.1998112996419271,
+              "pixel_pass": false,
+              "colored_pixel_fraction_delta_gt20": 0.002227783203125
+            },
+            "binary200": {
+              "model": "klein",
+              "sample": "12-night",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8310902913411459,
+              "black": 0.16890970865885416,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_and_subject_pass": false,
+          "raw_combined_pass": false,
+          "binary_combined_pass": false,
+          "review_note": "车流和道路细节重画成类似轨道的平行线，背景线条密集，不计通过。"
+        }
+      ]
+    },
+    "bria": {
+      "endpoint": "bria/fibo-edit/restyle",
+      "successful_outputs": 12,
+      "failed_or_canceled_requests": 0,
+      "mean_inference_seconds": 11.116416652997335,
+      "inference_seconds_range": [
+        10.195000171661377,
+        14.16100001335144
+      ],
+      "observed_submit_to_completed_seconds_range": [
+        14.004229833022691,
+        17.65234770893585
+      ],
+      "raw_pixel_pass_count": 7,
+      "binary_pixel_pass_count": 11,
+      "visual_and_subject_pass_count": 7,
+      "raw_combined_pass_count": 6,
+      "binary_combined_pass_count": 7,
+      "quality_gate_pass": false,
+      "cases": [
+        {
+          "sample": "01-portrait",
+          "category": "portrait",
+          "source": "NASA STS-104 official crew portrait, existing clean portrait crop",
+          "input_sha256": "e0f0dffea816162167b7683c4dac0d98f34fe784a27fcc47edd74a236ebc4b06",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b4-01ea-7ec2-b62d-c7d780b3bb27",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 10.452000141143799,
+          "observed_submit_to_completed_seconds": 16.806246375082992,
+          "output_sha256": "46c3a2943523b7a81da7fac1d831b7eca2934b91a0f022e0ce000a363279947a",
+          "output_size": [
+            1248,
+            832
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "01-portrait",
+              "variant": "output",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.889232387204142,
+              "black": 0.04793438732741617,
+              "gray": 0.06283322546844182,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.001732579820019724
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "01-portrait",
+              "variant": "binary200",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.9073758398052268,
+              "black": 0.09262416019477318,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "轮廓清楚，但背景略有暖色且有少量红色细节；需统一黑白处理。"
+        },
+        {
+          "sample": "02-portrait",
+          "category": "portrait",
+          "source": "NASA STS-104 official crew portrait, existing clean portrait crop",
+          "input_sha256": "e3cc6533959ba7b2d76604d3efaee3a061295b0af115ca6e8873c077f2666ffc",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b4-c9e4-7ff0-959a-243ebafbea99",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 10.958999872207642,
+          "observed_submit_to_completed_seconds": 14.300636125029996,
+          "output_sha256": "f4dae2c67ceb7fcc730bd0ca6d1ee5e581e24d845e30077d273620e7b64e1a77",
+          "output_size": [
+            1248,
+            832
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "02-portrait",
+              "variant": "output",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.873583310219428,
+              "black": 0.0647044887204142,
+              "gray": 0.06171220106015779,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 9.630793885601578e-07
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "02-portrait",
+              "variant": "binary200",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.8903495592948718,
+              "black": 0.10965044070512821,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "轮廓完整，头发宇航服局部黑填充较多。"
+        },
+        {
+          "sample": "03-long-fur",
+          "category": "pet_long_fur",
+          "source": "https://www.pexels.com/photo/16577236/",
+          "input_sha256": "3f29f3c1ff6e5b1849b587ea8e0129ad9a16cbb03a8ac758e0a6e681698186a4",
+          "input_size": [
+            576,
+            768
+          ],
+          "request_id": "01a1d5b5-11ad-7a10-80ee-f437aa0d7bbb",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 10.269000053405762,
+          "observed_submit_to_completed_seconds": 14.804624125012197,
+          "output_sha256": "dac375974314df2c223c80954bde34c6e7e23f1cb47546b9b68fe361e1c6d9a9",
+          "output_size": [
+            880,
+            1168
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "03-long-fur",
+              "variant": "output",
+              "size": [
+                880,
+                1168
+              ],
+              "white": 0.967102856475716,
+              "black": 0.01987274283935243,
+              "gray": 0.013024400684931508,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "03-long-fur",
+              "variant": "binary200",
+              "size": [
+                880,
+                1168
+              ],
+              "white": 0.9707172322540473,
+              "black": 0.029282767745952676,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_and_subject_pass": false,
+          "raw_combined_pass": false,
+          "binary_combined_pass": false,
+          "review_note": "主体被明显缩小并改变站/坐姿表现，构图偏离原图，保真门槛不通过。"
+        },
+        {
+          "sample": "04-short-fur",
+          "category": "pet_short_fur",
+          "source": "https://www.pexels.com/photo/4044201/",
+          "input_sha256": "eaf28f7d0ecbb4ac874bb546c65bee9872f0b65d34ea851665495697816a7aef",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b5-5900-71a0-b64c-391e29525283",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 10.223000049591064,
+          "observed_submit_to_completed_seconds": 14.444729625014588,
+          "output_sha256": "25ad90f81d91f483092d697cb1c6d093280a49d8c9d43aff174fbdc8e2f0d4e1",
+          "output_size": [
+            1248,
+            832
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "04-short-fur",
+              "variant": "output",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.9663307445759369,
+              "black": 0.022047776442307692,
+              "gray": 0.011621478981755425,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "04-short-fur",
+              "variant": "binary200",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.9694848295734714,
+              "black": 0.0305151704265286,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "犬脸肩部轮廓干净，但项圈等细节被省略。"
+        },
+        {
+          "sample": "05-house",
+          "category": "house",
+          "source": "https://www.pexels.com/photo/106399/",
+          "input_sha256": "a5b12e6320d777ac821a67bfec79ae387243399cda53db3d3d737b5f85305222",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b5-9e55-7f92-944e-094485304186",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 12.134999990463257,
+          "observed_submit_to_completed_seconds": 15.378024042001925,
+          "output_sha256": "321b92fafc36deb6c740177d80ae8db9e5ee68c9db548dfb2ba1854079e08672",
+          "output_size": [
+            1248,
+            832
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "05-house",
+              "variant": "output",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.7690853442430966,
+              "black": 0.08602417714497042,
+              "gray": 0.14489047861193294,
+              "pixel_pass": false,
+              "colored_pixel_fraction_delta_gt20": 0.00026388375246548323
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "05-house",
+              "variant": "binary200",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.803791836168639,
+              "black": 0.19620816383136094,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_and_subject_pass": false,
+          "raw_combined_pass": false,
+          "binary_combined_pass": false,
+          "review_note": "屋顶保留密集重复纹理，未兑现干净无排线的要求。"
+        },
+        {
+          "sample": "06-house",
+          "category": "house",
+          "source": "https://www.pexels.com/photo/house-exterior-during-daytime-6422939/",
+          "input_sha256": "446b30932e718818d3143e4d87736d15303b8b21baf0169c7dc2113a51ab5350",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b5-e958-7311-a0b8-e0545de66f5f",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 11.613999843597412,
+          "observed_submit_to_completed_seconds": 14.768730000010692,
+          "output_sha256": "d9797ebd0b951c111a0a2d76df0b4f1bc8333556b89a1ff9f9c05a674849c329",
+          "output_size": [
+            1248,
+            832
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "06-house",
+              "variant": "output",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.8028200890655819,
+              "black": 0.07646657729289941,
+              "gray": 0.12071333364151873,
+              "pixel_pass": false,
+              "colored_pixel_fraction_delta_gt20": 7.512019230769231e-05
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "06-house",
+              "variant": "binary200",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.8348636664817555,
+              "black": 0.16513633351824458,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": false,
+          "binary_combined_pass": true,
+          "review_note": "建筑轮廓完整但植物和石墙细节偏密，二值化后勉强可用。"
+        },
+        {
+          "sample": "07-car",
+          "category": "car",
+          "source": "https://www.pexels.com/photo/170811/",
+          "input_sha256": "ecd9f7004db236d09a1512591bba5191acdd1980b11d9276e6ca39146b65d27a",
+          "input_size": [
+            768,
+            432
+          ],
+          "request_id": "01a1d5b6-30f8-7ec2-becf-2e1b1209c526",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 10.378999948501587,
+          "observed_submit_to_completed_seconds": 14.563456834061071,
+          "output_sha256": "95720839048a1dab2eb693dec726fcf5a6ef5f31ed229d165bff7bc11abbaebc",
+          "output_size": [
+            1360,
+            768
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "07-car",
+              "variant": "output",
+              "size": [
+                1360,
+                768
+              ],
+              "white": 0.8932626761642157,
+              "black": 0.06299211090686274,
+              "gray": 0.04374521292892157,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.02001378676470588
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "07-car",
+              "variant": "binary200",
+              "size": [
+                1360,
+                768
+              ],
+              "white": 0.9052293964460785,
+              "black": 0.09477060355392157,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "汽车线条简洁，格栅和车窗大幅简化，不能承诺车型细节精确。"
+        },
+        {
+          "sample": "08-car",
+          "category": "car",
+          "source": "https://www.pexels.com/photo/358070/",
+          "input_sha256": "a02c4177f2a5d5457b2ce8e43ea7203841b9c445b3d6c7abc67e93b4683228a3",
+          "input_size": [
+            768,
+            432
+          ],
+          "request_id": "01a1d5b6-75e9-7890-ad33-30ed8bb0a25f",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 14.16100001335144,
+          "observed_submit_to_completed_seconds": 17.65234770893585,
+          "output_sha256": "417f782ae8030f91625b3fa2586021c040955c8905a9c73beab9b46f4a49d2e9",
+          "output_size": [
+            1360,
+            768
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "08-car",
+              "variant": "output",
+              "size": [
+                1360,
+                768
+              ],
+              "white": 0.712096928615196,
+              "black": 0.1119561887254902,
+              "gray": 0.1759468826593137,
+              "pixel_pass": false,
+              "colored_pixel_fraction_delta_gt20": 0.0004212622549019608
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "08-car",
+              "variant": "binary200",
+              "size": [
+                1360,
+                768
+              ],
+              "white": 0.759750306372549,
+              "black": 0.240249693627451,
+              "gray": 0.0,
+              "pixel_pass": false,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_and_subject_pass": false,
+          "raw_combined_pass": false,
+          "binary_combined_pass": false,
+          "review_note": "车窗、车轮和背景有密集排线，二值化黑像素超标。"
+        },
+        {
+          "sample": "09-low-contrast",
+          "category": "low_contrast",
+          "source": "https://www.pexels.com/photo/8545778/",
+          "input_sha256": "d8572bb8e69aca7097e98ef8d4b43e1ac55a452bb601328700ee37320ea414de",
+          "input_size": [
+            512,
+            768
+          ],
+          "request_id": "01a1d5b6-c866-74a1-b1bd-482e4258eaf6",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 10.629999876022339,
+          "observed_submit_to_completed_seconds": 14.004229833022691,
+          "output_sha256": "954eb6f315b42b07f9d4dbaad35176ca8e6543e1003598efb4e975845f084d0c",
+          "output_size": [
+            832,
+            1248
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "09-low-contrast",
+              "variant": "output",
+              "size": [
+                832,
+                1248
+              ],
+              "white": 0.943574141703649,
+              "black": 0.021255162105522682,
+              "gray": 0.0351706961908284,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 8.66771449704142e-06
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "09-low-contrast",
+              "variant": "binary200",
+              "size": [
+                832,
+                1248
+              ],
+              "white": 0.9530498798076923,
+              "black": 0.046950120192307696,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "花瓣叶片轮廓清楚，可涂色，细节有简化。"
+        },
+        {
+          "sample": "10-low-contrast",
+          "category": "low_contrast",
+          "source": "https://www.pexels.com/photo/1993424/",
+          "input_sha256": "0472eb64beca3232d70da878da9d25384a6e9eb007a3cd73d1f01051e62aa2b9",
+          "input_size": [
+            768,
+            512
+          ],
+          "request_id": "01a1d5b7-0c5f-71d3-b4f8-30a05037d6ab",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 10.195000171661377,
+          "observed_submit_to_completed_seconds": 14.712718958966434,
+          "output_sha256": "ccf5ca27d0f48a24f65c857ce74da1fc86a7e338795d5e2ab820722ed1b277e3",
+          "output_size": [
+            1248,
+            832
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "10-low-contrast",
+              "variant": "output",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.9484954773791914,
+              "black": 0.03372896634615385,
+              "gray": 0.01777555627465483,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "10-low-contrast",
+              "variant": "binary200",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.9534437792776134,
+              "black": 0.04655622072238659,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_and_subject_pass": true,
+          "raw_combined_pass": true,
+          "binary_combined_pass": true,
+          "review_note": "白犬轮廓清楚，姿态基本可辨，但比例和毛发被卡通化。"
+        },
+        {
+          "sample": "11-night",
+          "category": "night",
+          "source": "https://www.pexels.com/photo/night-city-street-19488222/",
+          "input_sha256": "a2e9eb0125238d3e600706927e7eebcac1077d9d85e2172973384b1ae6d1515d",
+          "input_size": [
+            512,
+            768
+          ],
+          "request_id": "01a1d5b7-522b-7d81-a6cd-4bb182b17be8",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 11.464999914169312,
+          "observed_submit_to_completed_seconds": 14.13704062497709,
+          "output_sha256": "18397fd8a3eea3aefc9462eb37e45519db0b91701fa6c1318e2f50e38265c6de",
+          "output_size": [
+            832,
+            1248
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "11-night",
+              "variant": "output",
+              "size": [
+                832,
+                1248
+              ],
+              "white": 0.8229272605399408,
+              "black": 0.07543415618836292,
+              "gray": 0.10163858327169625,
+              "pixel_pass": false,
+              "colored_pixel_fraction_delta_gt20": 1.8298508382642997e-05
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "11-night",
+              "variant": "binary200",
+              "size": [
+                832,
+                1248
+              ],
+              "white": 0.8498347355769231,
+              "black": 0.15016526442307693,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_and_subject_pass": false,
+          "raw_combined_pass": false,
+          "binary_combined_pass": false,
+          "review_note": "夜景暗部被重建，建筑与路面细节无法可靠忠实复现；保守不通过。"
+        },
+        {
+          "sample": "12-night",
+          "category": "night",
+          "source": "https://www.pexels.com/photo/169677/",
+          "input_sha256": "8ea0f36cce4b693a953361d783c122518a2cb0223c4f29e5114d5fe17037d365",
+          "input_size": [
+            768,
+            513
+          ],
+          "request_id": "01a1d5b7-98c1-74c1-bcc2-08aca3c83544",
+          "parameters": {
+            "style": "Coloring Book"
+          },
+          "inference_seconds": 10.914999961853027,
+          "observed_submit_to_completed_seconds": 14.64228608389385,
+          "output_sha256": "dfbab179cf20f4cbcca75abfdb74234e6d8855a8b25a8bbb6cf12f708d967328",
+          "output_size": [
+            1248,
+            832
+          ],
+          "pixel_metrics": {
+            "output": {
+              "model": "bria",
+              "sample": "12-night",
+              "variant": "output",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.8305943355522682,
+              "black": 0.04683743990384615,
+              "gray": 0.1225682245438856,
+              "pixel_pass": false,
+              "colored_pixel_fraction_delta_gt20": 0.03101211939102564
+            },
+            "binary200": {
+              "model": "bria",
+              "sample": "12-night",
+              "variant": "binary200",
+              "size": [
+                1248,
+                832
+              ],
+              "white": 0.8734773714866864,
+              "black": 0.1265226285133136,
+              "gray": 0.0,
+              "pixel_pass": true,
+              "colored_pixel_fraction_delta_gt20": 0.0
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_and_subject_pass": false,
+          "raw_combined_pass": false,
+          "binary_combined_pass": false,
+          "review_note": "道路与背景被大幅简化、重画，原图场景细节偏离。"
+        }
+      ]
+    }
+  },
+  "conclusion": {
+    "recommended_candidate": "fal-ai/flux-2/klein/4b/edit",
+    "klein_quality_pass": true,
+    "klein_pass_count": 10,
+    "required_pass_count": 9,
+    "klein_limit": "两张夜景失败；人像五官、花瓣数、建筑细节等会卡通化/重画，不能宣称精确描边或无损转换。",
+    "bria_quality_pass": false,
+    "bria_recommendation": "较贵且部分样例有排线、构图变化，不作为当前首选。",
+    "next_step": "保存验证结果；若用户之后决定接入，沿用本轮固定指令、单输出、PNG及统一黑白处理，并按实际账单复核2credits定价。当前不接生产。",
+    "production_integration_performed": false
+  },
+  "assets": {
+    "summary": "docs/validation-assets/coloring-clean-2026-11-14/summary.jpg",
+    "all_12_contacts": [
+      "docs/validation-assets/coloring-clean-2026-11-14/comparison-1.jpg",
+      "docs/validation-assets/coloring-clean-2026-11-14/comparison-2.jpg",
+      "docs/validation-assets/coloring-clean-2026-11-14/comparison-3.jpg"
+    ],
+    "cache": "/Users/liukai/Documents/ChatGPT/pixform/.cache/coloring-clean-validation-2026-11-14"
+  },
+  "remaining_active_requests": 0
+}
