@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-14",
+  "url": "https://pixform.ai/photo-to-coloring-page",
+  "deployment_version": "c3f03697-dc34-48ad-a65d-4c315505658f",
+  "production_worker": "pixform",
+  "feature_enabled": true,
+  "production_FAL_KEY_configured": true,
+  "google_oauth": "Passed: real Google account chooser -> Pixform account -> authenticated tool; no seeded sessions or auth bypass.",
+  "test_credit_grant": {
+    "user_authorized": true,
+    "credits": 2,
+    "ledger_recorded": true,
+    "ref": "coloring-production-acceptance-2026-11-14"
+  },
+  "model": {
+    "endpoint": "fal-ai/flux-2/klein/4b/edit",
+    "paid_calls": 1,
+    "estimated_cost_usd": 0.01,
+    "reserved_estimate_usd": 0.02,
+    "budget_cap_usd": 1,
+    "invoice_amount_verified": false
+  },
+  "job": {
+    "id": "f52567e5-1369-4fe6-84d8-154f0ad550bf",
+    "status": "succeeded",
+    "prediction_id": "01a1d5f4-6526-7452-b39e-2fc39aaeca11",
+    "credits_reserved": 2,
+    "created_at": 1794590920828,
+    "completed_at": 1794590930977,
+    "expires_at": 1794594530977,
+    "output_key": "output/f52567e5-1369-4fe6-84d8-154f0ad550bf",
+    "output_type": "image/png"
+  },
+  "reservation": [
+    {
+      "credits": 2,
+      "state": "captured"
+    }
+  ],
+  "generation_ledger": [
+    {
+      "delta": -2,
+      "reason": "generation_reserve"
+    }
+  ],
+  "balance_before": 2,
+  "balance_after": 0,
+  "download": {
+    "browser_download_success": true,
+    "size": [
+      768,
+      512
+    ],
+    "format": "PNG",
+    "black_white_only": true,
+    "identical_to_R2_result": true,
+    "sha256": "c0ea221e92448ecec3f3ee08f09a42397593563a15e2e20b2cd47e8d3d9685d9",
+    "artifact": "COLORING_PRODUCTION_RESULT_2026-11-14.png"
+  },
+  "screenshot": "COLORING_PRODUCTION_SCREENSHOT_2026-11-14.png",
+  "verification": {
+    "cloudflare_build": "passed",
+    "seo_production_smoke": "passed; new coloring page included; pricing 695 words",
+    "seo_checks": [
+      "HTTP 200",
+      "index/follow",
+      "self canonical",
+      "8 visible FAQs match JSON-LD",
+      "homepage and face-swap links",
+      "production sitemap entry",
+      "no isolated preview labels"
+    ]
+  },
+  "stripe_real_payments": 0,
+  "secrets_in_report": false,
+  "remaining_product_limitations": "AI redraw is not precise tracing; dark and complex photos may produce poor results."
+}

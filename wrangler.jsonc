@@ -12,7 +12,7 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "pixform" }],
-  "vars": { "COLORING_ENABLED": "false", "MULTIPLE_FACE_SWAP_ENABLED": "true", "REPLICATE_MULTI_FACE_SWAP_VERSION": "518f2116425c40acb5c234031c55daf843c1357eff784370fe9489e57b65c150", "GENERATION_ENABLED": "true", "BILLING_ENABLED": "true", "REPLICATE_FACE_SWAP_VERSION": "278a81e7ebb22db98bcba54de985d22cc1abeead2754eb1f2af717247be69b34" },
+  "vars": { "COLORING_ENABLED": "true", "MULTIPLE_FACE_SWAP_ENABLED": "true", "REPLICATE_MULTI_FACE_SWAP_VERSION": "518f2116425c40acb5c234031c55daf843c1357eff784370fe9489e57b65c150", "GENERATION_ENABLED": "true", "BILLING_ENABLED": "true", "REPLICATE_FACE_SWAP_VERSION": "278a81e7ebb22db98bcba54de985d22cc1abeead2754eb1f2af717247be69b34" },
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "pixform-private-media" }],
   "d1_databases": [{
     "binding": "DB",
