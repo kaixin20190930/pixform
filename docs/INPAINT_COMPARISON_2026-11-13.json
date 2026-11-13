@@ -1,0 +1,613 @@
+{
+  "date": "2026-11-13",
+  "scope": "离线候选模型对照；未修改生产功能、未部署、未进行Stripe付款。",
+  "license_review": {
+    "allenhooo_lama": {
+      "version": "cdac78a1bec5b23c07fd29692fb70baa513ea403a39e643c48ec5edadb15fe72",
+      "public_model_license_declared": "Apache-2.0，上游许可链接由Replicate模型元数据明确提供；不同于zylim封装license_url为空。",
+      "upstream_weights_statement": "issue 230 中上游 collaborator 在被询问权重许可时指向仓库 Apache 2.0，构成正面证据。",
+      "commercial_conclusion": "公开许可声明支持其作为商用候选；未发现模型页禁止商用条款。不能把这一结论写成固定容器内全部权重已独立审计或获得单独书面商业保证。",
+      "unresolved": "license_url 是模型级链接且目标为可变main分支；固定版本容器未公开对应完整权重清单/哈希和wrapper构建来源。上游仍有要求明确权重许可文件的开放问题。",
+      "independent_exact_container_weights_license_audit_complete": false,
+      "sources": [
+        "https://replicate.com/allenhooo/lama",
+        "https://replicate.com/allenhooo/lama/versions/cdac78a1bec5b23c07fd29692fb70baa513ea403a39e643c48ec5edadb15fe72",
+        "https://github.com/advimman/lama/blob/main/LICENSE",
+        "https://github.com/advimman/lama/issues/230",
+        "https://github.com/advimman/lama/issues/365",
+        "https://replicate.com/terms"
+      ]
+    },
+    "stable_diffusion": {
+      "published_license": "CreativeML Open RAIL++-M（模型页面声明，含用途限制）；模型直接链接许可文件当前访问失败，未将其他模型许可替代为该版本授权。",
+      "source": "https://replicate.com/stability-ai/stable-diffusion-inpainting"
+    },
+    "bria": {
+      "tested_endpoint": "Replicate bria/eraser，非 fal bria/fibo-edit-1.5/eraser；没有fal凭据，未将两者结果混同。",
+      "published_position": "官方模型页提供商用说明和许可条款链接，属于有商业条款的托管服务，不是Apache开源无限制使用。",
+      "conditions_to_resolve_before_release": "条款包含使用范围、用户内容、输出标记等要求；按量API产品与自托管权利分开处理，不将商用标签当无条件授权。",
+      "source": "https://replicate.com/bria/eraser"
+    }
+  },
+  "method": {
+    "samples": [
+      "05-wood",
+      "06-brick",
+      "11-product",
+      "14-grass",
+      "09-screenshot"
+    ],
+    "unique_inputs": 5,
+    "new_predictions": 15,
+    "retries": 0,
+    "input_dimensions": [
+      768,
+      512
+    ],
+    "mask": "与上一轮相同精确字形扩张4px掩膜；三个模型输入完全相同。",
+    "sd_parameters": "30 steps, guidance 7.5, seed 20261113, per-category background prompt, negative prompt excludes text; no parameter search.",
+    "postprocessing": "原始下载输出评估；没有合成回原图、锐化或后处理。",
+    "visual_rubric": "5=无明显痕迹；4=轻微缺陷可用；3=有可见缺陷、是否可用按场景要求判断；2=明显修补损伤；1=失败。由Codex视觉评估，非独立人工盲测。",
+    "limits": [
+      "5张为刻意挑选的困难样本，不代表总体成功率；不可与上轮14张样本直接比较可用比例。",
+      "精确掩膜不代表真实用户宽笔刷效果。",
+      "SD只测一组参数和一次seed，结果不等于模型最佳能力。",
+      "Bria测试的是Replicate当前固定版本，不能推断fal FIBO版本表现。",
+      "未专门制造冷启动；provider_total包括排队/启动但不包括客户端上传下载。",
+      "区域外像素变化包含可能的重编码/颜色微差，不等于每个区域都有肉眼明显内容改变。"
+    ]
+  },
+  "budget": {
+    "authorized_usd": 1,
+    "estimated_model_usd": 0.20943301618852503,
+    "invoice_actual_usd": null,
+    "basis": "LaMa T4运行时间×0.000225；SD A100运行时间×0.0014；Bria每输出0.04，税费以账单为准。",
+    "rate_source": "https://replicate.com/pricing",
+    "conservative_planned_time_deadline_and_output_price_reserve_usd": 0.9312499999999999,
+    "provider_cancel_after_seconds": 90,
+    "completed_calls": 15,
+    "unfinished_predictions": 0,
+    "stripe_payments": 0
+  },
+  "models": [
+    {
+      "id": "allenhooo/lama",
+      "alias": "lama",
+      "pinned_version": "cdac78a1bec5b23c07fd29692fb70baa513ea403a39e643c48ec5edadb15fe72",
+      "version_created_at": "2023-06-15T08:21:15.122420Z",
+      "model_license_url": "https://github.com/advimman/lama/blob/main/LICENSE",
+      "model_github_url": "https://github.com/advimman/lama",
+      "version_manifest_sha256": "f7d585bfc0b098e02f522866b37d18dd58ca12cda66a131b88d8a35230c4bade",
+      "calls": 5,
+      "provider_successes": 5,
+      "estimated_model_usd_total": 0.000423253243125,
+      "mean_predict_seconds": 0.376225105,
+      "mean_provider_total_seconds": 1.2968143824,
+      "mean_visual_score": 3,
+      "region_visually_usable_count": 2,
+      "exact_outside_preservation_count": 5,
+      "raw_combined_pass_count": 2,
+      "results": [
+        {
+          "sample": "05-wood",
+          "prediction_id": "w6fnqpj83drg80d1tnbvby59k0",
+          "status": "succeeded",
+          "visual_score": 2,
+          "region_visually_usable": false,
+          "visual_note_cn": "木纹条带与重复纹理仍明显，和旧封装没有实质改善。",
+          "strict_unmasked_pixels_unchanged": true,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 0.382842256,
+          "provider_total_seconds": 0.488179418,
+          "estimated_model_usd": 8.613950759999999e-05,
+          "pixel_metrics": {
+            "key": "lama/05-wood",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 0,
+            "outside_total_pixels": 383870,
+            "outside_mae": 0.0,
+            "inside_mae_to_ground_truth": 37.469790997931376,
+            "identical_to_previous_lama": false
+          },
+          "settings": {}
+        },
+        {
+          "sample": "06-brick",
+          "prediction_id": "vvjjwqv2dnrgc0d1tnbtxn7n6g",
+          "status": "succeeded",
+          "visual_score": 2,
+          "region_visually_usable": false,
+          "visual_note_cn": "跨砖缝修补痕迹仍明显。",
+          "strict_unmasked_pixels_unchanged": true,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 0.3598191,
+          "provider_total_seconds": 3.6132006800000003,
+          "estimated_model_usd": 8.09592975e-05,
+          "pixel_metrics": {
+            "key": "lama/06-brick",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 0,
+            "outside_total_pixels": 382178,
+            "outside_mae": 0.0,
+            "inside_mae_to_ground_truth": 24.949054780455395,
+            "identical_to_previous_lama": false
+          },
+          "settings": {}
+        },
+        {
+          "sample": "11-product",
+          "prediction_id": "abxsg3bx6srge0d1tnbtskvdkg",
+          "status": "succeeded",
+          "visual_score": 3,
+          "region_visually_usable": false,
+          "visual_note_cn": "玻璃反光及瓶沿变形，产品细节要求下不合格。",
+          "strict_unmasked_pixels_unchanged": true,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 0.451579503,
+          "provider_total_seconds": 0.497135419,
+          "estimated_model_usd": 0.000101605388175,
+          "pixel_metrics": {
+            "key": "lama/11-product",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 0,
+            "outside_total_pixels": 383668,
+            "outside_mae": 0.0,
+            "inside_mae_to_ground_truth": 18.372573662896244,
+            "identical_to_previous_lama": true
+          },
+          "settings": {}
+        },
+        {
+          "sample": "14-grass",
+          "prediction_id": "4t22k9cksdrge0d1tnbsdf21gc",
+          "status": "succeeded",
+          "visual_score": 3,
+          "region_visually_usable": true,
+          "visual_note_cn": "文字清除，草叶重建有变化，普通小图勉强可用。",
+          "strict_unmasked_pixels_unchanged": true,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": true,
+          "predict_seconds": 0.3380186,
+          "provider_total_seconds": 0.653733048,
+          "estimated_model_usd": 7.6054185e-05,
+          "pixel_metrics": {
+            "key": "lama/14-grass",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 0,
+            "outside_total_pixels": 385303,
+            "outside_mae": 0.0,
+            "inside_mae_to_ground_truth": 18.171826951430138,
+            "identical_to_previous_lama": false
+          },
+          "settings": {}
+        },
+        {
+          "sample": "09-screenshot",
+          "prediction_id": "x5h8kpd999rgc0d1tnbvbr443c",
+          "status": "succeeded",
+          "visual_score": 5,
+          "region_visually_usable": true,
+          "visual_note_cn": "文字清除，横线基本保持。",
+          "strict_unmasked_pixels_unchanged": true,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": true,
+          "predict_seconds": 0.348866066,
+          "provider_total_seconds": 1.231823347,
+          "estimated_model_usd": 7.849486484999999e-05,
+          "pixel_metrics": {
+            "key": "lama/09-screenshot",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 0,
+            "outside_total_pixels": 388440,
+            "outside_mae": 0.0,
+            "inside_mae_to_ground_truth": 1.1500558347292016,
+            "identical_to_previous_lama": true
+          },
+          "settings": {}
+        }
+      ]
+    },
+    {
+      "id": "stability-ai/stable-diffusion-inpainting",
+      "alias": "sd",
+      "pinned_version": "95b7223104132402a9ae91cc677285bc5eb997834bd2349fa486f53910fd68b3",
+      "version_created_at": "2024-02-14T16:55:15.877089Z",
+      "model_license_url": "https://huggingface.co/stabilityai/stable-diffusion-2/blob/main/LICENSE-MODEL",
+      "model_github_url": "https://github.com/replicate/cog-stable-diffusion-inpainting",
+      "version_manifest_sha256": "a17f6815fb7ce8f48ec60b90c4fcf60ad2e477796c9d45dd9430fe22110020f0",
+      "calls": 5,
+      "provider_successes": 5,
+      "estimated_model_usd_total": 0.009009762945399999,
+      "mean_predict_seconds": 1.2871089921999999,
+      "mean_provider_total_seconds": 2.0713488448,
+      "mean_visual_score": 1.8,
+      "region_visually_usable_count": 0,
+      "exact_outside_preservation_count": 0,
+      "raw_combined_pass_count": 0,
+      "results": [
+        {
+          "sample": "05-wood",
+          "prediction_id": "yhbyfvqg41rne0d1tnbv3pn938",
+          "status": "succeeded",
+          "visual_score": 1,
+          "region_visually_usable": false,
+          "visual_note_cn": "出现类似字母或图案的残留，木纹被重绘。",
+          "strict_unmasked_pixels_unchanged": false,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 1.272041198,
+          "provider_total_seconds": 1.460161978,
+          "estimated_model_usd": 0.0017808576772,
+          "pixel_metrics": {
+            "key": "sd/05-wood",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 383640,
+            "outside_total_pixels": 383870,
+            "outside_mae": 18.764056407985343,
+            "inside_mae_to_ground_truth": 43.476210856694486,
+            "identical_to_previous_lama": false
+          },
+          "settings": {
+            "width": 768,
+            "height": 512,
+            "prompt": "a continuous weathered wood surface with natural wood grain, no writing",
+            "negative_prompt": "text, letters, words, watermark, logo",
+            "num_outputs": 1,
+            "num_inference_steps": 30,
+            "guidance_scale": 7.5,
+            "seed": 20261113,
+            "disable_safety_checker": false
+          }
+        },
+        {
+          "sample": "06-brick",
+          "prediction_id": "2gfcq2ravdrn80d1tncacdxfp8",
+          "status": "succeeded",
+          "visual_score": 2,
+          "region_visually_usable": false,
+          "visual_note_cn": "灰缝和砖面结构被重绘。",
+          "strict_unmasked_pixels_unchanged": false,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 1.176758236,
+          "provider_total_seconds": 1.2417802629999999,
+          "estimated_model_usd": 0.0016474615304,
+          "pixel_metrics": {
+            "key": "sd/06-brick",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 382146,
+            "outside_total_pixels": 382178,
+            "outside_mae": 16.449330765594393,
+            "inside_mae_to_ground_truth": 30.942320468683942,
+            "identical_to_previous_lama": false
+          },
+          "settings": {
+            "width": 768,
+            "height": 512,
+            "prompt": "a continuous orange brick wall with natural mortar joints, no writing",
+            "negative_prompt": "text, letters, words, watermark, logo",
+            "num_outputs": 1,
+            "num_inference_steps": 30,
+            "guidance_scale": 7.5,
+            "seed": 20261113,
+            "disable_safety_checker": false
+          }
+        },
+        {
+          "sample": "11-product",
+          "prediction_id": "e1v4xp91zxrn80d1tnc91h0mem",
+          "status": "succeeded",
+          "visual_score": 1,
+          "region_visually_usable": false,
+          "visual_note_cn": "生成伪字及玻璃细节变形。",
+          "strict_unmasked_pixels_unchanged": false,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 1.5278663799999999,
+          "provider_total_seconds": 5.143936106,
+          "estimated_model_usd": 0.0021390129319999998,
+          "pixel_metrics": {
+            "key": "sd/11-product",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 377446,
+            "outside_total_pixels": 383668,
+            "outside_mae": 2.627008246713304,
+            "inside_mae_to_ground_truth": 26.569124423963135,
+            "identical_to_previous_lama": false
+          },
+          "settings": {
+            "width": 768,
+            "height": 512,
+            "prompt": "a clear glass perfume bottle with natural light reflections, no writing",
+            "negative_prompt": "text, letters, words, watermark, logo",
+            "num_outputs": 1,
+            "num_inference_steps": 30,
+            "guidance_scale": 7.5,
+            "seed": 20261113,
+            "disable_safety_checker": false
+          }
+        },
+        {
+          "sample": "14-grass",
+          "prediction_id": "a6kcgvj5xsrna0d1tncbmnm0nm",
+          "status": "succeeded",
+          "visual_score": 2,
+          "region_visually_usable": false,
+          "visual_note_cn": "草叶变为明显涂抹状，连续性受损。",
+          "strict_unmasked_pixels_unchanged": false,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 1.26170862,
+          "provider_total_seconds": 1.301811729,
+          "estimated_model_usd": 0.001766392068,
+          "pixel_metrics": {
+            "key": "sd/14-grass",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 384336,
+            "outside_total_pixels": 385303,
+            "outside_mae": 5.076260328451461,
+            "inside_mae_to_ground_truth": 30.271199292303805,
+            "identical_to_previous_lama": false
+          },
+          "settings": {
+            "width": 768,
+            "height": 512,
+            "prompt": "natural green grass blades in a field, no writing",
+            "negative_prompt": "text, letters, words, watermark, logo",
+            "num_outputs": 1,
+            "num_inference_steps": 30,
+            "guidance_scale": 7.5,
+            "seed": 20261113,
+            "disable_safety_checker": false
+          }
+        },
+        {
+          "sample": "09-screenshot",
+          "prediction_id": "0654gmav8srna0d1tncas82d10",
+          "status": "succeeded",
+          "visual_score": 3,
+          "region_visually_usable": false,
+          "visual_note_cn": "字被清除，但线条倾斜和底色变化不适合截图要求。",
+          "strict_unmasked_pixels_unchanged": false,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 1.197170527,
+          "provider_total_seconds": 1.2090541479999999,
+          "estimated_model_usd": 0.0016760387377999998,
+          "pixel_metrics": {
+            "key": "sd/09-screenshot",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 387768,
+            "outside_total_pixels": 388440,
+            "outside_mae": 4.770804585864827,
+            "inside_mae_to_ground_truth": 4.8237716359575655,
+            "identical_to_previous_lama": false
+          },
+          "settings": {
+            "width": 768,
+            "height": 512,
+            "prompt": "a plain white user interface panel with thin straight horizontal gray rules, no writing",
+            "negative_prompt": "text, letters, words, watermark, logo",
+            "num_outputs": 1,
+            "num_inference_steps": 30,
+            "guidance_scale": 7.5,
+            "seed": 20261113,
+            "disable_safety_checker": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "bria/eraser",
+      "alias": "bria",
+      "pinned_version": "2757d1ac2f1291af219f5f10e8ecba15e92e7c05253e2841295f3ba6bff6adc4",
+      "version_created_at": "2026-02-05T22:14:21.970885Z",
+      "model_license_url": "https://learn.bria.ai/hubfs/Terms%20and%20Conditions/Bria%20AI%20Online%20Terms%20and%20Conditions%20(March%202024)%20v1.1c.pdf?hsLang=en&_gl=1*iwvu7w*_gcl_au*MzQyMzUxMzAxLjE3NDcwNDU4NTg.*_ga*MjAxNDky",
+      "model_github_url": null,
+      "version_manifest_sha256": "694f480f8d61123e97656b963663dd6a5cfff840cebb501555832767537cfcb2",
+      "calls": 5,
+      "provider_successes": 5,
+      "estimated_model_usd_total": 0.2,
+      "mean_predict_seconds": 7.0069776052,
+      "mean_provider_total_seconds": 7.0870184664,
+      "mean_visual_score": 3.6,
+      "region_visually_usable_count": 4,
+      "exact_outside_preservation_count": 0,
+      "raw_combined_pass_count": 0,
+      "results": [
+        {
+          "sample": "05-wood",
+          "prediction_id": "bmfnef3qwhrmt0d1tncatjp40c",
+          "status": "succeeded",
+          "visual_score": 3,
+          "region_visually_usable": true,
+          "visual_note_cn": "字被清除，纹理比LaMa自然，但有重复及重建痕迹，仅普通照片可用。",
+          "strict_unmasked_pixels_unchanged": false,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 6.772011,
+          "provider_total_seconds": 6.991247115,
+          "estimated_model_usd": 0.04,
+          "pixel_metrics": {
+            "key": "bria/05-wood",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 364070,
+            "outside_total_pixels": 383870,
+            "outside_mae": 1.6297513915301187,
+            "inside_mae_to_ground_truth": 49.68649689706827,
+            "identical_to_previous_lama": false
+          },
+          "settings": {
+            "sync": true,
+            "preserve_alpha": true,
+            "content_moderation": true
+          }
+        },
+        {
+          "sample": "06-brick",
+          "prediction_id": "jez9nkxck1rmr0d1tncbx7061m",
+          "status": "succeeded",
+          "visual_score": 3,
+          "region_visually_usable": true,
+          "visual_note_cn": "字被清除，砖面较自然；灰缝位置有所变化，不适合精确结构还原。",
+          "strict_unmasked_pixels_unchanged": false,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 7.650322884,
+          "provider_total_seconds": 7.735460382,
+          "estimated_model_usd": 0.04,
+          "pixel_metrics": {
+            "key": "bria/06-brick",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 377867,
+            "outside_total_pixels": 382178,
+            "outside_mae": 2.3146273900294276,
+            "inside_mae_to_ground_truth": 30.911125203841276,
+            "identical_to_previous_lama": false
+          },
+          "settings": {
+            "sync": true,
+            "preserve_alpha": true,
+            "content_moderation": true
+          }
+        },
+        {
+          "sample": "11-product",
+          "prediction_id": "6hecbeq2k9rmr0d1tnc9yaq0cg",
+          "status": "succeeded",
+          "visual_score": 3,
+          "region_visually_usable": false,
+          "visual_note_cn": "文字清除，但瓶沿和反光形状改变，不适合要求精确的商品图。",
+          "strict_unmasked_pixels_unchanged": false,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 6.338722311,
+          "provider_total_seconds": 6.370421734,
+          "estimated_model_usd": 0.04,
+          "pixel_metrics": {
+            "key": "bria/11-product",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 332370,
+            "outside_total_pixels": 383668,
+            "outside_mae": 1.0197705655236646,
+            "inside_mae_to_ground_truth": 31.01948051948052,
+            "identical_to_previous_lama": false
+          },
+          "settings": {
+            "sync": true,
+            "preserve_alpha": true,
+            "content_moderation": true
+          }
+        },
+        {
+          "sample": "14-grass",
+          "prediction_id": "j586hh06vnrmr0d1tncvcth8pc",
+          "status": "succeeded",
+          "visual_score": 4,
+          "region_visually_usable": true,
+          "visual_note_cn": "草地重建较自然，仍不能还原被遮挡的原始草叶。",
+          "strict_unmasked_pixels_unchanged": false,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 7.124751281,
+          "provider_total_seconds": 7.173556303,
+          "estimated_model_usd": 0.04,
+          "pixel_metrics": {
+            "key": "bria/14-grass",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 359878,
+            "outside_total_pixels": 385303,
+            "outside_mae": 1.3374192951175223,
+            "inside_mae_to_ground_truth": 32.92114242385947,
+            "identical_to_previous_lama": false
+          },
+          "settings": {
+            "sync": true,
+            "preserve_alpha": true,
+            "content_moderation": true
+          }
+        },
+        {
+          "sample": "09-screenshot",
+          "prediction_id": "xr6s6hsstsrmr0d1tncvfvs7x8",
+          "status": "succeeded",
+          "visual_score": 5,
+          "region_visually_usable": true,
+          "visual_note_cn": "文字清除，横线与底色视觉上保持良好。",
+          "strict_unmasked_pixels_unchanged": false,
+          "raw_output_meets_both_region_quality_and_exact_outside_preservation": false,
+          "predict_seconds": 7.14908055,
+          "provider_total_seconds": 7.164406798,
+          "estimated_model_usd": 0.04,
+          "pixel_metrics": {
+            "key": "bria/09-screenshot",
+            "output_size": [
+              768,
+              512
+            ],
+            "outside_changed_pixels": 163714,
+            "outside_total_pixels": 388440,
+            "outside_mae": 0.21962894312291903,
+            "inside_mae_to_ground_truth": 0.32705192629815744,
+            "identical_to_previous_lama": false
+          },
+          "settings": {
+            "sync": true,
+            "preserve_alpha": true,
+            "content_moderation": true
+          }
+        }
+      ]
+    }
+  ],
+  "decision": {
+    "simple_background": "allenhooo/lama可作为简单背景、低成本手动选区工具的候选，复杂纹理无实质提升；不宣称精细无痕修复。",
+    "stable_diffusion": "本轮不选：产生伪字并改变区域外像素；不做额外调参开发。",
+    "bria": "局部观感较好但不是全面胜出；每次0.04且原始输出区域外像素变化，不建议直接替换主模型。若以后采用，需最小掩膜合回原图和独立验收，不提前承诺像素不变。",
+    "production": "本轮不接入任何新模型，不改变定价和现有工具；先由用户决定是否接受简单背景MVP的能力边界。"
+  },
+  "artifacts": {
+    "directory": ".cache/inpaint-comparison-2026-11-13",
+    "comparison_images": [
+      ".cache/inpaint-comparison-2026-11-13/comparison-1.jpg",
+      ".cache/inpaint-comparison-2026-11-13/comparison-2.jpg"
+    ],
+    "columns": [
+      "ground_truth_original",
+      "allenhooo_lama",
+      "stable_diffusion",
+      "replicate_bria_eraser"
+    ]
+  }
+}
