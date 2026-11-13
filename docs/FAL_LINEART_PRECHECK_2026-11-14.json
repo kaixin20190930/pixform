@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-14",
+  "endpoint": "fal-ai/image-preprocessors/lineart",
+  "commercial_review": {
+    "hosted_api_use_supported": true,
+    "basis": "官方模型页标注Commercial use；官方FAQ说明该标签表示可商用；API Services第2.1节允许通过Client Solution供End Users调用。",
+    "scope": "对fal托管API的公开条款核查；不等于取得下载、自托管或转售权重的许可。",
+    "conditions": "通过自有后端集成，不向用户直接暴露fal API或密钥；输入和输出使用须有相应权利，并遵守fal条款及适用模型文档。",
+    "sources": [
+      "https://fal.ai/models/fal-ai/image-preprocessors/lineart",
+      "https://fal.ai/docs/documentation/model-apis/faq",
+      "https://fal.ai/legal/api-services",
+      "https://fal.ai/legal/terms-of-service"
+    ]
+  },
+  "pricing": {
+    "confirmed": true,
+    "official_api": {
+      "prices": [
+        {
+          "endpoint_id": "fal-ai/image-preprocessors/lineart",
+          "unit_price": 0.00125,
+          "unit": "compute seconds",
+          "currency": "USD"
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    },
+    "query_http": 200
+  },
+  "credentials": {
+    "FAL_KEY_available": true,
+    "stored_in_gitignored_local_file": true
+  },
+  "test_plan": {
+    "same_fixture_manifest": ".cache/coloring-validation-2026-11-13/fixtures.json",
+    "samples": 12,
+    "settings": "固定coarse=false；不逐图调参；原图沿用既有哈希。",
+    "evaluate": [
+      "主体轮廓完整、有可涂色空间；至少9/12可用",
+      "近白>70%、近黑<20%、中间灰<10%；不得用空白图满足比例",
+      "原始输出与固定二值化分别评估",
+      "等待与推理耗时分开记录，30秒时延门槛",
+      "官方计价单位、逐请求费用或可核对的usage费用"
+    ],
+    "budget_usd": 1,
+    "cost_control": "取得非歧义单价和计费单位后，先核算12张上限；无法约束在$1内则不调用。按顺序提交，不自动重试、不额外购买余额。"
+  },
+  "test_status": "已完成；详见docs/FAL_LINEART_VALIDATION_2026-11-14.json",
+  "spent_usd": null,
+  "production_modified": false,
+  "estimated_compute_usd": 0.05260749995708466
+}

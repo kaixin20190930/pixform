@@ -1,0 +1,1611 @@
+{
+  "date": "2026-11-14",
+  "endpoint": "fal-ai/image-preprocessors/lineart",
+  "scope": "同一批12张照片，细线和内置coarse两种固定模式各跑一次，共24次；不修改生产功能、不部署、不进行Stripe付款。",
+  "commercial_review": {
+    "hosted_api_use_supported": true,
+    "basis": "官方模型页标注Commercial use；官方FAQ说明该标签表示可商用；API Services第2.1节允许通过Client Solution供End Users调用。",
+    "scope": "对fal托管API的公开条款核查；不等于取得下载、自托管或转售权重的许可。",
+    "conditions": "通过自有后端集成，不向用户直接暴露fal API或密钥；输入和输出使用须有相应权利，并遵守fal条款及适用模型文档。",
+    "sources": [
+      "https://fal.ai/models/fal-ai/image-preprocessors/lineart",
+      "https://fal.ai/docs/documentation/model-apis/faq",
+      "https://fal.ai/legal/api-services",
+      "https://fal.ai/legal/terms-of-service"
+    ]
+  },
+  "version_limit": "fal托管端点未暴露可固定的模型版本/权重哈希，报告是本次服务快照，不能保证未来输出完全一致。",
+  "pricing": {
+    "official_api": {
+      "prices": [
+        {
+          "endpoint_id": "fal-ai/image-preprocessors/lineart",
+          "unit_price": 0.00125,
+          "unit": "compute seconds",
+          "currency": "USD"
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    },
+    "query_http": 200,
+    "total_estimated_compute_usd": 0.05260749995708466,
+    "authorized_usd": 1,
+    "actual_usage_usd": null,
+    "usage_api_http": 403,
+    "usage_note": "当前Key可推理并可查价格，但没有usage账单读取权限；费用按返回inference_time×$0.00125/compute second估算，不宣称已对账。",
+    "source": "https://fal.ai/docs/documentation/model-apis/pricing",
+    "unit_economics": "均值约$0.002/张，低于年付毛收入每credit约$0.02389的40%（$0.00956）；仅成本门槛通过，不据此定价或上线。"
+  },
+  "method": {
+    "unique_inputs": 12,
+    "input_manifest": ".cache/coloring-validation-2026-11-13/fixtures.json",
+    "matching_input_hashes": true,
+    "categories": "正脸人像2、长/短毛宠物各1、房屋2、汽车2、低对比2、夜拍2。",
+    "input_dependence": "两张正脸来自同一NASA合影的不同人物裁图；样本规模小，非随机独立总体。",
+    "paid_requests": 24,
+    "automatic_retries": false,
+    "client_retries": 0,
+    "reason_for_coarse_comparison": "第一轮细线模式保留较多灰阶和纹理，仅增加内置coarse开关的整批对照，不逐图调参。",
+    "postprocessing": "原始黑底亮线输出、统一反相后的白底灰线、再按固定阈值200二值化，三者分别记录；没有逐图选阈值、闭合轮廓或去背景。",
+    "pixel_gate": "近白>=240占比>70%；近黑<=40占比<20%；中间灰占比<10%。",
+    "quality_gate": "12张至少9张(>=70%)具备完整主体轮廓和可涂色空间，并通过像素门槛；空白图不能凭比例通过。",
+    "visual_rubric": "Codex视觉评估，非独立人工盲测。5=清洁完整，4=轻微杂线可用，3=明显杂线但勉强可用，2=缺失或杂线明显，1=主体轮廓大量缺失。可用计数已宽松纳入3分，不应当作精确总体成功率。",
+    "timing": "queue状态接口inference_time为推理时间；wall为客户端提交至首次观察COMPLETED，含上传/网络/轮询，不含结果图片下载，不宣称刻意冷启动或生产p95。"
+  },
+  "variants": {
+    "fine": {
+      "samples": 12,
+      "successful_outputs": 12,
+      "compute_seconds": 23.10200023651123,
+      "estimated_compute_usd": 0.028877500295639038,
+      "mean_inference_seconds": 1.9251666863759358,
+      "max_inference_seconds": 2.2019999027252197,
+      "observed_submit_to_completed_seconds_range": [
+        3.8235994999995455,
+        8.098733499995433
+      ],
+      "inverted_pixel_gate_pass_count": 3,
+      "binary_pixel_gate_pass_count": 11,
+      "visual_usable_including_borderline_count": 8,
+      "binary_and_visual_pass_count": 7,
+      "mean_visual_score": 2.5833333333333335,
+      "passed": false,
+      "cases": [
+        {
+          "sample": "01-portrait",
+          "category": "portrait",
+          "source": "NASA STS-104 official crew portrait, existing clean portrait crop",
+          "input_sha256": "e0f0dffea816162167b7683c4dac0d98f34fe784a27fcc47edd74a236ebc4b06",
+          "request_id": "01a1d5a7-79e8-7891-8126-180a84a9fa01",
+          "coarse": false,
+          "inference_seconds": 1.874000072479248,
+          "submit_to_completed_observed_seconds": 8.098733499995433,
+          "estimated_compute_usd": 0.00234250009059906,
+          "output_sha256": "82b47162a7435b16a5ae69f50c14cb879e1efb06a2570e0291d9a2478f6f3f88",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "01-portrait",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 5.086263020833333e-06,
+              "black": 0.9159444173177084,
+              "gray": 0.08405049641927083,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "01-portrait",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8854904174804688,
+              "black": 7.883707682291667e-05,
+              "gray": 0.11443074544270833,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "01-portrait",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9304707845052084,
+              "black": 0.06952921549479167,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "主体完整，但头发与面部碎线多，勉强可用。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "02-portrait",
+          "category": "portrait",
+          "source": "NASA STS-104 official crew portrait, existing clean portrait crop",
+          "input_sha256": "e3cc6533959ba7b2d76604d3efaee3a061295b0af115ca6e8873c077f2666ffc",
+          "request_id": "01a1d5a7-bd0a-7713-b824-755212725ad3",
+          "coarse": false,
+          "inference_seconds": 1.875999927520752,
+          "submit_to_completed_observed_seconds": 4.165675583994016,
+          "estimated_compute_usd": 0.00234499990940094,
+          "output_sha256": "dd8a88c592e44bc5bab42126c564178e52b75681cb3db60a778edc3d9faac977",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "02-portrait",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 3.5603841145833336e-05,
+              "black": 0.9164403279622396,
+              "gray": 0.08352406819661458,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "02-portrait",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8850021362304688,
+              "black": 0.00032806396484375,
+              "gray": 0.1146697998046875,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "02-portrait",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9303385416666666,
+              "black": 0.06966145833333333,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "人物可辨，面部线条偏素描，勉强可用。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "03-long-fur",
+          "category": "pet_long_fur",
+          "source": "https://www.pexels.com/photo/16577236/",
+          "input_sha256": "3f29f3c1ff6e5b1849b587ea8e0129ad9a16cbb03a8ac758e0a6e681698186a4",
+          "request_id": "01a1d5a7-db76-7722-96e3-e560388abf86",
+          "coarse": false,
+          "inference_seconds": 1.75600004196167,
+          "submit_to_completed_observed_seconds": 4.341945832944475,
+          "estimated_compute_usd": 0.0021950000524520873,
+          "output_sha256": "7afd964f2ab6acd8dfeb92e48122704d39ca8ab68c298c885166a5df37a1dab4",
+          "output_size": [
+            512,
+            683
+          ],
+          "input_size": [
+            576,
+            768
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "03-long-fur",
+              "variant": "lineart",
+              "size": [
+                512,
+                683
+              ],
+              "white": 0.00044896138360175697,
+              "black": 0.8072811813689604,
+              "gray": 0.19226985724743778,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "03-long-fur",
+              "variant": "white-background",
+              "size": [
+                512,
+                683
+              ],
+              "white": 0.7683616627013177,
+              "black": 0.004040652452415813,
+              "gray": 0.22759768484626647,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "03-long-fur",
+              "variant": "binary200",
+              "size": [
+                512,
+                683
+              ],
+              "white": 0.8254169335651538,
+              "black": 0.17458306643484628,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 1,
+          "visual_usable_including_borderline": false,
+          "visual_note": "长毛白犬身体轮廓大面积消失，背景枝条密集。",
+          "binary_and_visual_pass": false
+        },
+        {
+          "sample": "04-short-fur",
+          "category": "pet_short_fur",
+          "source": "https://www.pexels.com/photo/4044201/",
+          "input_sha256": "eaf28f7d0ecbb4ac874bb546c65bee9872f0b65d34ea851665495697816a7aef",
+          "request_id": "01a1d5a7-f880-7ae1-9b8a-6fddafcb3993",
+          "coarse": false,
+          "inference_seconds": 2.0250000953674316,
+          "submit_to_completed_observed_seconds": 6.119947083992884,
+          "estimated_compute_usd": 0.0025312501192092897,
+          "output_sha256": "252d0a0e48a25398fc3cab03ae0c9e5b4763a0eecb2a811659bb638c6c2bec7d",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "04-short-fur",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.0,
+              "black": 0.9388046264648438,
+              "gray": 0.06119537353515625,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "04-short-fur",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9060287475585938,
+              "black": 5.8492024739583336e-05,
+              "gray": 0.09391276041666667,
+              "pixel_pass": true
+            },
+            "binary200": {
+              "sample": "04-short-fur",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9522069295247396,
+              "black": 0.047793070475260414,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "犬脸及身体较完整，面部毛发细碎。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "05-house",
+          "category": "house",
+          "source": "https://www.pexels.com/photo/106399/",
+          "input_sha256": "a5b12e6320d777ac821a67bfec79ae387243399cda53db3d3d737b5f85305222",
+          "request_id": "01a1d5a8-1d4a-7791-b614-eb8a82995d39",
+          "coarse": false,
+          "inference_seconds": 1.9470000267028809,
+          "submit_to_completed_observed_seconds": 6.28399329201784,
+          "estimated_compute_usd": 0.0024337500333786012,
+          "output_sha256": "8a4ecd41bebe78a0f74ddd408a8a441cdf802dab8948d5c9da11c23053203008",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "05-house",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.001983642578125,
+              "black": 0.7997817993164062,
+              "gray": 0.19823455810546875,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "05-house",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.7561747233072916,
+              "black": 0.011675516764322916,
+              "gray": 0.2321497599283854,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "05-house",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8193766276041666,
+              "black": 0.18062337239583334,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "房屋主体完整，但屋顶大面积纹理变黑。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "06-house",
+          "category": "house",
+          "source": "https://www.pexels.com/photo/house-exterior-during-daytime-6422939/",
+          "input_sha256": "446b30932e718818d3143e4d87736d15303b8b21baf0169c7dc2113a51ab5350",
+          "request_id": "01a1d5a8-4285-72f2-8dd7-dbb7eeda221b",
+          "coarse": false,
+          "inference_seconds": 1.8700001239776611,
+          "submit_to_completed_observed_seconds": 4.461096625076607,
+          "estimated_compute_usd": 0.0023375001549720766,
+          "output_sha256": "05905658704e182f3850cfd1c955445fa319ba0230a03fe4605dd30b51d92f99",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "06-house",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.0,
+              "black": 0.7700983683268229,
+              "gray": 0.2299016316731771,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "06-house",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.7096125284830729,
+              "black": 0.0002797444661458333,
+              "gray": 0.29010772705078125,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "06-house",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.7991892496744791,
+              "black": 0.20081075032552084,
+              "gray": 0.0,
+              "pixel_pass": false
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "建筑轮廓清楚，植物区域细碎；二值化后黑像素超过20%门槛。",
+          "binary_and_visual_pass": false
+        },
+        {
+          "sample": "07-car",
+          "category": "car",
+          "source": "https://www.pexels.com/photo/170811/",
+          "input_sha256": "ecd9f7004db236d09a1512591bba5191acdd1980b11d9276e6ca39146b65d27a",
+          "request_id": "01a1d5a8-6080-7f32-bb1e-b9065ec9297b",
+          "coarse": false,
+          "inference_seconds": 2.2019999027252197,
+          "submit_to_completed_observed_seconds": 6.4314765830058604,
+          "estimated_compute_usd": 0.002752499878406525,
+          "output_sha256": "3a5728c181bceb965cb41ca929958d1737006ff2e9c2dda1197a88b957492fb9",
+          "output_size": [
+            910,
+            512
+          ],
+          "input_size": [
+            768,
+            432
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "07-car",
+              "variant": "lineart",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.0,
+              "black": 0.8396183894230769,
+              "gray": 0.16038161057692307,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "07-car",
+              "variant": "white-background",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.7870127918956044,
+              "black": 4.93646978021978e-05,
+              "gray": 0.2129378434065934,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "07-car",
+              "variant": "binary200",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.8631653502747253,
+              "black": 0.13683464972527473,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_usable_including_borderline": true,
+          "visual_note": "汽车主体清楚，有较大的涂色区域。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "08-car",
+          "category": "car",
+          "source": "https://www.pexels.com/photo/358070/",
+          "input_sha256": "a02c4177f2a5d5457b2ce8e43ea7203841b9c445b3d6c7abc67e93b4683228a3",
+          "request_id": "01a1d5a8-8493-79d1-b676-0f8807395cb5",
+          "coarse": false,
+          "inference_seconds": 2.055999994277954,
+          "submit_to_completed_observed_seconds": 6.1778857910539955,
+          "estimated_compute_usd": 0.0025699999928474426,
+          "output_sha256": "7351aa15436b9b5dec34df1fb25c7c7103390463e9119ab4a9abbe41dcd5631e",
+          "output_size": [
+            910,
+            512
+          ],
+          "input_size": [
+            768,
+            432
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "08-car",
+              "variant": "lineart",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.0,
+              "black": 0.855634014423077,
+              "gray": 0.14436598557692307,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "08-car",
+              "variant": "white-background",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.8098042582417583,
+              "black": 0.0001201923076923077,
+              "gray": 0.19007554945054944,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "08-car",
+              "variant": "binary200",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.8767020089285714,
+              "black": 0.12329799107142857,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "车身可辨，车轮与背景反光线较多。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "09-low-contrast",
+          "category": "low_contrast",
+          "source": "https://www.pexels.com/photo/8545778/",
+          "input_sha256": "d8572bb8e69aca7097e98ef8d4b43e1ac55a452bb601328700ee37320ea414de",
+          "request_id": "01a1d5a8-a71d-7b13-8e5d-e3363bb276a9",
+          "coarse": false,
+          "inference_seconds": 1.74399995803833,
+          "submit_to_completed_observed_seconds": 3.981083665974438,
+          "estimated_compute_usd": 0.0021799999475479127,
+          "output_sha256": "de25ef2f9adcac656801cd2429fd9aacc2ffcab1ab26a664d59720e40545fc5f",
+          "output_size": [
+            512,
+            768
+          ],
+          "input_size": [
+            512,
+            768
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "09-low-contrast",
+              "variant": "lineart",
+              "size": [
+                512,
+                768
+              ],
+              "white": 7.62939453125e-06,
+              "black": 0.92486572265625,
+              "gray": 0.07512664794921875,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "09-low-contrast",
+              "variant": "white-background",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.9029286702473959,
+              "black": 0.00018056233723958334,
+              "gray": 0.09689076741536458,
+              "pixel_pass": true
+            },
+            "binary200": {
+              "sample": "09-low-contrast",
+              "variant": "binary200",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.9363683064778646,
+              "black": 0.06363169352213542,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "花瓣基本完整，叶片纹理偏密。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "10-low-contrast",
+          "category": "low_contrast",
+          "source": "https://www.pexels.com/photo/1993424/",
+          "input_sha256": "0472eb64beca3232d70da878da9d25384a6e9eb007a3cd73d1f01051e62aa2b9",
+          "request_id": "01a1d5a8-c3ab-7940-b207-2869f4495b52",
+          "coarse": false,
+          "inference_seconds": 1.8240001201629639,
+          "submit_to_completed_observed_seconds": 3.8235994999995455,
+          "estimated_compute_usd": 0.002280000150203705,
+          "output_sha256": "81373e4ad771d76f0bbc408b4fd331f319ed823d2470733784d17961f8a958c8",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "10-low-contrast",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.0011011759440104167,
+              "black": 0.9753367106119791,
+              "gray": 0.023562113444010418,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "10-low-contrast",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9626007080078125,
+              "black": 0.0021769205729166665,
+              "gray": 0.035222371419270836,
+              "pixel_pass": true
+            },
+            "binary200": {
+              "sample": "10-low-contrast",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9798482259114584,
+              "black": 0.020151774088541668,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 1,
+          "visual_usable_including_borderline": false,
+          "visual_note": "雪中白犬尾巴、身体和肢体边界缺失。",
+          "binary_and_visual_pass": false
+        },
+        {
+          "sample": "11-night",
+          "category": "night",
+          "source": "https://www.pexels.com/photo/night-city-street-19488222/",
+          "input_sha256": "a2e9eb0125238d3e600706927e7eebcac1077d9d85e2172973384b1ae6d1515d",
+          "request_id": "01a1d5a8-dd83-72a1-992a-397e889ac863",
+          "coarse": false,
+          "inference_seconds": 1.9689998626708984,
+          "submit_to_completed_observed_seconds": 4.045501540997066,
+          "estimated_compute_usd": 0.002461249828338623,
+          "output_sha256": "ac62c8220daf382698480db04f9fb0b3e1bd9cf474ef5a1a7fb5e720d7d97895",
+          "output_size": [
+            512,
+            768
+          ],
+          "input_size": [
+            512,
+            768
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "11-night",
+              "variant": "lineart",
+              "size": [
+                512,
+                768
+              ],
+              "white": 9.918212890625e-05,
+              "black": 0.9149271647135416,
+              "gray": 0.08497365315755208,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "11-night",
+              "variant": "white-background",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.8887201944986979,
+              "black": 0.0006459554036458334,
+              "gray": 0.11063385009765625,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "11-night",
+              "variant": "binary200",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.9268112182617188,
+              "black": 0.07318878173828125,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_usable_including_borderline": false,
+          "visual_note": "保留招牌与局部建筑，暗部结构与路面缺失。",
+          "binary_and_visual_pass": false
+        },
+        {
+          "sample": "12-night",
+          "category": "night",
+          "source": "https://www.pexels.com/photo/169677/",
+          "input_sha256": "8ea0f36cce4b693a953361d783c122518a2cb0223c4f29e5114d5fe17037d365",
+          "request_id": "01a1d5a8-f97f-7380-9743-e677d2f83db2",
+          "coarse": false,
+          "inference_seconds": 1.9590001106262207,
+          "submit_to_completed_observed_seconds": 4.3859103340655565,
+          "estimated_compute_usd": 0.002448750138282776,
+          "output_sha256": "7c4cc18c878a0e99c18e5e0f36511f025efa00293c190c99a4a86db996c1cd4f",
+          "output_size": [
+            767,
+            512
+          ],
+          "input_size": [
+            768,
+            513
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "12-night",
+              "variant": "lineart",
+              "size": [
+                767,
+                512
+              ],
+              "white": 0.0,
+              "black": 0.8108524486636245,
+              "gray": 0.18914755133637548,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "12-night",
+              "variant": "white-background",
+              "size": [
+                767,
+                512
+              ],
+              "white": 0.7485892682529335,
+              "black": 6.875407431551499e-05,
+              "gray": 0.25134197767275096,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "12-night",
+              "variant": "binary200",
+              "size": [
+                767,
+                512
+              ],
+              "white": 0.8377964064537158,
+              "black": 0.16220359354628422,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_usable_including_borderline": false,
+          "visual_note": "建筑和车流碎线密集，作为简单涂色页不理想。",
+          "binary_and_visual_pass": false
+        }
+      ]
+    },
+    "coarse": {
+      "samples": 12,
+      "successful_outputs": 12,
+      "compute_seconds": 18.983999729156494,
+      "estimated_compute_usd": 0.02372999966144562,
+      "mean_inference_seconds": 1.5819999774297078,
+      "max_inference_seconds": 2.258999824523926,
+      "observed_submit_to_completed_seconds_range": [
+        4.021918499958701,
+        14.674828332965262
+      ],
+      "inverted_pixel_gate_pass_count": 3,
+      "binary_pixel_gate_pass_count": 11,
+      "visual_usable_including_borderline_count": 7,
+      "binary_and_visual_pass_count": 7,
+      "mean_visual_score": 2.5833333333333335,
+      "passed": false,
+      "cases": [
+        {
+          "sample": "01-portrait",
+          "category": "portrait",
+          "source": "NASA STS-104 official crew portrait, existing clean portrait crop",
+          "input_sha256": "e0f0dffea816162167b7683c4dac0d98f34fe784a27fcc47edd74a236ebc4b06",
+          "request_id": "01a1d5aa-155d-7a01-9e28-b0f12291d41b",
+          "coarse": true,
+          "inference_seconds": 1.8400001525878906,
+          "submit_to_completed_observed_seconds": 4.021918499958701,
+          "estimated_compute_usd": 0.002300000190734863,
+          "output_sha256": "db0beea0c1f4f0074102552c0b33a67cc7c15273d5b47a14a6c5c8518c566409",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "01-portrait",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.0156402587890625,
+              "black": 0.8665135701497396,
+              "gray": 0.11784617106119792,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "01-portrait",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8338394165039062,
+              "black": 0.029340108235677082,
+              "gray": 0.13682047526041666,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "01-portrait",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8799870808919271,
+              "black": 0.12001291910807292,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "主体完整，交叉笔触多；不是单一清洁轮廓。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "02-portrait",
+          "category": "portrait",
+          "source": "NASA STS-104 official crew portrait, existing clean portrait crop",
+          "input_sha256": "e3cc6533959ba7b2d76604d3efaee3a061295b0af115ca6e8873c077f2666ffc",
+          "request_id": "01a1d5aa-314c-7241-bb7e-0b33a3230159",
+          "coarse": true,
+          "inference_seconds": 1.435999870300293,
+          "submit_to_completed_observed_seconds": 4.122232416062616,
+          "estimated_compute_usd": 0.0017949998378753663,
+          "output_sha256": "80aad530618ad08a0fe0c1559a86f09e952ef407c4f6b965069f203bd29bf7b3",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "02-portrait",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.0142974853515625,
+              "black": 0.8619105021158854,
+              "gray": 0.12379201253255208,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "02-portrait",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.825286865234375,
+              "black": 0.026812235514322918,
+              "gray": 0.1479008992513021,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "02-portrait",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8773015340169271,
+              "black": 0.12269846598307292,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "人物可辨，五官和头发交叉笔触明显。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "03-long-fur",
+          "category": "pet_long_fur",
+          "source": "https://www.pexels.com/photo/16577236/",
+          "input_sha256": "3f29f3c1ff6e5b1849b587ea8e0129ad9a16cbb03a8ac758e0a6e681698186a4",
+          "request_id": "01a1d5aa-4e03-76f0-b5a0-bc01783b7aa9",
+          "coarse": true,
+          "inference_seconds": 1.508000135421753,
+          "submit_to_completed_observed_seconds": 4.4734474999131635,
+          "estimated_compute_usd": 0.0018850001692771912,
+          "output_sha256": "df1bf92f169b6ee3c8dc8dc05f1d3ef010f47e2e8e78aa87eeef2939b75e3afc",
+          "output_size": [
+            512,
+            683
+          ],
+          "input_size": [
+            576,
+            768
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "03-long-fur",
+              "variant": "lineart",
+              "size": [
+                512,
+                683
+              ],
+              "white": 0.017758281478770132,
+              "black": 0.7928400668008785,
+              "gray": 0.1894016517203514,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "03-long-fur",
+              "variant": "white-background",
+              "size": [
+                512,
+                683
+              ],
+              "white": 0.7498713168008785,
+              "black": 0.041444568997071746,
+              "gray": 0.20868411420204977,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "03-long-fur",
+              "variant": "binary200",
+              "size": [
+                512,
+                683
+              ],
+              "white": 0.8109586612371888,
+              "black": 0.18904133876281112,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 1,
+          "visual_usable_including_borderline": false,
+          "visual_note": "白犬身体轮廓缺失，背景交叉线极密。",
+          "binary_and_visual_pass": false
+        },
+        {
+          "sample": "04-short-fur",
+          "category": "pet_short_fur",
+          "source": "https://www.pexels.com/photo/4044201/",
+          "input_sha256": "eaf28f7d0ecbb4ac874bb546c65bee9872f0b65d34ea851665495697816a7aef",
+          "request_id": "01a1d5aa-6aa2-7bd1-b2ed-86d9b79ad50b",
+          "coarse": true,
+          "inference_seconds": 1.3469998836517334,
+          "submit_to_completed_observed_seconds": 4.139178333920427,
+          "estimated_compute_usd": 0.0016837498545646669,
+          "output_sha256": "25ea5d8b6241df18e726c8471b1aa8ef74ebd30a56541c869179b0eca26238b7",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "04-short-fur",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.006556193033854167,
+              "black": 0.9167912801106771,
+              "gray": 0.07665252685546875,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "04-short-fur",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8895823160807291,
+              "black": 0.011962890625,
+              "gray": 0.09845479329427083,
+              "pixel_pass": true
+            },
+            "binary200": {
+              "sample": "04-short-fur",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9281717936197916,
+              "black": 0.07182820638020833,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "犬脸和肩部可辨，但毛发和背景仍是素描线。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "05-house",
+          "category": "house",
+          "source": "https://www.pexels.com/photo/106399/",
+          "input_sha256": "a5b12e6320d777ac821a67bfec79ae387243399cda53db3d3d737b5f85305222",
+          "request_id": "01a1d5aa-87d7-76a0-b04a-83048a1a978b",
+          "coarse": true,
+          "inference_seconds": 1.4659998416900635,
+          "submit_to_completed_observed_seconds": 10.600110917002894,
+          "estimated_compute_usd": 0.0018324998021125793,
+          "output_sha256": "0b531eed57023cae220a4b9d23e137f153322ed9647066aca4b0778bfb235630",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "05-house",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.012476603190104166,
+              "black": 0.8438034057617188,
+              "gray": 0.1437199910481771,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "05-house",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8076731363932291,
+              "black": 0.030657450358072918,
+              "gray": 0.1616694132486979,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "05-house",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.8581161499023438,
+              "black": 0.14188385009765625,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "屋顶比细线模式干净，仍有多重交叉辅助线。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "06-house",
+          "category": "house",
+          "source": "https://www.pexels.com/photo/house-exterior-during-daytime-6422939/",
+          "input_sha256": "446b30932e718818d3143e4d87736d15303b8b21baf0169c7dc2113a51ab5350",
+          "request_id": "01a1d5aa-c05a-7970-a40f-36d69ed918a1",
+          "coarse": true,
+          "inference_seconds": 1.374000072479248,
+          "submit_to_completed_observed_seconds": 4.909775667008944,
+          "estimated_compute_usd": 0.00171750009059906,
+          "output_sha256": "e098bfcd585f8bacb205bff696391bb3ce89bf0e1f352b89ad8fa529dc2b11b4",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "06-house",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.0029551188151041665,
+              "black": 0.7532857259114584,
+              "gray": 0.2437591552734375,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "06-house",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.6888351440429688,
+              "black": 0.01610565185546875,
+              "gray": 0.2950592041015625,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "06-house",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.7809626261393229,
+              "black": 0.2190373738606771,
+              "gray": 0.0,
+              "pixel_pass": false
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_usable_including_borderline": false,
+          "visual_note": "植物区域变成交叉网线，二值化后黑像素超过20%。",
+          "binary_and_visual_pass": false
+        },
+        {
+          "sample": "07-car",
+          "category": "car",
+          "source": "https://www.pexels.com/photo/170811/",
+          "input_sha256": "ecd9f7004db236d09a1512591bba5191acdd1980b11d9276e6ca39146b65d27a",
+          "request_id": "01a1d5aa-de53-7c00-a970-d8b6a6cacb40",
+          "coarse": true,
+          "inference_seconds": 2.258999824523926,
+          "submit_to_completed_observed_seconds": 6.509198750020005,
+          "estimated_compute_usd": 0.0028237497806549074,
+          "output_sha256": "4031f50cc0b54bc0df7fbfab92e73a077c2c3d802e6621af579995d4c9916954",
+          "output_size": [
+            910,
+            512
+          ],
+          "input_size": [
+            768,
+            432
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "07-car",
+              "variant": "lineart",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.0038311298076923075,
+              "black": 0.8681855254120879,
+              "gray": 0.12798334478021978,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "07-car",
+              "variant": "white-background",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.828258070054945,
+              "black": 0.012100789835164836,
+              "gray": 0.1596411401098901,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "07-car",
+              "variant": "binary200",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.8842161744505495,
+              "black": 0.11578382554945055,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 4,
+          "visual_usable_including_borderline": true,
+          "visual_note": "汽车轮廓较清楚，有涂色空间。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "08-car",
+          "category": "car",
+          "source": "https://www.pexels.com/photo/358070/",
+          "input_sha256": "a02c4177f2a5d5457b2ce8e43ea7203841b9c445b3d6c7abc67e93b4683228a3",
+          "request_id": "01a1d5ab-04cc-7303-8d51-f4f0b2ccf8ec",
+          "coarse": true,
+          "inference_seconds": 1.5989999771118164,
+          "submit_to_completed_observed_seconds": 4.381370707997121,
+          "estimated_compute_usd": 0.0019987499713897705,
+          "output_sha256": "e134d578f08156c0b208a8daee71d4ac56c7b1706e6ccfab1dce3fc02442ee40",
+          "output_size": [
+            910,
+            512
+          ],
+          "input_size": [
+            768,
+            432
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "08-car",
+              "variant": "lineart",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.004116586538461539,
+              "black": 0.8594994848901099,
+              "gray": 0.13638392857142856,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "08-car",
+              "variant": "white-background",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.8197201236263736,
+              "black": 0.01354739010989011,
+              "gray": 0.16673248626373627,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "08-car",
+              "variant": "binary200",
+              "size": [
+                910,
+                512
+              ],
+              "white": 0.875903588598901,
+              "black": 0.12409641140109891,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "车身可辨，但车轮及背景杂线较多。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "09-low-contrast",
+          "category": "low_contrast",
+          "source": "https://www.pexels.com/photo/8545778/",
+          "input_sha256": "d8572bb8e69aca7097e98ef8d4b43e1ac55a452bb601328700ee37320ea414de",
+          "request_id": "01a1d5ab-212f-70a2-bb71-f5595d67fcaf",
+          "coarse": true,
+          "inference_seconds": 1.7949998378753662,
+          "submit_to_completed_observed_seconds": 4.107466874993406,
+          "estimated_compute_usd": 0.0022437497973442078,
+          "output_sha256": "3308716dd4f2dd8265ebb0615521488ff76e688ec3a8752513aac035c773c6c7",
+          "output_size": [
+            512,
+            768
+          ],
+          "input_size": [
+            512,
+            768
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "09-low-contrast",
+              "variant": "lineart",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.015424092610677084,
+              "black": 0.9012629191080729,
+              "gray": 0.08331298828125,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "09-low-contrast",
+              "variant": "white-background",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.8809407552083334,
+              "black": 0.025858561197916668,
+              "gray": 0.09320068359375,
+              "pixel_pass": true
+            },
+            "binary200": {
+              "sample": "09-low-contrast",
+              "variant": "binary200",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.9104131062825521,
+              "black": 0.08958689371744792,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 3,
+          "visual_usable_including_borderline": true,
+          "visual_note": "花瓣可辨，叶片和花心暗线较密。",
+          "binary_and_visual_pass": true
+        },
+        {
+          "sample": "10-low-contrast",
+          "category": "low_contrast",
+          "source": "https://www.pexels.com/photo/1993424/",
+          "input_sha256": "0472eb64beca3232d70da878da9d25384a6e9eb007a3cd73d1f01051e62aa2b9",
+          "request_id": "01a1d5ab-3e51-7993-a178-4ceb89932ff0",
+          "coarse": true,
+          "inference_seconds": 1.2920000553131104,
+          "submit_to_completed_observed_seconds": 4.127685416955501,
+          "estimated_compute_usd": 0.001615000069141388,
+          "output_sha256": "1012d854950163617122b3eb4f8251eea5b4fca0d0be0a0ea71883ff2901bc62",
+          "output_size": [
+            768,
+            512
+          ],
+          "input_size": [
+            768,
+            512
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "10-low-contrast",
+              "variant": "lineart",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.0079193115234375,
+              "black": 0.9478581746419271,
+              "gray": 0.044222513834635414,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "10-low-contrast",
+              "variant": "white-background",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9309412638346354,
+              "black": 0.011967976888020834,
+              "gray": 0.05709075927734375,
+              "pixel_pass": true
+            },
+            "binary200": {
+              "sample": "10-low-contrast",
+              "variant": "binary200",
+              "size": [
+                768,
+                512
+              ],
+              "white": 0.9546178181966146,
+              "black": 0.045382181803385414,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_usable_including_borderline": false,
+          "visual_note": "白犬细节比细线模式多，但肢体尾部轮廓仍缺失，呈素描笔触。",
+          "binary_and_visual_pass": false
+        },
+        {
+          "sample": "11-night",
+          "category": "night",
+          "source": "https://www.pexels.com/photo/night-city-street-19488222/",
+          "input_sha256": "a2e9eb0125238d3e600706927e7eebcac1077d9d85e2172973384b1ae6d1515d",
+          "request_id": "01a1d5ab-5a09-70a1-a5a0-3aff2d6a6daf",
+          "coarse": true,
+          "inference_seconds": 1.440000057220459,
+          "submit_to_completed_observed_seconds": 4.35541104094591,
+          "estimated_compute_usd": 0.0018000000715255738,
+          "output_sha256": "7502ad8c23ea4566156c25737a04632db402e03302d21656d33379b40e5bba78",
+          "output_size": [
+            512,
+            768
+          ],
+          "input_size": [
+            512,
+            768
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "11-night",
+              "variant": "lineart",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.014088948567708334,
+              "black": 0.8817876180013021,
+              "gray": 0.10412343343098958,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "11-night",
+              "variant": "white-background",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.8574879964192709,
+              "black": 0.028106689453125,
+              "gray": 0.11440531412760417,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "11-night",
+              "variant": "binary200",
+              "size": [
+                512,
+                768
+              ],
+              "white": 0.8921051025390625,
+              "black": 0.1078948974609375,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_usable_including_borderline": false,
+          "visual_note": "夜景结构缺失，招牌区域交叉线密集。",
+          "binary_and_visual_pass": false
+        },
+        {
+          "sample": "12-night",
+          "category": "night",
+          "source": "https://www.pexels.com/photo/169677/",
+          "input_sha256": "8ea0f36cce4b693a953361d783c122518a2cb0223c4f29e5114d5fe17037d365",
+          "request_id": "01a1d5ab-799b-7cd2-80a2-9d337e4fa978",
+          "coarse": true,
+          "inference_seconds": 1.628000020980835,
+          "submit_to_completed_observed_seconds": 14.674828332965262,
+          "estimated_compute_usd": 0.002035000026226044,
+          "output_sha256": "c93b877afb61c4b15500daa5d2e5908ff90b41005bb54f6d6afe85b5003348b0",
+          "output_size": [
+            767,
+            512
+          ],
+          "input_size": [
+            768,
+            513
+          ],
+          "pixel_metrics": {
+            "lineart": {
+              "sample": "12-night",
+              "variant": "lineart",
+              "size": [
+                767,
+                512
+              ],
+              "white": 0.0025158898305084744,
+              "black": 0.7942801703063885,
+              "gray": 0.203203939863103,
+              "pixel_pass": false
+            },
+            "white-background": {
+              "sample": "12-night",
+              "variant": "white-background",
+              "size": [
+                767,
+                512
+              ],
+              "white": 0.7294272530964798,
+              "black": 0.012363001140808344,
+              "gray": 0.2582097457627119,
+              "pixel_pass": false
+            },
+            "binary200": {
+              "sample": "12-night",
+              "variant": "binary200",
+              "size": [
+                767,
+                512
+              ],
+              "white": 0.8197420958279009,
+              "black": 0.18025790417209908,
+              "gray": 0.0,
+              "pixel_pass": true
+            }
+          },
+          "visual_score_1_to_5": 2,
+          "visual_usable_including_borderline": false,
+          "visual_note": "道路与建筑有大量平行/交叉杂线，涂色空间不足。",
+          "binary_and_visual_pass": false
+        }
+      ]
+    }
+  },
+  "conclusion": {
+    "commercial_hosted_api_basis": "通过公开条款核查；不代表自托管许可。",
+    "cost_gate": true,
+    "latency_gate": true,
+    "coloring_quality_gate": false,
+    "best_visual_count_including_borderline": 8,
+    "best_combined_pass_count": 7,
+    "required_pass_count": 9,
+    "release_approved": false,
+    "recommendation": "暂不接入Photo to Coloring Page。fal可稳定低成本返回素描线条，但细线与粗线都未达到原定涂色页门槛；停止本轮调用，不为了耗完预算继续调参。",
+    "failure_patterns": [
+      "低对比白色长毛宠物丢身体/尾巴/肢体轮廓",
+      "夜景暗部结构缺失或背景碎线过密",
+      "coarse模式引入交叉素描笔触，并非更干净的闭合涂色轮廓",
+      "单纯二值化能消除灰阶，不能补全缺失轮廓"
+    ]
+  },
+  "assets": {
+    "representative_comparison": "docs/validation-assets/fal-lineart-2026-11-14/comparison.jpg",
+    "all_original_downloads_and_contact_sheets": "/Users/liukai/Documents/ChatGPT/pixform/.cache/fal-lineart-validation-2026-11-14"
+  },
+  "production_modified": false,
+  "deployment_performed": false,
+  "stripe_payment_performed": false,
+  "remaining_active_requests": 0
+}
