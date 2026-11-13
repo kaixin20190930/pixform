@@ -67,3 +67,16 @@ test("concurrent polls start each independent crop only once",async()=>{
   assert.equal(calls,1);assert.equal(db.prepare("SELECT prediction_id FROM jobs WHERE id=?").get(children[0])?.prediction_id,"mock-prediction");
  }finally{globalThis.fetch=original;db.close();}
 });
+
+test("only the first crop gets the longer cold-start deadline",async()=>{
+ const {db,env,parent,children}=await fixture(2);const original=globalThis.fetch;const deadlines:string[]=[];
+ try{
+  db.prepare("UPDATE jobs SET status='pending',output_key=NULL WHERE id IN (?,?)").run(...children);
+  globalThis.fetch=async(_url,init)=>{deadlines.push(new Headers(init?.headers).get("Cancel-After")!);return Response.json({id:`prediction-${deadlines.length}`,status:"starting"});};
+  await pollMultiple(env,{...parent},"https://pixform.ai");
+  db.prepare("UPDATE jobs SET status='succeeded' WHERE id=?").run(children[0]);
+  await pollMultiple(env,{...parent},"https://pixform.ai");
+  assert.deepEqual(deadlines,["15m","5m"]);
+  assert.equal(db.prepare("SELECT count(*) n FROM credit_ledger WHERE reason='generation_reserve'").get()?.n,1);
+ }finally{globalThis.fetch=original;db.close();}
+});

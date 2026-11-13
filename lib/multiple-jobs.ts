@@ -68,7 +68,8 @@ export async function pollMultiple(env:Env,parent:Job,origin:string){
   for(const child of children){
     if(child.status==="pending"){
       const lock=await env.DB.prepare("UPDATE jobs SET status='submitting',created_at=? WHERE id=? AND status='pending' RETURNING id").bind(Date.now(),child.id).first();if(!lock)return;
-      try{const p=await createPrediction(env,child,origin);await env.DB.prepare("UPDATE jobs SET prediction_id=?,status='starting' WHERE id=?").bind(p.id,child.id).run();}catch{await finish(env,child,"failed","Couldn't confirm this face swap.");await finishParent(env,parent,"failed","Couldn't start a selected face. Your credits were returned.");}return;
+      // The first crop may cold-boot the model; later sequential crops reuse it.
+      try{const p=await createPrediction(env,child,origin,child.id===ids[0]?"15m":"5m");await env.DB.prepare("UPDATE jobs SET prediction_id=?,status='starting' WHERE id=?").bind(p.id,child.id).run();}catch{await finish(env,child,"failed","Couldn't confirm this face swap.");await finishParent(env,parent,"failed","Couldn't start a selected face. Your credits were returned.");}return;
     }
     if(child.status==="submitting"||child.status==="saving"||child.status==="retrying"){
       if(Date.now()-child.created_at>600000)await finishParent(env,parent,"failed","A selected face timed out. Your credits were returned.");return;

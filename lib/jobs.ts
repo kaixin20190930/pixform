@@ -15,11 +15,11 @@ export async function provider(env: Env, path: string, init?: RequestInit): Prom
   if (!res.ok) throw new Error(`Provider HTTP ${res.status}`);
   return res.json();
 }
-export async function createPrediction(env: Env, job: Job, origin: string) {
+export async function createPrediction(env: Env, job: Job, origin: string, faceDeadline: "5m" | "15m" = "5m") {
   if (job.style === "face-crop") {
     const input = await sign(env.JOB_SIGNING_SECRET!, job.id, "input", job.expires_at);
     const face = await sign(env.JOB_SIGNING_SECRET!, job.id, "face", job.expires_at);
-    return provider(env, "predictions", { method: "POST", headers: { "Cancel-After": "5m" }, body: JSON.stringify({
+    return provider(env, "predictions", { method: "POST", headers: { "Cancel-After": faceDeadline }, body: JSON.stringify({
       version: env.REPLICATE_MULTI_FACE_SWAP_VERSION,
       input: { destination_image: `${origin}/api/media/${input}`, source_face_image: `${origin}/api/media/${face}`, source_face_index: 0, destination_face_index: 0 },
     }) });
