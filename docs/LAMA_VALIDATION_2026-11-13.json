@@ -1,0 +1,482 @@
+{
+  "date": "2026-11-13",
+  "model": "zylim0702/remove-object",
+  "version": "0e3a841c913f597c1e4c321560aa69e2bc1f15c65f8c366caafc379240efd8ba",
+  "scope": "模型可行性验证；不新增工具页、不接入生产推理、不涉及 Stripe；现有页面文案优化已部署。",
+  "decision": "controlled_benchmark_passed_exact_hosted_license_unconfirmed_no_tool_launch",
+  "license": {
+    "upstream_code": "Apache-2.0，允许商业用途但须遵守许可条件。",
+    "upstream_weights_signal": "上游 issue 230 中 collaborator senya-ashukha 回应权重许可问题时指向仓库 Apache 2.0；是正面依据，但未证明 Replicate 此固定版本使用的权重来源及 wrapper 授权链。",
+    "hosted_version_metadata": {
+      "license_url": null,
+      "github_url": null
+    },
+    "production_clearance": "尚未完全核实；不将按量付费或平台可运行当成商用授权证明。",
+    "next_required_evidence": "提供方确认此固定版本的 wrapper/权重来源和许可，及在面向用户收费 SaaS 中使用托管 API 的范围。",
+    "sources": [
+      "https://github.com/advimman/lama/blob/main/LICENSE",
+      "https://github.com/advimman/lama/issues/230",
+      "https://replicate.com/zylim0702/remove-object",
+      "https://replicate.com/terms"
+    ]
+  },
+  "test_design": {
+    "samples": 14,
+    "photo_samples_with_controlled_added_text": 11,
+    "fictional_screenshots": 3,
+    "dimensions": [
+      768,
+      512
+    ],
+    "mask": "已知测试文字像素扩张4px，白色擦除；非用户手涂或自动OCR掩膜。",
+    "reference": "每张保留加字前原图进行对照；只删除自加文字，不删除素材原有标记。",
+    "limitations": [
+      "小样本受控验证，不能外推真实用户成功率。",
+      "精确掩膜比实际手涂容易，尚未测试宽笔刷或漏涂。",
+      "人像类文字位于肩部/背景，不覆盖五官；未证明贴近脸缘或遮挡脸部时的修复能力。",
+      "没有专门强制冷启动；排队与启动耗时合并，不能推断冷启动上限。",
+      "没有验证OCR、移动端画笔、大图或正式产品端到端流程。"
+    ],
+    "sources": {
+      "wall1": [
+        8996664,
+        "https://www.pexels.com/photo/white-wall-in-close-up-photography-8996664/"
+      ],
+      "wall2": [
+        8348219,
+        "https://www.pexels.com/photo/photo-of-a-rough-white-concrete-wall-8348219/"
+      ],
+      "sky1": [
+        110873,
+        "https://www.pexels.com/photo/blue-sky-with-white-clouds-110873/"
+      ],
+      "sky2": [
+        5119995,
+        "https://www.pexels.com/photo/fluffy-clouds-on-bright-blue-sky-5119995/"
+      ],
+      "wood": [
+        36299710,
+        "https://www.pexels.com/photo/close-up-of-weathered-wood-texture-36299710/"
+      ],
+      "brick": [
+        7674653,
+        "https://www.pexels.com/photo/close-up-shot-of-a-brick-wall-7674653/"
+      ],
+      "product1": [
+        34690231,
+        "https://www.pexels.com/photo/elegant-transparent-perfume-bottle-on-white-surface-34690231/"
+      ],
+      "product2": [
+        11711810,
+        "https://www.pexels.com/photo/bottled-perfume-on-white-surface-11711810/"
+      ],
+      "grass": [
+        582486,
+        "https://www.pexels.com/photo/close-view-of-green-grass-582486/"
+      ]
+    }
+  },
+  "summary": {
+    "provider_successes": 14,
+    "visual_usable": 11,
+    "visual_usable_fraction": 0.7857142857142857,
+    "visual_mean_score": 3.9285714285714284,
+    "reviewer": "Codex visual review; subjective rubric, not independent human panel",
+    "predict_mean_seconds": 1.9540196992857144,
+    "predict_min_seconds": 1.870988179,
+    "predict_max_seconds": 2.114504742,
+    "provider_total_min_seconds": 1.8997499709999999,
+    "provider_total_max_seconds": 6.981525688,
+    "provider_total_note": "provider created_at 到 completed_at，包括排队/启动；不含客户端上传、轮询、下载时间。",
+    "outside_mask_changed_pixels_total": 0,
+    "all_dimensions_preserved": true
+  },
+  "budget": {
+    "authorized_usd": 1,
+    "calls": 14,
+    "retries": 0,
+    "rate_usd_per_second": 0.000225,
+    "rate_source": "https://replicate.com/pricing",
+    "estimated_compute_usd": 0.006155162052749999,
+    "estimated_model_cost_per_usable_output_usd": 0.0005595601866136363,
+    "actual_invoice_usd": null,
+    "billing_note": "按 provider predict_time × 公示 T4 费率估算，非账单结算额；模型14次均已完成，无遗留运行。",
+    "stripe_payments": 0
+  },
+  "acceptance": {
+    "usable_at_least_10": true,
+    "visual_mean_at_least_3_5": true,
+    "estimated_cost_per_usable_at_most_0_005": true,
+    "all_observed_inference_at_most_10_seconds": true,
+    "exact_hosted_commercial_license_verified": false,
+    "release_gate_passed": false
+  },
+  "next_step": "授权证据补齐后再决定开发 text-remover；MVP 使用手动掩膜，不承诺自动识别文字、精细纹理无痕或人脸还原；本轮停止扩展，不测线条化。",
+  "artifacts_directory": ".cache/lama-validation-2026-11-13",
+  "samples": [
+    {
+      "sample": "01-wall-dark",
+      "category": "plain_wall",
+      "source": "https://www.pexels.com/photo/white-wall-in-close-up-photography-8996664/",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "dzs8a5gsh5rge0d1tn79h6qpjc",
+      "provider_status": "succeeded",
+      "predict_seconds": 2.045742176,
+      "provider_total_seconds": 4.669664229,
+      "estimated_compute_usd": 0.0004602919896,
+      "visual_score_1_to_5": 5,
+      "usable": true,
+      "visual_note_cn": "文字清除完整，墙面裂纹大体连贯。",
+      "pixels": {
+        "sample": "01-wall-dark",
+        "input_mae_inside_mask": 61.113159371492706,
+        "output_mae_inside_mask": 3.1647306397306396,
+        "error_reduction_fraction": 0.9482152342919636,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "02-wall-light",
+      "category": "plain_wall",
+      "source": "https://www.pexels.com/photo/photo-of-a-rough-white-concrete-wall-8348219/",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "dbhmz2szz5rge0d1tn7bqns3dm",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.870988179,
+      "provider_total_seconds": 6.57233606,
+      "estimated_compute_usd": 0.000420972340275,
+      "visual_score_1_to_5": 4,
+      "usable": true,
+      "visual_note_cn": "文字清除，粗糙墙面局部纹理变软。",
+      "pixels": {
+        "sample": "02-wall-light",
+        "input_mae_inside_mask": 33.18144458281444,
+        "output_mae_inside_mask": 8.84906600249066,
+        "error_reduction_fraction": 0.7333128164325362,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "03-sky-white",
+      "category": "sky_gradient",
+      "source": "https://www.pexels.com/photo/blue-sky-with-white-clouds-110873/",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "710874k92srga0d1tn7a68thtg",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.9097217450000001,
+      "provider_total_seconds": 2.073412886,
+      "estimated_compute_usd": 0.000429687392625,
+      "visual_score_1_to_5": 4,
+      "usable": true,
+      "visual_note_cn": "文字清除，天空与云层过渡自然，局部细节有变化。",
+      "pixels": {
+        "sample": "03-sky-white",
+        "input_mae_inside_mask": 32.34644538418575,
+        "output_mae_inside_mask": 2.285938455809995,
+        "error_reduction_fraction": 0.9293295313083274,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "04-sky-dark",
+      "category": "sky_gradient",
+      "source": "https://www.pexels.com/photo/fluffy-clouds-on-bright-blue-sky-5119995/",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "dc0z7tm2kdrge0d1tn788sd120",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.9908474090000001,
+      "provider_total_seconds": 3.624792914,
+      "estimated_compute_usd": 0.00044794066702500004,
+      "visual_score_1_to_5": 4,
+      "usable": true,
+      "visual_note_cn": "文字清除，云边界局部重建，与原图不同但可接受。",
+      "pixels": {
+        "sample": "04-sky-dark",
+        "input_mae_inside_mask": 50.81530924128012,
+        "output_mae_inside_mask": 5.891046386192017,
+        "error_reduction_fraction": 0.884069457135048,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "05-wood",
+      "category": "wood_or_brick",
+      "source": "https://www.pexels.com/photo/close-up-of-weathered-wood-texture-36299710/",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "zx72t2wt35rgc0d1tn78v1qzbm",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.886876879,
+      "provider_total_seconds": 1.977812506,
+      "estimated_compute_usd": 0.00042454729777499997,
+      "visual_score_1_to_5": 2,
+      "usable": false,
+      "visual_note_cn": "木纹出现可见条带与重复纹理，保守判为不可交付。",
+      "pixels": {
+        "sample": "05-wood",
+        "input_mae_inside_mask": 53.40070618446394,
+        "output_mae_inside_mask": 37.46982666381339,
+        "error_reduction_fraction": 0.2983271319600147,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "06-brick",
+      "category": "wood_or_brick",
+      "source": "https://www.pexels.com/photo/close-up-shot-of-a-brick-wall-7674653/",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "h0r0aqxkvnrga0d1tn79vmwxec",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.924730017,
+      "provider_total_seconds": 6.981525688,
+      "estimated_compute_usd": 0.00043306425382499996,
+      "visual_score_1_to_5": 2,
+      "usable": false,
+      "visual_note_cn": "跨砖缝区域修补痕迹明显，砖面纹理不连贯。",
+      "pixels": {
+        "sample": "06-brick",
+        "input_mae_inside_mask": 25.422238328199555,
+        "output_mae_inside_mask": 24.949115177870386,
+        "error_reduction_fraction": 0.018610601640232316,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "07-screenshot",
+      "category": "screenshot",
+      "source": "Locally drawn fictional dashboard",
+      "fixture_kind": "synthetic_ui_no_personal_data",
+      "prediction_id": "yas3ts6tddrg80d1tn7a0mzr6g",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.944178996,
+      "provider_total_seconds": 2.092658633,
+      "estimated_compute_usd": 0.0004374402741,
+      "visual_score_1_to_5": 5,
+      "usable": true,
+      "visual_note_cn": "虚构白色界面文字清除，背景平整。",
+      "pixels": {
+        "sample": "07-screenshot",
+        "input_mae_inside_mask": 46.72245663384904,
+        "output_mae_inside_mask": 1.0578215346147835,
+        "error_reduction_fraction": 0.9773594624335651,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "08-screenshot",
+      "category": "screenshot",
+      "source": "Locally drawn fictional dashboard",
+      "fixture_kind": "synthetic_ui_no_personal_data",
+      "prediction_id": "5dz96rfe3drgc0d1tn78d48r1m",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.87717474,
+      "provider_total_seconds": 1.8997499709999999,
+      "estimated_compute_usd": 0.0004223643165,
+      "visual_score_1_to_5": 5,
+      "usable": true,
+      "visual_note_cn": "虚构深色界面文字清除，背景平整。",
+      "pixels": {
+        "sample": "08-screenshot",
+        "input_mae_inside_mask": 44.584466322862944,
+        "output_mae_inside_mask": 0.35232067510548526,
+        "error_reduction_fraction": 0.9920976810049913,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "09-screenshot",
+      "category": "screenshot",
+      "source": "Locally drawn fictional dashboard",
+      "fixture_kind": "synthetic_ui_no_personal_data",
+      "prediction_id": "qx8pfmg2k1rgc0d1tn7s6290jr",
+      "provider_status": "succeeded",
+      "predict_seconds": 2.114504742,
+      "provider_total_seconds": 3.982428379,
+      "estimated_compute_usd": 0.00047576356694999995,
+      "visual_score_1_to_5": 5,
+      "usable": true,
+      "visual_note_cn": "文字清除，截图横线保持。",
+      "pixels": {
+        "sample": "09-screenshot",
+        "input_mae_inside_mask": 41.70254048017867,
+        "output_mae_inside_mask": 1.1500558347292016,
+        "error_reduction_fraction": 0.972422403491801,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "10-product",
+      "category": "product_with_store_name",
+      "source": "https://www.pexels.com/photo/elegant-transparent-perfume-bottle-on-white-surface-34690231/",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "yazsne15r5rg80d1tn7v8tpm0m",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.9018613370000002,
+      "provider_total_seconds": 1.954268595,
+      "estimated_compute_usd": 0.000427918800825,
+      "visual_score_1_to_5": 4,
+      "usable": true,
+      "visual_note_cn": "店名测试字清除，瓶身局部细节被重建。",
+      "pixels": {
+        "sample": "10-product",
+        "input_mae_inside_mask": 27.613880742913,
+        "output_mae_inside_mask": 4.719731881022204,
+        "error_reduction_fraction": 0.8290811811290413,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "11-product",
+      "category": "product_with_store_name",
+      "source": "https://www.pexels.com/photo/bottled-perfume-on-white-surface-11711810/",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "rk32nzsvjdrgc0d1tn7rkxkhcr",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.9196968509999999,
+      "provider_total_seconds": 1.9656003119999998,
+      "estimated_compute_usd": 0.00043193179147499994,
+      "visual_score_1_to_5": 3,
+      "usable": false,
+      "visual_note_cn": "字已清除，但玻璃反光和瓶沿存在可见变形；按产品图要求判为不可交付。",
+      "pixels": {
+        "sample": "11-product",
+        "input_mae_inside_mask": 31.932272029046224,
+        "output_mae_inside_mask": 18.372573662896244,
+        "error_reduction_fraction": 0.42463932268320315,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "12-near-face",
+      "category": "text_near_face",
+      "source": "NASA STS-104 official crew portrait; text placed next to face, no endorsement",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "3ekx44jj6drg80d1tn7rmgzba4",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.936526052,
+      "provider_total_seconds": 4.434586822,
+      "estimated_compute_usd": 0.0004357183617,
+      "visual_score_1_to_5": 4,
+      "usable": true,
+      "visual_note_cn": "肩部附近文字清除，面孔掩膜外未变，肩部纹理稍软。",
+      "pixels": {
+        "sample": "12-near-face",
+        "input_mae_inside_mask": 33.088254103602644,
+        "output_mae_inside_mask": 2.9084061678391246,
+        "error_reduction_fraction": 0.9121015524502256,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "13-near-face",
+      "category": "text_near_face",
+      "source": "NASA STS-104 official crew portrait; text placed next to face, no endorsement",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "j6g3ndkpzsrga0d1tn7rzm8ynr",
+      "provider_status": "succeeded",
+      "predict_seconds": 1.922504983,
+      "provider_total_seconds": 1.975651462,
+      "estimated_compute_usd": 0.000432563621175,
+      "visual_score_1_to_5": 5,
+      "usable": true,
+      "visual_note_cn": "人像旁背景文字清除，面孔掩膜外未变。",
+      "pixels": {
+        "sample": "13-near-face",
+        "input_mae_inside_mask": 33.979037873943014,
+        "output_mae_inside_mask": 1.0283521637177575,
+        "error_reduction_fraction": 0.9697356891759918,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    },
+    {
+      "sample": "14-grass",
+      "category": "grass_texture",
+      "source": "https://www.pexels.com/photo/close-view-of-green-grass-582486/",
+      "fixture_kind": "photo_with_known_added_text",
+      "prediction_id": "n044qemg51rgc0d1tn7vp49ng0",
+      "provider_status": "succeeded",
+      "predict_seconds": 2.110921684,
+      "provider_total_seconds": 3.755247009,
+      "estimated_compute_usd": 0.0004749573789,
+      "visual_score_1_to_5": 3,
+      "usable": true,
+      "visual_note_cn": "文字清除，草叶连续性有可见变化，普通小图可用，精细修图不足。",
+      "pixels": {
+        "sample": "14-grass",
+        "input_mae_inside_mask": 51.564471965963186,
+        "output_mae_inside_mask": 18.171869076203716,
+        "error_reduction_fraction": 0.6475893501207837,
+        "outside_mask_changed_pixels": 0,
+        "outside_mask_mae": 0.0,
+        "output_size": [
+          768,
+          512
+        ]
+      }
+    }
+  ]
+}

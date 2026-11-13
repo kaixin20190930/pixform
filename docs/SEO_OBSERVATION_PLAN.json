@@ -1,0 +1,493 @@
+{
+  "version": 3,
+  "updated_at": "2026-11-13",
+  "timezone": "Asia/Shanghai",
+  "status": "existing_page_optimization_deployed_lama_controlled_validation_complete_license_pending",
+  "scope": {
+    "now": "现有页面优化已部署；按授权预算完成14次LaMa验证，商用授权链待核，新工具页未开发。",
+    "later": [
+      "先验证 LaMa，许可、质量、成本通过且关键词意图核对后优先上线 text-remover；coloring page 单独验证通过再上线；不并行发布、不扩展其他工具页"
+    ],
+    "excluded": [
+      "外链提交或购买",
+      "GSC 请求收录与重新提交 sitemap",
+      "Stripe 真实付款与退款",
+      "自动轮换或撤销生产密钥"
+    ]
+  },
+  "checklist": [
+    {
+      "id": "P0-1",
+      "action": "替换 multiple-face-swap Description，保留 Title、H1 和现有 H2",
+      "description": "Multiple face swap in one photo: pick up to five faces and change them with one reference face. 2 credits per face, 10 free with Google sign-in.",
+      "characters": 144,
+      "files": [
+        "lib/multiple-face-content.ts"
+      ],
+      "acceptance": "HTML meta、OG、Twitter 同步；自指 canonical 不变",
+      "status": "completed_2026-11-13"
+    },
+    {
+      "id": "P0-2",
+      "action": "补充约 200–250 个有用英文词；不以 1230 词作为索引门槛",
+      "sections": {
+        "limits": "超过五脸需手动分成独立任务；第二批若要累计替换须上传第一批下载 PNG、重新检测选择剩余人脸，再次按每脸 2 credits 计费。编号重新生成，不保证沿用。后续批次仍受 1600px、40px、区域隔离限制，不保证所有大合影可分批成功。",
+        "cost": "300 credits 在全部用于该工具且任务成功时，等于 30 次五脸或 50 次三脸任务；下载副本不额外收费。",
+        "use_cases": "家庭表情不保证精确还原、团队须获得同意、活动照留出肩距更易隔离但不保证检测、不同姿态光线仍影响结果。",
+        "faq": "新增手机 FAQ，总数 8→9；说明现代移动浏览器、Google 登录、选择两图、PNG 下载；不保证所有旧设备。",
+        "free_guidance": "推荐先选三脸花 6 credits，保留 4 credits；仍允许五脸用完 10 credits，不改默认选择和产品逻辑。"
+      },
+      "acceptance": "可见 FAQ 与 JSON-LD 同源、问题和答案逐字对齐，smoke 预期同步 8→9",
+      "status": "completed_2026-11-13"
+    },
+    {
+      "id": "P0-3",
+      "action": "文案核对实际实现，不为文案改后端",
+      "result": "四项约束实现均存在，修正计时和物理删除措辞",
+      "evidence": {
+        "max_side": "lib/browser-face-detection.ts 与 lib/multiple-image.ts：最长边至多 1600px，小图不放大",
+        "minimum_face": "前端和服务端均要求宽、高分别 >=40px；基于预处理后检测框，不是原始图任意人脸保证",
+        "retention": "父任务成功或失败收尾后 expires_at=收尾时间+1小时；媒体/下载接口到期拒绝，物理清理每分钟分批并重试，不保证整点立即删除",
+        "unfinished": "父任务初始 expires_at=创建+2小时；提前失败会走收尾后1小时，不把2小时写成推理时长或SLA"
+      },
+      "status": "completed_2026-11-13"
+    },
+    {
+      "id": "P0-4",
+      "action": "品牌链接统一为 Pixform，保留用途明确的工具锚文本",
+      "scope": "正文把品牌 Pixform 自然链接至首页；品牌头尾导航统一，避免每个重复品牌词强行加链接。Image to Image AI、Home、Try now 等功能/导航语义不机械全改为 Pixform。",
+      "status": "completed_2026-11-13"
+    },
+    {
+      "id": "P0-5",
+      "action": "一次轻量验收后停止扩写",
+      "checks": [
+        "npm run seo:source-audit（以 package.json 实际脚本名为准）",
+        "更新现有 seo-production-smoke FAQ 数量，逐条比较问题和答案",
+        "构建一次",
+        "部署后生产 smoke 一次；检查描述、内链、canonical、robots、sitemap、图片 noindex"
+      ],
+      "no_extra": [
+        "不改定价",
+        "不新增实验系统",
+        "不为凑字数增加 H2",
+        "不重复真实出图验收"
+      ],
+      "status": "completed_2026-11-13"
+    }
+  ],
+  "new_pages": [
+    {
+      "path": "/photo-to-coloring-page",
+      "status": "planned_pending_line_extraction_validation",
+      "priority": 2,
+      "title": "Photo to Coloring Page — Free Line Art Maker | Pixform",
+      "h1": "Photo to Coloring Page",
+      "candidate_description": "Turn a photo into a printable coloring page. Create black outlines on white, preview the result, and download it with Pixform.",
+      "keyword_data": {
+        "primary": "photo to coloring page",
+        "us_monthly_searches_reported": 1900,
+        "kd_reported": 22.3,
+        "verification": "用户提供，未独立核实，非排名承诺"
+      },
+      "mvp": "单图上传→生成黑白轮廓→预览和 PNG 下载；复用账号、积分、任务、失败返还和临时存储。先确认算法/模型、商用许可和成本，再确认是否可定 1 credit。",
+      "must_verify_before_copy": [
+        "选择一套可用方案，不假定现有 sketch 风格等于 coloring page",
+        "若做本地图像算法不声称 AI 模型；若调用模型必须核成本、许可、质量和延迟",
+        "先验收普通人像、宠物、简单场景、低对比复杂背景；不无条件保证闭合轮廓、零阴影或白底纯黑",
+        "线条粗细功能未实现前从文案删除",
+        "US Letter/A4尺寸与DPI未实现前不承诺100%清晰打印",
+        "删除 in seconds / about ten seconds",
+        "300 credits 可生成多少次按本工具实际费率计算，不能说任意其他工具都是300次",
+        "重复打印同一文件不再计费，十张相同感谢卡不是十次生成",
+        "不无条件承诺商用权；原图、人物和模型许可分别约束"
+      ],
+      "content": "参考附件现有 H2 / 场景 / 8 FAQ，保留有用部分，按实测重写，约1200词仅作上限参考不凑字。工具首屏可用。",
+      "launch_gate": [
+        "功能可用且费用/许可明确",
+        "首页、face-swap、multiple-face-swap 至少三个上下文入口",
+        "只链接已上线页面，不提前互链 text-remover",
+        "新增自指 canonical、robots、sitemap、FAQ对齐与现有 smoke 覆盖",
+        "请求索引和重交 sitemap 由用户处理"
+      ],
+      "launch_order": "优先验证真正的照片到线稿提取；不强制先于text-remover上线；先通过并发布一个，再动另一个。"
+    },
+    {
+      "path": "/text-remover",
+      "status": "planned_pending_lama_validation",
+      "priority": 1,
+      "title": "Remove Text From Image — Erase Text Online | Pixform",
+      "h1": "Remove Text From Image",
+      "keyword_data": {
+        "primary": "remove text from image",
+        "us_monthly_searches_reported": 9900,
+        "secondary": "text remover from image",
+        "secondary_us_monthly_searches_reported": 1900,
+        "verification": "用户称来自官方规划师，尚无25词完整导出、时间与匹配口径，记录为用户提供而非独立验证；旧次词KD25.2不得移植给新主词",
+        "kd_reported": null
+      },
+      "mvp": "单图上传→最简画笔遮罩→修复→预览下载；一张图一次任务，不做 OCR 或批量。先定可商用修复模型、成本、输入输出规格，再确认积分价。",
+      "copy_corrections": [
+        "不承诺 any image、in seconds、原分辨率或绝无模糊",
+        "删除无权清理供应商品牌/他人水印以变成自有素材的建议，只举有权编辑素材",
+        "截图隐私保护场景建议本地不透明覆盖后重新导出并核验；生成修复不作为可靠脱敏工具",
+        "删除 picture to drawing / blur text 后续独立页面的隐含开发承诺",
+        "新页成功后再互链；不同时上线两页"
+      ],
+      "launch_gate": "LaMa确切版本、许可来源、质量、积分成本、下载与生产SEO验收通过；不再依赖coloring page先上线。新主词SERP/意图仍需核对。"
+    }
+  ],
+  "baseline": {
+    "as_of": "2026-11-08",
+    "source": "用户提供的历史摘要，尚未用 GSC 导出复核",
+    "period_start": null,
+    "period_end": null,
+    "period_warning": "截止11/08不等于10/19–11/07窗口；不可冒充同口径基线",
+    "reported": {
+      "clicks": 11,
+      "impressions": 120,
+      "ctr_percent": 9.2,
+      "average_position": 13,
+      "brand_pixform_impressions": 40,
+      "brand_share_percent": 33.3,
+      "nonbrand_queries_reported": 10,
+      "nonbrand_impressions_each_reported": 1,
+      "referring_domains": 2
+    },
+    "comparison_period": {
+      "start": "2026-10-19",
+      "end": "2026-11-07",
+      "days": 20,
+      "metrics": null,
+      "verification": "待 GSC 同筛选条件提取"
+    },
+    "filters_to_record": [
+      "sc-domain:pixform.ai",
+      "search_type:web",
+      "country",
+      "device",
+      "search_appearance",
+      "data_state:final",
+      "latest_complete_date",
+      "source_timezone",
+      "query_anonymization_or_row_limit"
+    ]
+  },
+  "page_ledger": [
+    {
+      "path": "/multiple-face-swap",
+      "launch_date": "2026-11-13",
+      "first_observed_crawl_at": null,
+      "first_observed_impression_date": null,
+      "first_observed_top50_date": null,
+      "indexed": null,
+      "google_canonical": null,
+      "declared_canonical": "https://pixform.ai/multiple-face-swap",
+      "last_crawl_at": null,
+      "keyword_impressions": null,
+      "evidence": null,
+      "note": "未核实留 null；URL检查显示最近抓取不代表首次抓取；排名<=50须有真实曝光"
+    },
+    {
+      "path": "/photo-to-coloring-page",
+      "launch_date": null,
+      "first_observed_crawl_at": null,
+      "first_observed_impression_date": null,
+      "first_observed_top50_date": null,
+      "indexed": null,
+      "google_canonical": null,
+      "declared_canonical": "https://pixform.ai/photo-to-coloring-page",
+      "last_crawl_at": null,
+      "keyword_impressions": null,
+      "evidence": null,
+      "note": "未核实留 null；URL检查显示最近抓取不代表首次抓取；排名<=50须有真实曝光"
+    },
+    {
+      "path": "/text-remover",
+      "launch_date": null,
+      "first_observed_crawl_at": null,
+      "first_observed_impression_date": null,
+      "first_observed_top50_date": null,
+      "indexed": null,
+      "google_canonical": null,
+      "declared_canonical": "https://pixform.ai/text-remover",
+      "last_crawl_at": null,
+      "keyword_impressions": null,
+      "evidence": null,
+      "note": "未核实留 null；URL检查显示最近抓取不代表首次抓取；排名<=50须有真实曝光"
+    }
+  ],
+  "observations": [
+    {
+      "date": "2026-11-16",
+      "id": "crawl",
+      "scope": [
+        "/",
+        "/face-swap",
+        "/about",
+        "/pricing"
+      ],
+      "measure": "逐页上次抓取、pricing索引、sitemap最后读取和已发现网址数；multiple-face-swap补记最近抓取及Google/声明canonical",
+      "pass": "四个旧页逐项 last_crawl>=2026-11-09；pricing索引独立报告；新页抓取>=其实际优化部署时间另行记录",
+      "if_fail": "先看URL检查、robots是否实际匹配、状态、服务器错误，不断言API/result规则误伤"
+    },
+    {
+      "date": "2026-11-20",
+      "id": "homepage-impressions",
+      "measure": "首页image to image词族非品牌曝光；品牌pixform按页面点击、曝光、占比，about与首页对比",
+      "pass": "首页词族>=1曝光仅表示被展示，不称稳定排名；about点击上涨本身不算抢词",
+      "if_fail": "检查首页主题与描述性内链；无证据不改TDK"
+    },
+    {
+      "date": "2026-11-23",
+      "id": "multiple-index",
+      "measure": "multiple-face-swap URL索引状态、最近抓取、sitemap读取、两种canonical、实际内链",
+      "pass": "已编入索引且Google canonical自指；缺失canonical与尚未选定分别记录",
+      "if_fail": "报告排除原因和证据，建议用户按需请求收录；任务不代提交"
+    },
+    {
+      "date": "2026-11-27",
+      "id": "multiple-impressions",
+      "measure": "URL限定multiple-face-swap，query精确multiple face swap与词族分别统计，区间11/13至最新完整日",
+      "pass": ">=1曝光为首波信号",
+      "if_fail": "先查已索引与抓取，再评估补上下文内链；不自动新建页面"
+    },
+    {
+      "date": "2026-12-09",
+      "id": "four-week",
+      "measure": "11/09–12/06对比10/19–11/07：点击、曝光、CTR、平均排名、可见非品牌查询数；按首页/face-swap/multiple-face-swap/about/pricing拆分",
+      "pass": "点击/曝光/可见非品牌词覆盖不下降为业务观察目标；28天与20天同时报原值、日均和11/17–12/06匹配20天窗口，不把天数差当增长",
+      "if_fail": "先排查抓取索引和同口径；曝光少于30不解读CTR波动"
+    },
+    {
+      "date": "2026-12-13",
+      "id": "landing-page",
+      "measure": "最近28个完整日query×page，精确multiple face swap及词族落地页的曝光/点击/平均位置",
+      "pass": "主要落地页为multiple-face-swap；1次他页曝光不判互抢",
+      "if_fail": "仅有持续分流证据才建议收短face-swap GROUP PHOTOS为一句+新页链接"
+    },
+    {
+      "date": "2027-01-15",
+      "id": "referring-domains",
+      "measure": "同来源、同统计口径的有效引用域和外链；>=8后看非品牌词趋势",
+      "pass": ">=8是评估条件，不是排名保证；GSC外链不是完整实时清单",
+      "if_fail": "只报告证据和是否满足条件，不买外链或增加预算"
+    }
+  ],
+  "automation": {
+    "id": "pixform",
+    "timezone": "Asia/Shanghai",
+    "time": "09:15 daily",
+    "ordinary_days": "仅只读线上健康，健康无变化静默，不读排名",
+    "milestone_days": "同一任务额外执行到期观察并通知逐项结果；不新增任务；本地记录已报告节点避免重复",
+    "existing_milestones_to_pause": [
+      "pixform-11-16",
+      "pixform-11-20",
+      "pixform-12-9",
+      "pixform-1"
+    ],
+    "weekly": "pixform-seo继续PAUSED",
+    "missing_data": "不可用标 unavailable，不当0、不伪造Google canonical/当前曝光；节点报告缺权限或数据滞后，需用户处理；不无限每天重试",
+    "report_fields": [
+      "实际执行时间",
+      "GSC数据截止日和日期区间",
+      "实际值",
+      "标准",
+      "通过/未通过/不可验证",
+      "证据",
+      "建议下一步"
+    ],
+    "local_outputs": ".cache/seo-observations/YYYY-MM-DD.json 与 state.json；仅记录公开汇总，不保存凭据或用户图片"
+  },
+  "references": [
+    "https://developers.google.com/search/updates",
+    "https://developers.google.com/search/docs/fundamentals/creating-helpful-content",
+    "https://developers.google.com/search/docs/crawling-indexing/links-crawlable",
+    "https://replicate.com/zylim0702/remove-object",
+    "https://replicate.com/lucataco/flux.1-controlnet-lineart-promeai",
+    "https://replicate.com/rossjillian/controlnet",
+    "https://replicate.com/fofr/controlnet-preprocessors",
+    "https://github.com/advimman/lama/blob/main/LICENSE",
+    "https://replicate.com/pricing"
+  ],
+  "model_validation": {
+    "checked_at": "2026-11-13",
+    "status": "desk_review_only_no_paid_calls",
+    "budget_authorized_usd": null,
+    "execution": "可先Playground手动小样，不写生产接入代码；通过小样再跑完整集。记录输入、掩膜、版本、参数、种子、输出、平台状态、人工质量、启动等待、推理/端到端耗时、实际可核费用和失败原因；Playground不能证明网站扣费和下载闭环。",
+    "candidates": [
+      {
+        "id": "zylim0702/remove-object",
+        "purpose": "LaMa图像+掩膜局部修复",
+        "provider_estimate_usd_per_run": 0.00073,
+        "provider_typical_seconds": 4,
+        "provider_runs_display": "4.4M（动态参考，不是质量证据）",
+        "decision": "优先验证",
+        "license": "LaMa上游代码Apache-2.0已核；此wrapper页面未提供明确license/readme，确切版本权重来源及托管付费SaaS条款仍须核对，不把上游代码许可直接当完整部署授权",
+        "source": "https://replicate.com/zylim0702/remove-object"
+      },
+      {
+        "id": "rossjillian/controlnet",
+        "purpose": "按图像结构条件生成图片，不等于独立线稿提取",
+        "provider_estimate_usd_per_run": 0.044,
+        "provider_typical_seconds": 32,
+        "decision": "移出便宜优先候选；页面估价已超过原1/2积分成本线，除非受控参数实测明显降低且输出适用，否则不跑12张",
+        "source": "https://replicate.com/rossjillian/controlnet"
+      },
+      {
+        "id": "lucataco/flux.1-controlnet-lineart-promeai",
+        "purpose": "FLUX.1-dev按线稿条件生成图片；不是已确认照片转线稿提取器",
+        "provider_estimate_usd_per_run": 0.018,
+        "provider_typical_seconds": 14,
+        "decision": "降为待证方向的备选，不先跑12张；必须先证明可产出保真可涂色线稿",
+        "license": "模型页明确Replicate生成图可商用；不等于所有底层权重无限商用，付费SaaS托管调用范围须核对；不下载自托管",
+        "source": "https://replicate.com/lucataco/flux.1-controlnet-lineart-promeai"
+      },
+      {
+        "id": "fofr/controlnet-preprocessors",
+        "purpose": "明确包含lineart、Canny等预处理，更接近照片到轮廓方向",
+        "provider_estimate_usd_per_run": 0.032,
+        "provider_typical_seconds": 33,
+        "decision": "仅补充用途匹配候选，不直接推荐生产；当前整体估价超过2积分40%成本线，需核单一lineart参数成本和确切权重许可",
+        "source": "https://replicate.com/fofr/controlnet-preprocessors"
+      },
+      {
+        "id": "local-canny-or-xdog",
+        "purpose": "本地算法提取轮廓",
+        "decision": "先作为免费对照；不因无风格化直接淘汰，用同一主体保真和打印质量门槛判断。算法本身不收Replicate费，部署仍有计算和依赖成本。"
+      }
+    ],
+    "economics": {
+      "monthly_gross_usd_per_credit": 0.03,
+      "annual_gross_usd_per_credit": 0.02388888888888889,
+      "base": "按最低常规年付收入计算，实际还需扣支付手续费、基础设施、免费体验和退款/失败成本；40%为内部目标不是通用硬规则",
+      "model_cost_fraction_target": 0.4,
+      "one_credit_gross_ceiling_usd": 0.009555555555555557,
+      "two_credit_gross_ceiling_usd": 0.019111111111111113,
+      "effective_cost_formula": "所有实际计费调用成本（包括失败和重试）/成功交付并收费任务数，再加该工具其他可变成本；免费任务成本单列纳入产品总体预算。未完成账单不能把估算写成实付。",
+      "example": "FLUX每次0.018，若成功交付率0.7且失败同样计费，有效模型成本约0.0257，超过2积分毛收入40%上限约0.0191，不能仅按0.018/0.06宣布达标。"
+    },
+    "lama_test": {
+      "samples": 14,
+      "categories": {
+        "plain_wall_text": 2,
+        "sky_gradient": 2,
+        "wood_or_brick": 2,
+        "screenshots": 3,
+        "authorized_product_name": 2,
+        "text_near_faces": 2,
+        "grass_texture": 1
+      },
+      "cost_estimate_total_usd": 0.01022,
+      "license_gate": "先核确切wrapper/权重来源和许可再决定可发布性",
+      "acceptance": {
+        "usable_outputs_at_least": 10,
+        "human_mean_score_at_least": 3.5,
+        "provisional_model_cost_usd_per_delivered_task_at_most": 0.005,
+        "warm_inference_seconds_target_at_most": 10
+      },
+      "quality_checks": [
+        "平台成功与质量可用分开计数",
+        "文字去除完整、无明显残笔、纹理延续合理",
+        "人脸旁不擅改五官",
+        "掩膜外区域保持；若模型改动外部，评估仅把掩膜区域合回原图的最小方案",
+        "统一掩膜规则和尺寸，记录是否自动缩放",
+        "冷启动单列，不将4秒宣传值作为端到端SLA"
+      ]
+    },
+    "coloring_test": {
+      "samples": 12,
+      "categories": {
+        "portraits": 2,
+        "pets_long_and_short_fur": 2,
+        "houses": 2,
+        "cars": 2,
+        "low_contrast": 2,
+        "night": 2
+      },
+      "order": [
+        "本地Canny/XDoG建立对照",
+        "选择用途正确且许可明确的lineart提取器；先2–3样本验证方向，再决定是否完成12张",
+        "仅提取路线不够时再考虑生成式方案，不默认便宜SD1.5先行"
+      ],
+      "acceptance": {
+        "usable_outputs_at_least": 9,
+        "grayscale_near_white_min": 240,
+        "near_white_fraction_gt": 0.7,
+        "near_black_max": 40,
+        "near_black_fraction_lt": 0.2,
+        "middle_gray_range": "41–239",
+        "middle_gray_fraction_lt": 0.1,
+        "warm_inference_seconds_target_at_most": 30
+      },
+      "quality_checks": [
+        "近白/近黑比只作辅助；纯白空图也会通过，必须人工核主体轮廓、可识别性、可涂色空间、无大片实心黑和保真",
+        "原始输出与最小后处理输出分别检查，不能靠二值化比例掩盖缺失轮廓",
+        "分别记录API成功、质量成功、冷启动与端到端时间；不以12张样本宣称总体稳定成功率"
+      ]
+    },
+    "stop_rule": "不固定凑三家模型。只有方向匹配、许可可核且有望达成本线的候选才继续；明显失败即停，缺少合适模型则延期，不先发空壳页。"
+  },
+  "keyword_backlog": {
+    "source": "用户提供的规划师/第三方精评摘要，未拿到完整导出；不是本次独立验证数据",
+    "do_not_expand_now": [
+      "watermark remover",
+      "ai clothes changer",
+      "transparent background maker",
+      "background remover",
+      "old photo restoration"
+    ],
+    "reported": [
+      {
+        "query": "watermark remover",
+        "us_monthly_searches": 135000,
+        "kd": 55.7,
+        "decision": "暂缓"
+      },
+      {
+        "query": "ai clothes changer",
+        "us_monthly_searches": 22200,
+        "kd": 45.8,
+        "decision": "暂缓"
+      },
+      {
+        "query": "transparent background maker",
+        "us_monthly_searches": 22200,
+        "kd": 59.1,
+        "decision": "暂缓；覆盖旧预筛难度25判断"
+      }
+    ],
+    "interpretation": [
+      "引用域50/100仅为第三方估计，不设为建页或排名硬门票",
+      "Google Ads广告竞争度不是自然搜索SEO难度",
+      "9,900对1,900是搜索量比，不代表点击或收入增长5.2倍",
+      "25词中精评少数大词不能证明整个image-to-image词族没有机会；当前仅决定不扩页",
+      "词量暴跌应先核同地区、语言、匹配/近似词、网络和历史口径，不直接当需求坍塌"
+    ]
+  },
+  "implementation": {
+    "date": "2026-11-13",
+    "worker_version": "a99a37c9-daca-4dcd-b162-08b10f032c9c",
+    "existing_h2_unchanged": 8,
+    "added_english_words_approx": 243,
+    "multiple_faq_count": 9,
+    "verification": [
+      "npm run seo:source-audit passed",
+      "npm run cf:build passed",
+      "npm run seo:production-smoke passed",
+      "live description confirmed"
+    ],
+    "lama_report": "docs/LAMA_VALIDATION_2026-11-13.json",
+    "new_tool_pages_published": false
+  },
+  "model_validation_update": {
+    "date": "2026-11-13",
+    "status": "14_completed_controlled_quality_and_cost_pass_exact_hosted_license_pending",
+    "provider_successes": 14,
+    "visual_usable": 11,
+    "visual_mean_score": 3.9285714285714284,
+    "estimated_compute_usd": 0.006155162052749999,
+    "report": "docs/LAMA_VALIDATION_2026-11-13.json",
+    "no_additional_calls_authorized_by_this_record": true
+  }
+}

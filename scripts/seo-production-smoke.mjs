@@ -53,14 +53,14 @@ for (const path of canonicalPaths) {
   pages.set(path, html);
 }
 
-for (const path of ["/", "/face-swap", "/about"]) {
+for (const path of ["/", "/face-swap", "/multiple-face-swap", "/about"]) {
   const main = mainHtml(pages.get(path));
   assert(/href="\/pricing"/.test(main), `${path} is missing a contextual link to /pricing`);
   assert(!retiredClaims.test(textContent(main)), `${path} still exposes a retired free-access claim`);
 }
 assert(!/href="[^"#]*\?style=/.test(mainHtml(pages.get("/"))), "homepage still exposes crawlable style query links");
 
-const expectedFaqCounts = new Map([["/", 8], ["/face-swap", 9], ["/pricing", 8], ["/multiple-face-swap", 8]]);
+const expectedFaqCounts = new Map([["/", 8], ["/face-swap", 9], ["/pricing", 8], ["/multiple-face-swap", 9]]);
 for (const path of ["/", "/face-swap", "/pricing", "/multiple-face-swap"]) {
   const main = mainHtml(pages.get(path));
   const faq = jsonLd(main).find((entry) => entry?.["@type"] === "FAQPage");

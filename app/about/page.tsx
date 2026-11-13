@@ -10,7 +10,7 @@ export default function About() {
   return <main id="main" className="legal wrap">
     <div className="section-label">A FRESH PERSPECTIVE</div>
     <h1>About Pixform</h1>
-    <p>Pixform is a small creative tool for turning photos you already own into versions you have not seen yet. Start with an image, choose a direction — watercolor, pencil, anime or pixel art — and download the result. There is no editor to learn and no timeline to manage.</p>
+    <p><Link href="/">Pixform</Link> is a small creative tool for turning photos you already own into versions you have not seen yet. Start with an image, choose a direction — watercolor, pencil, anime or pixel art — and download the result. There is no editor to learn and no timeline to manage.</p>
     <h2>Made for experimentation</h2>
     <p>The distance between an idea and an image should feel smaller. We build one task per page rather than one giant editor: <Link href="/">Image to Image</Link>, for changing the treatment of a photo you have, and <Link href="/face-swap">AI Face Swap</Link>, for putting a chosen face into a chosen scene. The first release does these two things and tries to do them well.</p>
     <h2>What you get</h2>
