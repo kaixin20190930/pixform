@@ -1,5 +1,6 @@
 export const TOOL_RATES = {
   "image-to-image": 1,
+  "photo-to-coloring-page": 2,
   "face-swap": 2,
   "multiple-face-swap": 2,
 } as const;

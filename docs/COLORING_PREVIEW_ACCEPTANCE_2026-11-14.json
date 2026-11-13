@@ -1,0 +1,87 @@
+{
+  "environment": "isolated localhost:3015, local D1 and R2 only",
+  "production_changed": false,
+  "stripe_calls": 0,
+  "model": "fal-ai/flux-2/klein/4b/edit",
+  "paid_model_jobs": 1,
+  "provider_request_id": "01a1d5cf-6b80-7463-a4cc-ec21f14ea83a",
+  "budget_reserved_usd": 0.02,
+  "model_cost_estimate_usd": 0.01,
+  "actual_invoice_verified": false,
+  "elapsed_seconds": 12.68,
+  "credits_before": 10,
+  "credits_after": 8,
+  "reservation": [
+    2,
+    "captured"
+  ],
+  "ledger": [
+    [
+      -2,
+      "generation_reserve"
+    ]
+  ],
+  "output_size": [
+    768,
+    512
+  ],
+  "preview_download_identical": true,
+  "repeat_download_free": true,
+  "idempotent_replay": true,
+  "anonymous_http": 401,
+  "invalid_upload_http": 400,
+  "faq_visible_and_schema_count": 8,
+  "noindex": true,
+  "excluded_from_sitemap": true,
+  "download_sha256": "b5950aa6b1ea2bec41ce6102c411764cc7fc562f51d253cb4e386eda7834c608",
+  "date": "2026-11-14",
+  "preview_url": "http://localhost:3015/photo-to-coloring-page",
+  "page_words": 797,
+  "implementation": {
+    "scope": "Single photo, fixed Klein 4B prompt, 2 credits, binary PNG",
+    "production_deployed": false,
+    "production_resources_modified": false,
+    "production_navigation_or_sitemap_changed": false,
+    "stripe_products_added": false,
+    "provider_submission": "Single data URI for bounded 768px input; works without exposing local R2 to the Internet. No client model parameters or fallback retries."
+  },
+  "verification": {
+    "tests": "33/33 passed",
+    "typecheck": "passed",
+    "next_build": "passed",
+    "seo_source_audit": "passed",
+    "cached_outputs_reprocessed": 12,
+    "cached_regression_model_calls": 0,
+    "quality_reference": "COLORING_CLEAN_MODELS_VALIDATION_2026-11-14.json: 10/12 combined passed. Two night scenes remain unsuitable.",
+    "faq": "8 visible and JSON-LD items matched exactly on tool and preview pricing pages",
+    "mocked_checks": [
+      "provider terminal failure",
+      "all-white output rejection",
+      "uncertain POST: no resubmission",
+      "2-hour expiry releases credits",
+      "insufficient credits: no model call",
+      "concurrent duplicate: one submission",
+      "credit release exactly once",
+      "background sweep dispatches fal jobs"
+    ]
+  },
+  "boundaries": {
+    "login": "Local test user/session seeded into isolated D1, then validated through real Better Auth session API. External Google OAuth not rerun; Google preview credentials are placeholders. No application authentication bypass.",
+    "background": "Sweep and expiry tested with mocked provider/database fixtures. Next dev does not run Cloudflare scheduled events automatically.",
+    "billing": "Real fal job verified 10 -> 8 and one captured 2-credit reservation. Failure paths used mocks. fal amount is an estimate, not a verified invoice.",
+    "production": "Preview only: noindex; production feature flag absent; new page returns 404 and API remains disabled under production configuration. No production deployment.",
+    "quality": "Creative AI redraw, not precise tracing; night scenes remain limited."
+  },
+  "reproduce": {
+    "start": "npm run preview:coloring",
+    "migrate_local_only": "npx wrangler d1 migrations apply DB --local --config preview/coloring/wrangler.jsonc --persist-to .wrangler/coloring-preview",
+    "secrets": "preview/coloring/.dev.vars (ignored): FAL_KEY, isolated auth/signing secrets, Google placeholders; no Stripe/Replicate credentials",
+    "data": ".wrangler/coloring-preview/v3 (ignored)",
+    "test_state": ".cache/coloring-preview-2026-11-14 (ignored); real-submit.json prevents accidental repeated paid validation."
+  },
+  "example_sources": {
+    "portrait": "NASA STS-104 official crew portrait, existing clean portrait crop",
+    "pet": "https://www.pexels.com/photo/4044201/",
+    "house": "https://www.pexels.com/photo/106399/"
+  }
+}

@@ -3,6 +3,9 @@ import type { D1Database, R2Bucket } from "@cloudflare/workers-types";
 
 export type Env = {
   DB: D1Database;
+  FAL_KEY?: string;
+  COLORING_PREVIEW_ENABLED?: string;
+  APP_ORIGIN?: string;
   MEDIA: R2Bucket;
   REPLICATE_API_TOKEN?: string;
   REPLICATE_SDXL_VERSION?: string;

@@ -52,6 +52,10 @@ export async function finish(env: Env, job: Job, status: string, error: string |
   if (job.credits_reserved) await settleCredits(env, job.id, status === "succeeded");
 }
 export async function poll(env: Env, job: Job, origin: string) {
+  if (job.tool === "photo-to-coloring-page") {
+    const { pollColoring } = await import("./coloring-jobs.ts");
+    return pollColoring(env, job);
+  }
   if (!job.prediction_id || !["starting", "processing"].includes(job.status)) return;
   const prediction = await provider(env, `predictions/${encodeURIComponent(job.prediction_id)}`);
   if (prediction.status === "failed" && job.attempts < 2 && retryableError(prediction.error)) {
