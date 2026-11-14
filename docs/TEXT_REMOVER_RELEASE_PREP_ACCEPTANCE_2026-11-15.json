@@ -1,0 +1,144 @@
+{
+  "date": "2026-11-15",
+  "scope": "Remove Text From Image release preparation; no production deployment",
+  "preview_origin": "https://pixform-text-preview.liukai19911010.workers.dev",
+  "preview_deployment": "958d66f5-261d-44a9-a5a4-1a8d82be3b19",
+  "production_latest_version_unchanged": "1f3535f4-8f0b-4e49-ac45-800730845fd9",
+  "fixes": [
+    "Frontend POST corrected to /api/text-remover",
+    "Text removal button, progress, filename and API grammar corrected",
+    "Mask controls frozen during an unconfirmed request",
+    "Production feature flag gates page/API/navigation/home card/pricing/sitemap; remains false",
+    "Runtime rendering prevents build-time false flags hiding launch navigation",
+    "Production canonical/index/OG metadata and preview noindex prepared",
+    "Privacy covers painted masks; Try Pixform uses local tool anchor"
+  ],
+  "browser_acceptance": {
+    "authentication": "One-use, short-lived seeded session in isolated preview. Not real Google OAuth. Temporary importer removed; GET 404 verified.",
+    "upload": true,
+    "manual_brush": true,
+    "undo": true,
+    "clear": true,
+    "generate_and_poll": true,
+    "reedit_new_job": true,
+    "downloads": 3,
+    "credits_observed": [
+      10,
+      9,
+      8,
+      7
+    ],
+    "account_api_final_balance": 7,
+    "ledger_direct_read": "Not completed: Cloudflare D1 API code 7403 after OAuth refresh; preview ledger endpoint returns 503 because Stripe billing readiness is intentionally absent. Balance and job outputs verified; do not claim all three ledger rows inspected.",
+    "quality": "First two jobs had automation pointer coordinates shifted by focus/scroll; they validate request, download and per-edit balance only. Third job mask visually verified over all letters before submit; simple-wall text removed successfully.",
+    "real_mobile_touch_hardware": false,
+    "runs": [
+      {
+        "job_id": "9b9433ca-906d-40a4-b5f0-158c3eb8b7e3",
+        "prediction_id": "26f6n6s021rgc0d1vbhs85ws74",
+        "status": "succeeded",
+        "provider_predict_seconds": 3.647222817,
+        "created_at": "2026-11-14T16:28:00.400000Z",
+        "outside_mask_exact": true,
+        "browser_download_identical": "browser-first.png",
+        "size": [
+          768,
+          512
+        ]
+      },
+      {
+        "job_id": "45e69e62-da70-4914-9153-f94f897a117f",
+        "prediction_id": "9czwazgyc9rgc0d1vbm8rzk0w8",
+        "status": "succeeded",
+        "provider_predict_seconds": 3.176986723,
+        "created_at": "2026-11-14T16:33:27.650000Z",
+        "outside_mask_exact": true,
+        "browser_download_identical": "browser-second.png",
+        "size": [
+          768,
+          512
+        ]
+      },
+      {
+        "job_id": "eda3ba6b-6a4a-4f8b-a9e3-62da541209a4",
+        "prediction_id": "b4xbp94v0xrga0d1vbxvkvz6er",
+        "status": "succeeded",
+        "provider_predict_seconds": 3.986667501,
+        "created_at": "2026-11-14T16:54:44.743000Z",
+        "outside_mask_exact": true,
+        "browser_download_identical": "browser-final.png",
+        "size": [
+          768,
+          512
+        ]
+      }
+    ]
+  },
+  "budget": {
+    "limit_usd": 1,
+    "paid_model_calls": 3,
+    "estimated_usd": 0.00243245,
+    "basis": "Provider predict_time × recorded T4 rate $0.000225/s; estimate, not an invoice",
+    "stripe_payments": 0
+  },
+  "http": {
+    "/text-remover": {
+      "status": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "faq_exact": true,
+      "faq_count": 8,
+      "canonical": "https://pixform.ai/text-remover"
+    },
+    "/": {
+      "status": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "text_remover_links": 3
+    },
+    "/pricing": {
+      "status": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "text_remover_links": 3
+    },
+    "/privacy": {
+      "status": 200,
+      "x_robots_tag": "noindex, nofollow",
+      "text_remover_links": 2
+    },
+    "/sitemap.xml": {
+      "status": 200,
+      "x_robots_tag": "noindex, nofollow"
+    },
+    "/_acceptance/session": {
+      "status": 404,
+      "x_robots_tag": "noindex, nofollow"
+    }
+  },
+  "production_switch": {
+    "TEXT_REMOVER_ENABLED": "false",
+    "activation_later": "Explicit launch authorization, set flag true in production config and deploy the built Worker. No migration or new provider key needed when existing production Replicate/signing/storage bindings are valid.",
+    "local_enabled_render": "passed: canonical, index/follow, sitemap, navigation, pricing; no model calls",
+    "production_route_status": 404
+  },
+  "checks": {
+    "tests": "36 passed",
+    "typecheck": "passed",
+    "cloudflare_build": "passed",
+    "seo_source_audit": "69 files passed",
+    "diff_check": "passed",
+    "preview_faq_visible_jsonld": "8 entries, exact questions and answers"
+  },
+  "remaining_before_or_at_launch": [
+    "Production deployment is intentionally pending.",
+    "On launch: real Google login redirect, one 1-credit generation, download and production ledger row/reservation verification. Any test credit grant needs separate authorization.",
+    "D1 direct-read permission issue remains for operational ledger inspection; do not rotate provider or Stripe keys as part of this work.",
+    "Simple backgrounds only; complex textures/details remain an explicit limitation."
+  ],
+  "evidence": [
+    "docs/TEXT_REMOVER_RELEASE_PREP_BROWSER_2026-11-15.png",
+    "docs/TEXT_REMOVER_RELEASE_PREP_RESULT_2026-11-15.png"
+  ],
+  "unrelated_changes_left_untouched": [
+    "docs/SEO_OBSERVATION_PLAN.json",
+    "docs/COLORING_VALIDATION_2026-11-13.json"
+  ]
+}

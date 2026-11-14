@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {encode,decode} from 'fast-png';
 import {textImages,mergeTextResult} from '../lib/text-remover-image.ts';
-import {textRemoverEnabled} from '../lib/text-remover-config.ts';
+import {textRemoverEnabled,textRemoverPublished} from '../lib/text-remover-config.ts';
 import type {Env} from '../lib/cloudflare.ts';
 const png=(data:Uint8Array,channels=3)=>encode({width:4,height:4,depth:8,channels,data});
 test('text removal rejects empty, whole-image and mismatched masks; preserves every unselected pixel',()=>{
@@ -20,6 +20,12 @@ test('text remover is restricted to its own preview environment',()=>{
  assert.equal(textRemoverEnabled(env),true);
  assert.equal(textRemoverEnabled({...env,APP_ORIGIN:'https://pixform.ai'}),false);
  assert.equal(textRemoverEnabled({...env,TEXT_REMOVER_PREVIEW_ENABLED:undefined}),false);
+ const prod={...env,APP_ORIGIN:'https://pixform.ai',TEXT_REMOVER_ENABLED:'true'};
+ assert.equal(textRemoverEnabled(prod),true);assert.equal(textRemoverPublished(prod),true);
+ assert.equal(textRemoverPublished(env),false);
+ assert.equal(textRemoverEnabled({...prod,TEXT_REMOVER_ENABLED:'false'}),false);
+ assert.equal(textRemoverEnabled({...prod,APP_ORIGIN:'https://attacker.invalid'}),false);
+ assert.equal(textRemoverEnabled({...prod,REPLICATE_API_TOKEN:undefined}),false);
 });
 
 import {DatabaseSync} from 'node:sqlite';

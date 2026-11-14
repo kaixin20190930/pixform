@@ -7,7 +7,7 @@ import { json } from "@/lib/jobs";
 export async function POST(request: Request) {
   try {
     const env = await environment();
-    if (!textRemoverEnabled(env)) return json({error:"Text removal are temporarily unavailable."},503);
+    if (!textRemoverEnabled(env)) return json({error:"Text removal is temporarily unavailable."},503);
     if (!sameOrigin(request) || new URL(request.url).origin !== env.APP_ORIGIN) return json({error:"Use the Pixform website."},403);
     const session = await currentSession(env,request.headers);
     if (!session) return json({error:"Sign in to remove text.",code:"AUTH_REQUIRED"},401);

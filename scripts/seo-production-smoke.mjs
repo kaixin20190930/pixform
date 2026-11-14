@@ -5,6 +5,7 @@ const canonicalPaths = ["/", "/face-swap", "/multiple-face-swap", "/pricing", "/
 const initialSitemap = await fetch(`${base}/sitemap.xml`).then(r => r.text());
 const coloringPublished = initialSitemap.includes(`${canonicalOrigin}/photo-to-coloring-page</loc>`);
 if (coloringPublished) canonicalPaths.push("/photo-to-coloring-page");
+if(initialSitemap.includes(`${canonicalOrigin}/text-remover</loc>`))canonicalPaths.push("/text-remover");
 const retiredClaims = /without signup|without an account|no signup|no account|per IP|per hour|attempts per|attempts\s*\/\s*hour/i;
 
 function assert(condition, message) {
