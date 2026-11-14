@@ -4,6 +4,7 @@ import type { D1Database, R2Bucket } from "@cloudflare/workers-types";
 export type Env = {
   DB: D1Database;
   FAL_KEY?: string;
+  TEXT_REMOVER_PREVIEW_ENABLED?: string;
   COLORING_PREVIEW_ENABLED?: string;
   COLORING_ENABLED?: string;
   APP_ORIGIN?: string;

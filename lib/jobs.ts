@@ -52,6 +52,7 @@ export async function finish(env: Env, job: Job, status: string, error: string |
   if (job.credits_reserved) await settleCredits(env, job.id, status === "succeeded");
 }
 export async function poll(env: Env, job: Job, origin: string) {
+  if (job.tool === "text-remover") { const { pollTextRemover } = await import("./text-remover-jobs.ts"); return pollTextRemover(env,job); }
   if (job.tool === "photo-to-coloring-page") {
     const { pollColoring } = await import("./coloring-jobs.ts");
     return pollColoring(env, job);

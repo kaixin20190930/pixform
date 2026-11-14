@@ -1,4 +1,5 @@
 import { environment, billingReady } from "@/lib/cloudflare";
+import { textRemoverEnabled } from "@/lib/text-remover-config";
 import { coloringEnabled } from "@/lib/coloring-config";
 import { currentSession } from "@/lib/session";
 import { balance } from "@/lib/billing/credits";
@@ -6,7 +7,7 @@ import { json } from "@/lib/jobs";
 
 export async function GET(request: Request) {
   const env = await environment();
-  if (!billingReady(env) && !coloringEnabled(env)) return json({ error: "Billing is not enabled." }, 503);
+  if (!billingReady(env) && !coloringEnabled(env) && !textRemoverEnabled(env)) return json({ error: "Billing is not enabled." }, 503);
   const session = await currentSession(env, request.headers);
   if (!session) return json({ error: "Sign in required." }, 401);
   const value = await balance(env, session.user.id);

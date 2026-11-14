@@ -1,0 +1,310 @@
+{
+  "environment": "https://pixform-text-preview.liukai19911010.workers.dev",
+  "production_changed": false,
+  "stripe_calls": 0,
+  "credits_before": 10,
+  "credits_after": 0,
+  "paid_calls": 10,
+  "faq_count": 8,
+  "noindex": true,
+  "excluded_from_sitemap": true,
+  "runs": [
+    {
+      "sample": "01-wall-dark",
+      "job_id": "e034b511-951f-47f7-ae61-f3536a5f6ccb",
+      "prediction_id": "p6webnpnanrga0d1v6fsbd75x8",
+      "elapsed_seconds": 15.98,
+      "outside_mask_exact": true,
+      "download_identical": true,
+      "ledger": [
+        {
+          "delta": -1,
+          "reason": "generation_reserve"
+        }
+      ],
+      "output_size": [
+        768,
+        512
+      ],
+      "provider_predict_seconds": 3.421293441,
+      "visual_score_1_to_5": 4,
+      "scope": "simple background",
+      "visually_usable": true
+    },
+    {
+      "sample": "02-wall-light",
+      "job_id": "be53820a-ff22-4873-8f1c-7ee3fa5708b1",
+      "prediction_id": "76bn75rnz9rge0d1v6ga041qv8",
+      "elapsed_seconds": 17.86,
+      "outside_mask_exact": true,
+      "download_identical": true,
+      "ledger": [
+        {
+          "delta": -1,
+          "reason": "generation_reserve"
+        }
+      ],
+      "output_size": [
+        768,
+        512
+      ],
+      "provider_predict_seconds": 3.654087031,
+      "visual_score_1_to_5": 4,
+      "scope": "simple background",
+      "visually_usable": true
+    },
+    {
+      "sample": "03-sky-white",
+      "job_id": "62dcb93b-f9c5-45f9-b82d-68aefe44c453",
+      "prediction_id": "y000cw2qtdrge0d1v6gbd0s190",
+      "elapsed_seconds": 13.06,
+      "outside_mask_exact": true,
+      "download_identical": true,
+      "ledger": [
+        {
+          "delta": -1,
+          "reason": "generation_reserve"
+        }
+      ],
+      "output_size": [
+        768,
+        512
+      ],
+      "provider_predict_seconds": 2.877613341,
+      "visual_score_1_to_5": 4,
+      "scope": "simple background",
+      "visually_usable": true
+    },
+    {
+      "sample": "04-sky-dark",
+      "job_id": "f9a923af-2f4a-46cb-a2c2-9809aa5f0601",
+      "prediction_id": "8bkma44cchrg80d1v6gbh7xdkw",
+      "elapsed_seconds": 15.37,
+      "outside_mask_exact": true,
+      "download_identical": true,
+      "ledger": [
+        {
+          "delta": -1,
+          "reason": "generation_reserve"
+        }
+      ],
+      "output_size": [
+        768,
+        512
+      ],
+      "provider_predict_seconds": 2.8290159729999997,
+      "visual_score_1_to_5": 4,
+      "scope": "simple background",
+      "visually_usable": true
+    },
+    {
+      "sample": "07-screenshot",
+      "job_id": "79ca8066-6683-4c92-8b37-2e7746b27f11",
+      "prediction_id": "yx22st66q1rge0d1v6gactypmr",
+      "elapsed_seconds": 15.81,
+      "outside_mask_exact": true,
+      "download_identical": true,
+      "ledger": [
+        {
+          "delta": -1,
+          "reason": "generation_reserve"
+        }
+      ],
+      "output_size": [
+        768,
+        512
+      ],
+      "provider_predict_seconds": 2.578553044,
+      "visual_score_1_to_5": 5,
+      "scope": "simple background",
+      "visually_usable": true
+    },
+    {
+      "sample": "08-screenshot",
+      "job_id": "c7c1dbf0-dbf6-4f80-bec9-ef2e63a7a18e",
+      "prediction_id": "kq70hy04d5rga0d1v6gsr5c0m8",
+      "elapsed_seconds": 13.33,
+      "outside_mask_exact": true,
+      "download_identical": true,
+      "ledger": [
+        {
+          "delta": -1,
+          "reason": "generation_reserve"
+        }
+      ],
+      "output_size": [
+        768,
+        512
+      ],
+      "provider_predict_seconds": 2.791409208,
+      "visual_score_1_to_5": 5,
+      "scope": "simple background",
+      "visually_usable": true
+    },
+    {
+      "sample": "10-product",
+      "job_id": "d0380ce7-5048-4b9c-891e-bce47a7108d9",
+      "prediction_id": "kq41k5hv11rg80d1v6gtsa5nzr",
+      "elapsed_seconds": 13.1,
+      "outside_mask_exact": true,
+      "download_identical": true,
+      "ledger": [
+        {
+          "delta": -1,
+          "reason": "generation_reserve"
+        }
+      ],
+      "output_size": [
+        768,
+        512
+      ],
+      "provider_predict_seconds": 2.6309385770000002,
+      "visual_score_1_to_5": 2,
+      "scope": "boundary",
+      "visually_usable": false
+    },
+    {
+      "sample": "11-product",
+      "job_id": "f84ea389-e04d-409c-b522-adb9b6f20e03",
+      "prediction_id": "mn7mfbvcw5rga0d1v6gs7vzp34",
+      "elapsed_seconds": 11.74,
+      "outside_mask_exact": true,
+      "download_identical": true,
+      "ledger": [
+        {
+          "delta": -1,
+          "reason": "generation_reserve"
+        }
+      ],
+      "output_size": [
+        768,
+        512
+      ],
+      "provider_predict_seconds": 2.239393516,
+      "visual_score_1_to_5": 2,
+      "scope": "boundary",
+      "visually_usable": false
+    },
+    {
+      "sample": "flat-color",
+      "job_id": "cb1501de-9f70-4211-aba3-c9f252feed37",
+      "prediction_id": "repytd49phrg80d1v6h80trbr0",
+      "elapsed_seconds": 11.68,
+      "outside_mask_exact": true,
+      "download_identical": true,
+      "ledger": [
+        {
+          "delta": -1,
+          "reason": "generation_reserve"
+        }
+      ],
+      "output_size": [
+        768,
+        512
+      ],
+      "provider_predict_seconds": 2.204992926,
+      "visual_score_1_to_5": 5,
+      "scope": "simple background",
+      "visually_usable": true
+    },
+    {
+      "sample": "gentle-gradient",
+      "job_id": "e91a4cf1-6b29-4da9-aff6-8dc85fac769d",
+      "prediction_id": "9bjy72dq7drg80d1v6h93dapmg",
+      "elapsed_seconds": 11.12,
+      "outside_mask_exact": true,
+      "download_identical": true,
+      "ledger": [
+        {
+          "delta": -1,
+          "reason": "generation_reserve"
+        }
+      ],
+      "output_size": [
+        768,
+        512
+      ],
+      "provider_predict_seconds": 2.522360491,
+      "visual_score_1_to_5": 5,
+      "scope": "simple background",
+      "visually_usable": true
+    }
+  ],
+  "model": "allenhooo/lama",
+  "version": "cdac78a1bec5b23c07fd29692fb70baa513ea403a39e643c48ec5edadb15fe72",
+  "deployment_version": "0be7758a-9f1e-47d1-9ca2-37f5ba26eb47",
+  "estimated_cost_usd": 0.00624367,
+  "cost_basis": "Replicate T4 recorded rate $0.000225/s × provider predict_time; estimate, invoice not verified",
+  "total_provider_predict_seconds": 27.749657548,
+  "budget_usd": 1,
+  "provider_cancel_after": "5m",
+  "automatic_paid_retries": false,
+  "simple_background_quality": {
+    "sample_count": 8,
+    "usable": 8,
+    "mean_score": 4.5,
+    "passed": true,
+    "reviewer": "agent visual review; not independent user study",
+    "composition": "2 walls, 2 skies, 2 flat screenshot panels, 1 synthetic flat color, 1 synthetic gentle gradient"
+  },
+  "boundary_quality": {
+    "sample_count": 2,
+    "usable": 0,
+    "reason": "Text across bottle contours/details leaves invented or softened structures; excluded from simple-background promise"
+  },
+  "browser_checks": {
+    "upload": true,
+    "brush": true,
+    "undo": true,
+    "clear": true,
+    "phone_width_375": true,
+    "native_touch_hardware_tested": false,
+    "google_oauth_tested": false,
+    "authenticated_api": "isolated seeded test session; no production account touched",
+    "brush_resize_coordinate_mapping": "manual responsive visual check, no claim of full device matrix"
+  },
+  "scheduled_expiry": {
+    "expired_preview_job_id": "35a8e43c-69c2-4ab7-abbf-bb8c972ea802",
+    "scheduled_expiry_cleanup": true,
+    "reservation_released": true,
+    "ledger": [
+      {
+        "delta": -1,
+        "reason": "generation_reserve"
+      },
+      {
+        "delta": 1,
+        "reason": "generation_release"
+      }
+    ],
+    "model_calls": 0
+  },
+  "physical_r2_cleanup": {
+    "input": "not found after scheduled cleanup",
+    "face": "not found after scheduled cleanup",
+    "output": "not found after scheduled cleanup"
+  },
+  "local_checks": {
+    "tests": 36,
+    "typecheck": "passed",
+    "cloudflare_build": "passed",
+    "seo_source_audit": "passed"
+  },
+  "production_latest_version_unchanged": "1f3535f4-8f0b-4e49-ac45-800730845fd9",
+  "remaining_before_production": [
+    "Separate launch authorization; production integration and navigation/pricing/sitemap are not enabled.",
+    "Preview uses isolated seeded authentication; real Google redirect on preview is not configured.",
+    "Simple-background scope only; complex detail remains unsupported."
+  ],
+  "license_evidence": "docs/INPAINT_COMPARISON_2026-11-13.json: upstream Apache-2.0 metadata and weights statement; fixed container full weight provenance not independently audited",
+  "price_sources": [
+    "https://replicate.com/allenhooo/lama",
+    "https://replicate.com/docs/topics/billing"
+  ],
+  "artifacts": [
+    "docs/TEXT_REMOVER_PREVIEW_UI_2026-11-14.png",
+    "docs/TEXT_REMOVER_PREVIEW_COMPARISON_2026-11-14.jpg",
+    "docs/TEXT_REMOVER_PREVIEW_RESULT_2026-11-14.png"
+  ],
+  "acceptance_scope": "Authenticated job/billing/download acceptance via seeded isolated API session; manual UI upload/brush/undo/clear at desktop and 375px. Full Google-to-generation browser flow is not claimed."
+}

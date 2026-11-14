@@ -5,7 +5,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ tok
     const env = await environment(); const { token } = await params;
     let job = await getJob(env, token, "output"); let key = job?.output_key;
     if (!job) { job = await getJob(env, token, "input"); key = job ? `input/${job.id}` : null; }
-    if (!job) { job = await getJob(env, token, "face"); key = job && ["face-swap", "face-crop"].includes(job.style) ? `face/${job.id}` : null; }
+    if (!job) { job = await getJob(env, token, "face"); key = job && ["face-swap", "face-crop", "text-remover"].includes(job.style) ? `face/${job.id}` : null; }
     if (!job || !key) return json({ error: "Image unavailable or expired." }, 404);
     const object = await env.MEDIA.get(key);
     if (!object) return json({ error: "Image unavailable or expired." }, 404);
