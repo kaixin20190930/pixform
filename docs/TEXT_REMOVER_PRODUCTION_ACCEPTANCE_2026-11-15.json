@@ -1,0 +1,120 @@
+{
+  "date": "2026-11-15",
+  "timezone": "Asia/Shanghai",
+  "url": "https://pixform.ai/text-remover",
+  "production_worker": "pixform",
+  "deployment_version": "39b53999-051a-49b1-bb6a-c57f6d728fdf",
+  "feature_flag": {
+    "TEXT_REMOVER_ENABLED": "true"
+  },
+  "launch_fixes": [
+    "Same-origin guard now defaults to https://pixform.ai when APP_ORIGIN is absent, matching the feature configuration. Initial 403 attempts created no jobs or provider calls.",
+    "Pricing prose shortened after new tool row and FAQ pushed the existing 700-word smoke limit; final visible word count 696."
+  ],
+  "authentication": {
+    "existing_google_account_verified_in_database": true,
+    "existing_browser_session_verified": true,
+    "fresh_incognito_google_login_callback": "User confirmed 登录回跳正常 in this chat; agent did not independently observe the incognito flow."
+  },
+  "test_credit_grant": {
+    "authorized_by_user": true,
+    "credits": 1,
+    "ledger": [
+      {
+        "delta": 1,
+        "reason": "acceptance_test",
+        "ref_id": "acceptance:text-remover-production:2026-11-15:1-credit"
+      }
+    ],
+    "balance_before": 0,
+    "balance_after_grant": 1,
+    "balance_after_success": 0
+  },
+  "job": {
+    "id": "fef24655-52a2-48e4-a3c1-ca4c9930b8d4",
+    "status": "succeeded",
+    "style": "text-remover",
+    "prediction_id": "cgarr8b669rga0d1vcha1d94rr",
+    "created_at": 1794677824586,
+    "completed_at": 1794677836453,
+    "expires_at": 1794681436453,
+    "error": null,
+    "credits": 1,
+    "state": "captured"
+  },
+  "generation_ledger": [
+    {
+      "delta": -1,
+      "reason": "generation_reserve",
+      "ref_id": "fef24655-52a2-48e4-a3c1-ca4c9930b8d4",
+      "balance_after": 0
+    }
+  ],
+  "final_balance": {
+    "permanent_credits": 0,
+    "subscription_credits": 0
+  },
+  "download": {
+    "browser_download": true,
+    "identical_to_private_r2_output": true,
+    "sha256": "fde0236a4ce1a75a340f2d85cdf3194ca62d3be4c034abe32c2f2b4897c7d402",
+    "file": "docs/TEXT_REMOVER_PRODUCTION_RESULT_2026-11-15.png"
+  },
+  "provider": {
+    "id": "cgarr8b669rga0d1vcha1d94rr",
+    "status": "succeeded",
+    "metrics": {
+      "predict_time": 4.891981325,
+      "total_time": 5.779250949
+    },
+    "version": "cdac78a1bec5b23c07fd29692fb70baa513ea403a39e643c48ec5edadb15fe72"
+  },
+  "budget": {
+    "limit_usd": 1,
+    "paid_model_calls": 1,
+    "estimated_usd": 0.0011007,
+    "basis": "Recorded T4 rate $0.000225/s × provider predict_time; estimate, not invoice",
+    "stripe_payments": 0
+  },
+  "seo": {
+    "/text-remover": {
+      "status": 200,
+      "x_robots_tag": null,
+      "text_remover_links": 2,
+      "canonical": "https://pixform.ai/text-remover",
+      "robots": "index, follow",
+      "faq_exact": true
+    },
+    "/": {
+      "status": 200,
+      "x_robots_tag": null,
+      "text_remover_links": 3
+    },
+    "/pricing": {
+      "status": 200,
+      "x_robots_tag": null,
+      "text_remover_links": 3
+    },
+    "/sitemap.xml": {
+      "status": 200,
+      "x_robots_tag": null,
+      "text_remover_included": true
+    }
+  },
+  "checks": {
+    "cloudflare_build": "passed",
+    "tests": "36/36 passed",
+    "seo_production_smoke": "passed; pricing 696 words",
+    "diff_check": "passed"
+  },
+  "evidence": [
+    "docs/TEXT_REMOVER_PRODUCTION_BROWSER_2026-11-15.png",
+    "docs/TEXT_REMOVER_PRODUCTION_LEDGER_2026-11-15.png",
+    "docs/TEXT_REMOVER_PRODUCTION_RESULT_2026-11-15.png"
+  ],
+  "limitations": [
+    "Simple-background text removal only; no OCR or automatic text detection.",
+    "Masked content is inpainted, not recovered; complex textures can leave patches."
+  ],
+  "git": "Production launch configuration and report are local changes; no commit or push performed in this turn."
+}

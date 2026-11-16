@@ -158,8 +158,71 @@
       "start": "2026-10-19",
       "end": "2026-11-07",
       "days": 20,
-      "metrics": null,
-      "verification": "待 GSC 同筛选条件提取"
+      "metrics": {
+        "clicks": 9,
+        "impressions": 108,
+        "ctr_percent": 8.3,
+        "average_position": 11.4,
+        "brand_pixform_clicks": 6,
+        "brand_pixform_impressions": 32,
+        "visible_nonbrand_query_count": 8,
+        "visible_query_count": 9
+      },
+      "verification": "GSC browser read 2026-11-16; custom dates 2026-10-19–2026-11-07 confirmed in chart",
+      "source": "https://search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3Apixform.ai&start_date=20261019&end_date=20261107",
+      "filters": {
+        "search_type": "web",
+        "country": "all",
+        "device": "all",
+        "search_appearance": "all",
+        "source_timezone": "GSC reporting timezone; no conversion",
+        "data_state": "historical window; UI did not explicitly expose finality",
+        "latest_chart_date_in_default_report": "2026-11-13",
+        "query_coverage": "visible rows only; anonymized queries excluded"
+      },
+      "pages": {
+        "/": {
+          "clicks": 5,
+          "impressions": 44,
+          "ctr_percent": 11.4,
+          "average_position": 7.8
+        },
+        "/about": {
+          "clicks": 4,
+          "impressions": 60,
+          "ctr_percent": 6.7,
+          "average_position": 4.6
+        },
+        "/face-swap": {
+          "clicks": 0,
+          "impressions": 26,
+          "ctr_percent": 0,
+          "average_position": 27.7
+        },
+        "/privacy": {
+          "clicks": 0,
+          "impressions": 19,
+          "ctr_percent": 0,
+          "average_position": 3.4
+        },
+        "/terms": {
+          "clicks": 0,
+          "impressions": 15,
+          "ctr_percent": 0,
+          "average_position": 3.5
+        },
+        "/pricing": {
+          "clicks": 0,
+          "impressions": 1,
+          "ctr_percent": 0,
+          "average_position": 10
+        }
+      },
+      "notes": [
+        "New tool pages absent from baseline rows, not fabricated as zero.",
+        "Page impression sums can exceed property totals; retain GSC aggregation.",
+        "User snapshot remains unchanged and separate."
+      ]
     },
     "filters_to_record": [
       "sc-domain:pixform.ai",
@@ -177,44 +240,84 @@
     {
       "path": "/multiple-face-swap",
       "launch_date": "2026-11-13",
-      "first_observed_crawl_at": null,
+      "first_observed_crawl_at": "2026-11-16",
       "first_observed_impression_date": null,
       "first_observed_top50_date": null,
-      "indexed": null,
-      "google_canonical": null,
+      "indexed": true,
+      "google_canonical": "https://pixform.ai/multiple-face-swap",
       "declared_canonical": "https://pixform.ai/multiple-face-swap",
-      "last_crawl_at": null,
-      "keyword_impressions": null,
+      "last_crawl_at": "2026-11-12 23:54:09",
+      "keyword_impressions": 0,
       "evidence": null,
-      "note": "未核实留 null；URL检查显示最近抓取不代表首次抓取；排名<=50须有真实曝光"
+      "note": "未核实留 null；URL检查显示最近抓取不代表首次抓取；排名<=50须有真实曝光",
+      "gsc_observation": {
+        "source": "GSC URL Inspection browser",
+        "observed_at": "2026-11-16",
+        "crawl_time_zone": "GSC UI displayed timezone not explicitly identified; preserved verbatim",
+        "note": "first_observed_crawl_at is observation date, not first actual crawl date; do not compare intra-day UTC and local times without timezone confirmation"
+      },
+      "keyword_observation": {
+        "query": "multiple face swap",
+        "match": "exact",
+        "scope": "whole property",
+        "period_start": "2026-10-19",
+        "period_end": "2026-11-13",
+        "source": "https://search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3Apixform.ai&num_of_months=3&query=!multiple%20face%20swap",
+        "observed_at": "2026-11-16",
+        "note": "0 is displayed GSC query-filter total; visible reporting only, not 11/27 milestone window"
+      }
     },
     {
       "path": "/photo-to-coloring-page",
-      "launch_date": null,
-      "first_observed_crawl_at": null,
+      "launch_date": "2026-11-14",
+      "first_observed_crawl_at": "2026-11-16",
       "first_observed_impression_date": null,
       "first_observed_top50_date": null,
-      "indexed": null,
-      "google_canonical": null,
+      "indexed": true,
+      "google_canonical": "https://pixform.ai/photo-to-coloring-page",
       "declared_canonical": "https://pixform.ai/photo-to-coloring-page",
-      "last_crawl_at": null,
+      "last_crawl_at": "2026-11-14 01:31:48",
       "keyword_impressions": null,
-      "evidence": null,
-      "note": "未核实留 null；URL检查显示最近抓取不代表首次抓取；排名<=50须有真实曝光"
+      "evidence": {
+        "source": "docs/COLORING_PRODUCTION_ACCEPTANCE_2026-11-14.json",
+        "deployment_version": "c3f03697-dc34-48ad-a65d-4c315505658f",
+        "production_url": "https://pixform.ai/photo-to-coloring-page",
+        "confirmed_at": "2026-11-14"
+      },
+      "note": "未核实留 null；URL检查显示最近抓取不代表首次抓取；排名<=50须有真实曝光",
+      "gsc_observation": {
+        "source": "GSC URL Inspection browser",
+        "observed_at": "2026-11-16",
+        "crawl_time_zone": "GSC UI displayed timezone not explicitly identified; preserved verbatim",
+        "note": "first_observed_crawl_at is observation date, not first actual crawl date; do not compare intra-day UTC and local times without timezone confirmation"
+      }
     },
     {
       "path": "/text-remover",
-      "launch_date": null,
+      "launch_date": "2026-11-15",
       "first_observed_crawl_at": null,
       "first_observed_impression_date": null,
       "first_observed_top50_date": null,
-      "indexed": null,
+      "indexed": false,
       "google_canonical": null,
       "declared_canonical": "https://pixform.ai/text-remover",
       "last_crawl_at": null,
       "keyword_impressions": null,
-      "evidence": null,
-      "note": "未核实留 null；URL检查显示最近抓取不代表首次抓取；排名<=50须有真实曝光"
+      "evidence": {
+        "source": "docs/TEXT_REMOVER_PRODUCTION_ACCEPTANCE_2026-11-15.json",
+        "deployment_version": "39b53999-051a-49b1-bb6a-c57f6d728fdf",
+        "production_url": "https://pixform.ai/text-remover",
+        "confirmed_at": "2026-11-15"
+      },
+      "note": "未核实留 null；URL检查显示最近抓取不代表首次抓取；排名<=50须有真实曝光",
+      "gsc_observation": {
+        "observed_at": "2026-11-16",
+        "source": "GSC URL Inspection browser",
+        "exclusion": "Discovered - currently not indexed",
+        "last_crawl_at": null,
+        "google_canonical_status": "not applicable",
+        "declared_canonical_status": "not applicable in GSC; live HTML self canonical verified"
+      }
     }
   ],
   "observations": [

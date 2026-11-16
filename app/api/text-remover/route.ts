@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   try {
     const env = await environment();
     if (!textRemoverEnabled(env)) return json({error:"Text removal is temporarily unavailable."},503);
-    if (!sameOrigin(request) || new URL(request.url).origin !== env.APP_ORIGIN) return json({error:"Use the Pixform website."},403);
+    if (!sameOrigin(request) || new URL(request.url).origin !== (env.APP_ORIGIN || "https://pixform.ai")) return json({error:"Use the Pixform website."},403);
     const session = await currentSession(env,request.headers);
     if (!session) return json({error:"Sign in to remove text.",code:"AUTH_REQUIRED"},401);
     return await startTextRemover(env,request,session.user.id);
