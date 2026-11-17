@@ -1,0 +1,16 @@
+{
+  "updatedAt": "2026-11-17",
+  "note": "以下是选题和研究入口，不是已发布内容，也不是已审核可用的社区。首轮先核账号与当天规则，不能照抄模板批量发布。",
+  "researchEntrypoints": [
+    {"url": "https://www.reddit.com/r/StableDiffusion/", "status": "needs_current_rules", "fit": "图像编辑的遮罩、轮廓和失败原因等具体技术问题"},
+    {"url": "https://www.reddit.com/r/aiArt/", "status": "needs_current_rules", "fit": "有实际图像的编辑流程与能力边界"},
+    {"url": "https://www.reddit.com/r/Coloring/", "status": "needs_current_rules", "fit": "先核实是否允许 AI 相关讨论；禁止则排除，不改写绕过"}
+  ],
+  "topics": [
+    {"id": "selected-faces", "status": "research", "tool": "/multiple-face-swap", "angle": "为什么合照中只替换选中的人更可控，以及同一参考脸和多参考脸的区别", "asset": "有公开使用权的原图与结果，标明选中框；现有验收图的权利未核实前不能使用"},
+    {"id": "outline-not-sketch", "status": "research", "tool": "/photo-to-coloring-page", "angle": "涂色轮廓与灰阶素描的区别；选择主体清晰、背景简单照片的理由", "asset": "已核实公开使用权的原图、黑白 PNG 与局部放大对照"},
+    {"id": "simple-background-mask", "status": "research", "tool": "/text-remover", "angle": "文字涂选为什么要覆盖笔画边缘；简单背景与复杂纹理的真实差别", "asset": "使用自有简单背景素材；不演示移除第三方版权水印或将此当隐私脱敏"},
+    {"id": "starter-credits", "status": "research", "tool": "/pricing", "angle": "三张脸 6 credits，保留 4 credits 体验其他工具；不把免费额度写成无限免费", "asset": "当日线上价格核对；仅在平台允许产品介绍的位置发布"}
+  ],
+  "eventFields": {"id": "唯一事件 ID", "at": "实际 ISO 时间", "status": "draft | blocked | pending | unknown | published | removed", "platform": "实际平台", "account": "公开账号名，不含邮箱/密钥", "parentId": "后续核验所引用的原事件 ID，可选", "url": "原帖/草稿/发布直链，可选", "evidence": "原始证据文件路径或公开证据链接，必填", "publicVerified": "仅独立核验后 true；published 必须 true", "note": "实际结果及下一步"}
+}

@@ -1,0 +1,40 @@
+{
+  "product": "Pixform",
+  "timezone": "Asia/Shanghai",
+  "authorizedAt": "2026-11-17",
+  "authorization": "用户明确授权免费目录提交及合规社媒发布；不包含付费投放、新付费模型调用或真实付款。",
+  "sharedBacklinksRoot": "/Users/liukai/Documents/ChatGPT/新词侦探",
+  "coordinationRoot": "/Users/liukai/Documents/ChatGPT/外链服务",
+  "backlinks": {
+    "ownerAutomation": "automation",
+    "lane": "shared",
+    "dailyTime": "08:55",
+    "dailyMaximum": 2,
+    "policy": "沿用共享系统现行资格、滚动配额、平台查重和原子预占；不复制 RapCraft 专用放宽规则。不以每日上限作为必须凑满的指标。",
+    "priorityPages": ["https://pixform.ai/face-swap", "https://pixform.ai/multiple-face-swap", "https://pixform.ai/"],
+    "secondaryPages": ["https://pixform.ai/photo-to-coloring-page", "https://pixform.ai/text-remover"],
+    "rules": ["原账本 pending/unknown/历史已投不能重投，换落地页也不能绕过去重", "只走官方免费入口；强制互链、付费、验证码或新增协议停对应动作", "回执、公开链接、可索引、Google 已收录、90 天存活分别记录", "nofollow 如实记录，不为了 dofollow 放宽质量标准", "提交不等于引用域增加；现有 2 个引用域仅为历史用户报告，当前值未知"]
+  },
+  "social": {
+    "dailyTime": "11:30",
+    "minutesPerRun": 30,
+    "newCommentsPerDayMaximum": 2,
+    "profilePostsPerWeekMaximum": 2,
+    "noProactiveLinksUntil": "2026-12-01",
+    "initialPlatforms": ["Reddit"],
+    "researchOnlyPlatforms": ["X", "Medium", "DEV"],
+    "excluded": ["Hacker News 发布", "Product Hunt 重发", "私信拉客", "多账号互动或刷票", "禁 AI 文本社区的起草或发布"],
+    "rules": ["发布前读当前官方社区完整规则、置顶、原帖及既有答案；AI 内容与 AI 辅助文本分别核查", "先查共用账号历史和锁，沿用既有 social_media 协调流程认领，不新增第二发布账本", "两条新评论上限按同账号当天全部产品累计；其他产品已用完时只做跟进和准备", "个人主页每周两篇是同账号累计上限，排队与 RapCraft 等产品协调，不另加两篇", "既有个人主页 community doesn't exist 阻塞不重试，等待恢复证据；阻塞只影响该动作", "2026-11-17 至 11-30 不主动附产品链接；之后仍须规则允许并披露与 Pixform 的关系", "没有实际操作证据不声称试用结果；照片需有公开使用权，去除账号、邮箱和账本隐私", "没有合适问题可以零发布；访问受限与零机会分开，不填假零", "发出结果不明记 unknown，先回查原动作，绝不机械重试"]
+  },
+  "runbook": [
+    "运行 npm run ops:refresh，读取原外链账本并生成本地看板；缺库或读取失败如实报错，不显示为零。",
+    "外链由原 08:55 总控执行。本任务只核对材料、待审和阻塞，不再创建提交队列或分发任务。",
+    "社媒先读外链服务 AGENTS.md、coordination/RULES.md、OPERATING_MODEL.md、ACTIVE_JOBS.json 与账号历史；通过现有 task_cards.py check 和 control.py claim 的协调后才操作共享浏览器/发布。无可用合法认领路径则保留草稿并记录阻塞，不绕过锁。",
+    "扫描最近 72 小时相关问题，必要时扩到 7 天；选择至多两条能补充具体方法的讨论。候选社区须当天核规则，名单不代表允许推广。",
+    "发布前把规则证据、原帖、正文、账号、素材权利证据及协调卡写入 .cache/operations/runs/YYYY-MM-DD.json；发布后立即补原始回执、直链、实际时间、公开可见状态。正文与证据不得含密钥或会话。",
+    "使用 npm run ops:record -- /absolute/path/event.json 追加社媒事件。该记录是本地索引，统一协调系统仍是外部动作权威；同一事件 ID 不重复写入。pending/unknown 后续用新事件 ID 引用原 ID 更新核验，不能重发。",
+    "周五同一次任务复盘：实际直链、删除/审核状态、实质追问、可读取的引荐访问与工具使用；不可读记 unknown。日常不解读 SEO 排名，继续沿用原 09:15 SEO 任务。",
+    "仅实际发布、重要状态变化、需要用户处理的具体阻塞通知；无变化保持安静。"
+  ],
+  "sources": ["/Users/liukai/Documents/ChatGPT/ai rap/outputs/reddit-operations-playbook.md", "/Users/liukai/Documents/ChatGPT/新词侦探/README.md", "/Users/liukai/Documents/ChatGPT/外链服务/coordination/RULES.md"]
+}

@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "ops:refresh": "node scripts/operations.mjs refresh",
+    "ops:record": "node scripts/operations.mjs record",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

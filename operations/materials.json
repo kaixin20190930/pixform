@@ -1,0 +1,18 @@
+{
+  "updatedAt": "2026-11-17",
+  "brand": "Pixform",
+  "contact": "hello@pixform.ai",
+  "contactNote": "转发邮箱不等于可作为发件身份。账号验证前核对收信；发送使用真实可用身份，不伪造 From。",
+  "tagline": "Transform photos, swap faces, and make clean coloring pages.",
+  "shortDescription": "Pixform offers image-to-image styling, single and multiple face swap, photo-to-coloring-page conversion, and manual text removal on simple backgrounds. Get 10 one-time free credits with Google sign-in.",
+  "longDescription": "Pixform is a browser-based toolkit for editing photos you have permission to use. Transform a photo into a new visual style, swap one face, or replace up to five selected faces in a group photo using the same reference face. Turn a photo into clean black-and-white coloring outlines, or brush over unwanted text on a simple background. New accounts receive 10 one-time free credits with Google sign-in. Image to Image and Remove Text From Image use 1 credit per result; AI Face Swap and Photo to Coloring Page use 2; Multiple Face Swap uses 2 per selected face. Pro starts at $9 per month for 300 credits, with one-time packs from $9.",
+  "tools": [
+    {"name": "Image to Image AI", "url": "https://pixform.ai/", "credits": 1, "limit": "风格化结果不保证精确还原细节。"},
+    {"name": "AI Face Swap", "url": "https://pixform.ai/face-swap", "credits": 2, "limit": "静态图片；效果受角度、遮挡与分辨率影响。"},
+    {"name": "Multiple Face Swap", "url": "https://pixform.ai/multiple-face-swap", "creditsPerFace": 2, "limit": "同一参考脸，最多选五张脸；不能为不同目标分配不同参考脸。"},
+    {"name": "Photo to Coloring Page", "url": "https://pixform.ai/photo-to-coloring-page", "credits": 2, "limit": "黑白 PNG；不能保证所有低对比和复杂背景均成功。"},
+    {"name": "Remove Text From Image", "url": "https://pixform.ai/text-remover", "credits": 1, "limit": "手动涂选，优先简单背景；无 OCR/自动定位，不是可靠隐私脱敏或原始数据恢复。"}
+  ],
+  "pricing": {"freeCreditsOnce": 10, "signIn": "Google", "monthlyUSD": 9, "monthlyCredits": 300, "annualUSD": 86, "annualCredits": 3600, "packs": [{"usd": 9, "credits": 200}, {"usd": 25, "credits": 700}]},
+  "avoid": ["无需登录或永久免费/无限次", "视频/GIF 换脸", "自动识别文字并一键全部去除", "保证几秒完成", "保证无损、完美身份或人脸不变", "商用授权尚待确认的换脸模型已有无条件商用许可", "无依据的排名、用户量、引用域或竞品效果"]
+}

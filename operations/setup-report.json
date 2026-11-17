@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-11-17T03:18:06.292230+00:00",
+  "scope": "运营系统搭建与只读接入；本轮无外部提交、社媒发布、付费、代码部署或SEO配置修改",
+  "automation": {
+    "id": "pixform-2",
+    "status": "ACTIVE",
+    "timeAsiaShanghai": "11:30",
+    "thread": "01a15a0e-2169-75f2-9583-28e2d64e5ad5"
+  },
+  "preserved": {
+    "backlinks": "原 automation 总控 08:55，shared lane",
+    "seo": "原 pixform 09:15；暂停的周报保持不变"
+  },
+  "checks": {
+    "nodeSyntax": "passed",
+    "readonlyLedgerSnapshot": "passed",
+    "automationReadback": "passed",
+    "originalSeoSchedule": "passed"
+  },
+  "ledgerRawCountsAtSetup": {
+    "submission_attempts:pending": 5,
+    "experimental_submission_attempts:pending": 5,
+    "experimental_submission_attempts:active": 4
+  },
+  "limits": [
+    "原始 active 不等于公开上线；不同轨道不直接合计为独立域名",
+    "社媒本地索引尚未接入历史；不能据此宣称历史零发布",
+    "本轮尚未核实社媒登录与当前社区规则；首次执行需完成",
+    "既有个人主页发布异常无恢复证据不重试",
+    "换脸模型商用授权仍在等待，不作无条件商用承诺"
+  ],
+  "paths": {
+    "dashboard": ".cache/operations/index.html",
+    "snapshot": ".cache/operations/snapshot.json",
+    "socialEvents": ".cache/operations/social-events.jsonl",
+    "dailyRuns": ".cache/operations/runs/",
+    "sharedMaterials": "/Users/liukai/Documents/ChatGPT/新词侦探/content/pixform-directory-submission.md"
+  }
+}
